@@ -33,6 +33,18 @@ migrate_working_dir/
 /build/
 /coverage/
 /.pipeline-reports/
+/.tooling/
+/.fvm/
+/.packages
+/.env
+/.env.*
+*.jks
+*.keystore
+key.properties
+*.pem
+*.p12
+*.mobileprovision
+local.properties
 
 # Symbolication related
 app.*.symbols

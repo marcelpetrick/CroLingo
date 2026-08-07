@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOCAL_FLUTTER="${ROOT_DIR}/.tooling/flutter/bin/flutter"
+
+if [[ -x "${LOCAL_FLUTTER}" ]]; then
+  exec "${LOCAL_FLUTTER}" "$@"
+fi
+
+if command -v flutter >/dev/null 2>&1; then
+  exec flutter "$@"
+fi
+
+printf 'Flutter is unavailable. Run ./scripts/bootstrap.sh first.\n' >&2
+exit 1
