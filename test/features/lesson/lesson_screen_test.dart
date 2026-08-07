@@ -1,4 +1,5 @@
 import 'package:crolingo/domain/course/course.dart';
+import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/lesson/lesson_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,12 +8,18 @@ void main() {
   testWidgets('completes all four text exercise families with feedback', (
     tester,
   ) async {
+    final progress = _RecordingProgress();
     tester.view
       ..physicalSize = const Size(412, 915)
       ..devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
-      const MaterialApp(home: LessonScreen(lessonId: 'begrussen')),
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'begrussen',
+          repository: progress,
+        ),
+      ),
     );
     await tester.pumpAndSettle();
     expect(find.text('Was gehört zusammen?'), findsOneWidget);
@@ -47,6 +54,9 @@ void main() {
 
     expect(find.text('Lektion geschafft!'), findsOneWidget);
     expect(find.textContaining('48 XP'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(progress.attempts, 5);
+    expect(progress.progress.single.completedAt, isNotNull);
   });
 
   testWidgets('shows a safe error for an unknown lesson', (tester) async {
@@ -69,6 +79,40 @@ void main() {
       findsOneWidget,
     );
   });
+}
+
+class _RecordingProgress implements ProgressRepository {
+  final progress = <LessonProgress>[];
+  int attempts = 0;
+
+  @override
+  Future<List<LessonProgress>> loadLessonProgress() async => progress;
+
+  @override
+  Future<LearningStats> loadStats() async => const LearningStats(
+    totalXp: 0,
+    completedLessons: 0,
+    studyDays: 0,
+  );
+
+  @override
+  Future<void> recordAttempt({
+    required String lessonId,
+    required String exerciseId,
+    required String submittedAnswer,
+    required bool correct,
+    required int incorrectBefore,
+    required DateTime occurredAt,
+  }) async {
+    attempts++;
+  }
+
+  @override
+  Future<void> saveLessonProgress(LessonProgress value) async {
+    progress
+      ..removeWhere((item) => item.lessonId == value.lessonId)
+      ..add(value);
+  }
 }
 
 Future<void> _choose(

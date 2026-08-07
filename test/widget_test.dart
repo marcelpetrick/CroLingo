@@ -1,12 +1,22 @@
 import 'package:crolingo/app/crolingo_app.dart';
+import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/app/router.dart';
+import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Future<void> pumpApp(WidgetTester tester) async {
     appRouter.go('/');
-    await tester.pumpWidget(const CroLingoApp());
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(_FakeProgress()),
+        ],
+        child: const CroLingoApp(),
+      ),
+    );
     await tester.pumpAndSettle();
   }
 
@@ -41,4 +51,29 @@ void main() {
     expect(find.text('Wortschatz'), findsOneWidget);
     expect(find.text('Offline · Keine Werbung · Keine Herzen'), findsOneWidget);
   });
+}
+
+class _FakeProgress implements ProgressRepository {
+  @override
+  Future<List<LessonProgress>> loadLessonProgress() async => [];
+
+  @override
+  Future<LearningStats> loadStats() async => const LearningStats(
+    totalXp: 0,
+    completedLessons: 0,
+    studyDays: 0,
+  );
+
+  @override
+  Future<void> recordAttempt({
+    required String lessonId,
+    required String exerciseId,
+    required String submittedAnswer,
+    required bool correct,
+    required int incorrectBefore,
+    required DateTime occurredAt,
+  }) async {}
+
+  @override
+  Future<void> saveLessonProgress(LessonProgress progress) async {}
 }

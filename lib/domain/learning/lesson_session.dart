@@ -46,6 +46,17 @@ class LessonSession {
   /// Starts a session for [lesson].
   LessonSession(this.lesson);
 
+  /// Resumes a stored exercise and XP checkpoint.
+  LessonSession.resume(this.lesson, {required int index, required int xp})
+    : state = LessonSessionState(
+        index: index.clamp(0, lesson.exercises.length - 1),
+        xp: xp,
+        incorrectAttempts: 0,
+        submittedAnswer: null,
+        grade: null,
+        isComplete: false,
+      );
+
   /// Lesson being learned.
   final Lesson lesson;
 

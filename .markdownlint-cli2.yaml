@@ -7,5 +7,6 @@ globs:
   - "**/*.md"
 ignores:
   - ".tooling/**"
+  - "build/**"
   - "linux/flutter/ephemeral/**"
   - "docs/00_product_spec.md"

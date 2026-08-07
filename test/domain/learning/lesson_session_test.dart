@@ -53,4 +53,11 @@ void main() {
       ..submit('Bok!');
     expect(session.state.xp, 10);
   });
+
+  test('resumes a bounded stored checkpoint', () {
+    final session = LessonSession.resume(lesson, index: 99, xp: 22);
+    expect(session.state.index, 0);
+    expect(session.state.xp, 22);
+    expect(session.state.grade, isNull);
+  });
 }

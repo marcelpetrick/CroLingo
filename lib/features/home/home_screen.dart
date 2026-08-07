@@ -1,6 +1,9 @@
+import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/core/theme/app_colors.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
+import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Learner dashboard and continuation entry point.
@@ -54,28 +57,42 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        const Row(
-          children: [
-            Expanded(
-              child: _StatCard(
-                icon: Icons.local_fire_department_outlined,
-                value: '0',
-                label: 'Tage',
-              ),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: _StatCard(
-                icon: Icons.bolt_rounded,
-                value: '0',
-                label: 'XP',
-              ),
-            ),
-          ],
-        ),
+        const _Stats(),
       ],
     );
   }
+}
+
+class _Stats extends ConsumerWidget {
+  const _Stats();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) =>
+      FutureBuilder<LearningStats>(
+        future: ref.read(progressRepositoryProvider).loadStats(),
+        builder: (context, snapshot) {
+          final stats = snapshot.data;
+          return Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.local_fire_department_outlined,
+                  value: '${stats?.studyDays ?? 0}',
+                  label: 'Tage',
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.bolt_rounded,
+                  value: '${stats?.totalXp ?? 0}',
+                  label: 'XP',
+                ),
+              ),
+            ],
+          );
+        },
+      );
 }
 
 class _Header extends StatelessWidget {

@@ -1,15 +1,23 @@
+import 'dart:async';
+
 import 'package:crolingo/core/theme/app_colors.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/learning/answer_grader.dart';
 import 'package:crolingo/domain/learning/lesson_session.dart';
+import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// Interactive player for one bundled lesson.
 class LessonScreen extends StatefulWidget {
   /// Creates a lesson player for a stable lesson ID.
-  const LessonScreen({required this.lessonId, this.lesson, super.key});
+  const LessonScreen({
+    required this.lessonId,
+    this.lesson,
+    this.repository,
+    super.key,
+  });
 
   /// Lesson to load.
   final String lessonId;
@@ -17,12 +25,24 @@ class LessonScreen extends StatefulWidget {
   /// Optional preloaded lesson for deterministic hosts and tests.
   final Future<Lesson>? lesson;
 
+  /// Local progress storage; omitted only by isolated widget tests.
+  final ProgressRepository? repository;
+
   @override
   State<LessonScreen> createState() => _LessonScreenState();
 }
 
 class _LessonScreenState extends State<LessonScreen> {
-  late final Future<Lesson> _lesson = widget.lesson ?? _loadLesson();
+  late final Future<_LessonPayload> _lesson = _loadPayload();
+
+  Future<_LessonPayload> _loadPayload() async {
+    final lesson = await (widget.lesson ?? _loadLesson());
+    final allProgress = await widget.repository?.loadLessonProgress();
+    final progress = allProgress
+        ?.where((item) => item.lessonId == widget.lessonId)
+        .firstOrNull;
+    return _LessonPayload(lesson, progress);
+  }
 
   Future<Lesson> _loadLesson() async {
     final course = await AssetCourseRepository().load();
@@ -34,17 +54,21 @@ class _LessonScreenState extends State<LessonScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
-      child: FutureBuilder<Lesson>(
+      child: FutureBuilder<_LessonPayload>(
         future: _lesson,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return _LoadFailure(onClose: () => context.pop());
           }
-          final lesson = snapshot.data;
-          if (lesson == null) {
+          final payload = snapshot.data;
+          if (payload == null) {
             return const Center(child: CircularProgressIndicator());
           }
-          return _LessonPlayer(lesson: lesson);
+          return _LessonPlayer(
+            lesson: payload.lesson,
+            progress: payload.progress,
+            repository: widget.repository,
+          );
         },
       ),
     ),
@@ -52,18 +76,75 @@ class _LessonScreenState extends State<LessonScreen> {
 }
 
 class _LessonPlayer extends StatefulWidget {
-  const _LessonPlayer({required this.lesson});
+  const _LessonPlayer({
+    required this.lesson,
+    required this.progress,
+    required this.repository,
+  });
 
   final Lesson lesson;
+  final LessonProgress? progress;
+  final ProgressRepository? repository;
 
   @override
   State<_LessonPlayer> createState() => _LessonPlayerState();
 }
 
 class _LessonPlayerState extends State<_LessonPlayer> {
-  late final LessonSession _session = LessonSession(widget.lesson);
+  late final LessonSession _session =
+      widget.progress == null || widget.progress!.completedAt != null
+      ? LessonSession(widget.lesson)
+      : LessonSession.resume(
+          widget.lesson,
+          index: widget.progress!.exerciseIndex,
+          xp: widget.progress!.xp,
+        );
+  Future<void> _pendingWrite = Future<void>.value();
 
   void _refresh(void Function() action) => setState(action);
+
+  void _submit(String answer) {
+    final exercise = widget.lesson.exercises[_session.state.index];
+    final incorrectBefore = _session.state.incorrectAttempts;
+    _refresh(() => _session.submit(answer));
+    final grade = _session.state.grade!;
+    final repository = widget.repository;
+    if (repository != null) {
+      _enqueue(() async {
+        await repository.recordAttempt(
+          lessonId: widget.lesson.id,
+          exerciseId: exercise.id,
+          submittedAnswer: answer,
+          correct: grade.isCorrect,
+          incorrectBefore: incorrectBefore,
+          occurredAt: DateTime.now().toUtc(),
+        );
+        await _saveProgress();
+      });
+    }
+  }
+
+  void _enqueue(Future<void> Function() operation) {
+    _pendingWrite = _pendingWrite.then((_) => operation());
+    unawaited(_pendingWrite);
+  }
+
+  Future<void> _saveProgress() async {
+    final state = _session.state;
+    await widget.repository?.saveLessonProgress(
+      LessonProgress(
+        lessonId: widget.lesson.id,
+        exerciseIndex: state.index,
+        xp: state.xp,
+        completedAt: state.isComplete ? DateTime.now().toUtc() : null,
+      ),
+    );
+  }
+
+  void _continue() {
+    _refresh(_session.continueAfterCorrect);
+    _enqueue(_saveProgress);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +167,21 @@ class _LessonPlayerState extends State<_LessonPlayer> {
             exercise: exercise,
             grade: state.grade,
             submittedAnswer: state.submittedAnswer,
-            onSubmit: (answer) => _refresh(() => _session.submit(answer)),
+            onSubmit: _submit,
             onRetry: () => _refresh(_session.retry),
-            onContinue: () => _refresh(_session.continueAfterCorrect),
+            onContinue: _continue,
           ),
         ),
       ],
     );
   }
+}
+
+class _LessonPayload {
+  const _LessonPayload(this.lesson, this.progress);
+
+  final Lesson lesson;
+  final LessonProgress? progress;
 }
 
 class _LessonHeader extends StatelessWidget {
