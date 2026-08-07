@@ -78,9 +78,42 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('opens a recently completed lesson for review', (tester) async {
+    appRouter.go('/review');
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(
+            _FakeProgress(
+              progress: [
+                LessonProgress(
+                  lessonId: 'begrussen',
+                  exerciseIndex: 4,
+                  xp: 50,
+                  completedAt: DateTime.utc(2026, 8, 7),
+                ),
+              ],
+            ),
+          ),
+        ],
+        child: const CroLingoApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('1 neu gelernte Lektionen'), findsOneWidget);
+    await tester.tap(find.text('Begrussen').first);
+    await tester.pump();
+    expect(appRouter.state.uri.path, '/lesson/begrussen');
+  });
 }
 
 class _FakeProgress implements ProgressRepository {
+  _FakeProgress({this.progress = const []});
+
+  final List<LessonProgress> progress;
+
   @override
   Future<List<ExerciseAttempt>> loadAttemptHistory() async => [];
 
@@ -88,7 +121,7 @@ class _FakeProgress implements ProgressRepository {
   Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
 
   @override
-  Future<List<LessonProgress>> loadLessonProgress() async => [];
+  Future<List<LessonProgress>> loadLessonProgress() async => progress;
 
   @override
   Future<LearningStats> loadStats() async => const LearningStats(

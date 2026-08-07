@@ -30,7 +30,8 @@ through Git history.
 - strict offline grading with Croatian characters preserved;
 - matching, two-way translation, gaps, and sentence tiles;
 - immediate correction, explanations, unlimited retries, and XP;
-- durable local progress, lesson resume/unlocking, streaks, and recent mistakes;
+- durable local progress, lesson resume/unlocking, streaks, recent mistakes, and
+  replay of recently learned lessons;
 - a local vocabulary view with mastery for recognition, both recall directions,
   sentence production, and grammar application;
 - reproducible Android APK/AAB and native Linux builds;

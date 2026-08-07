@@ -28,8 +28,8 @@ Listening, native audio, TTS, learner recordings, sample comparison, and pronunc
 
 Current status: loops 1 through 5 are complete, including durable SQLite
 attempts/checkpoints, sequential unlocking, and all text exercise families.
-Streak statistics, recent-mistake replay, deterministic FSRS due dates, and
-fine-grained concept mastery from loop 6 are implemented. Automated
+Streak statistics, recent-mistake and recently-learned replay, deterministic
+FSRS due dates, and fine-grained concept mastery from loop 6 are implemented. Automated
 320-pixel/200%-text accessibility checks are active; extended
 assistive-technology review and physical-device checks remain.
 
