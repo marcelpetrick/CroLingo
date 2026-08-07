@@ -152,6 +152,12 @@ artifact while reclaiming disposable Android intermediates before the AAB.
 The workflows also remove unrelated preinstalled hosted-runner SDKs before
 bootstrap; the guarded cleanup script refuses to run outside GitHub Actions.
 
+The run closes with a warning review. It names every warning that comes from
+the pinned Flutter toolchain, the Flutter Gradle template, or a bundled
+third-party plugin, so a reader can tell known upstream noise from something
+new. Warnings it cannot account for are listed as unreviewed for a person to
+judge; the stage reports and never fails the pipeline.
+
 Omit `--noRun` to launch the finished Linux bundle after all checks. The
 pipeline validates repository policy, version progression, dependencies,
 course content, Gradle-wrapper integrity, formatting, static analysis,

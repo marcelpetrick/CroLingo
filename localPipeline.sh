@@ -21,8 +21,10 @@ Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
 builds, and artifact inspection. The Linux app is launched once unless --noRun
 is supplied. Missing pinned tools are restored by running scripts/bootstrap.sh
-automatically before the first gate. Reports are temporary unless --report-dir
-is supplied, and are kept on failure so a failing run stays diagnosable.
+automatically before the first gate. A closing warning review names the
+expected upstream warnings and lists anything unreviewed. Reports are temporary
+unless --report-dir is supplied, and are kept on failure so a failing run stays
+diagnosable.
 Use --low-disk-builds on constrained CI runners to discard generated Android
 intermediates before the AAB build while preserving every verified artifact.
 EOF
@@ -319,6 +321,90 @@ launch_linux() {
   return "${status}"
 }
 
+# Warnings that originate outside this repository. CroLingo cannot remove them
+# without forking a dependency or unpinning the Flutter toolchain, so they are
+# named as expected instead of quietly tolerated. Delete an entry as soon as an
+# upstream release retires it.
+accepted_warning_reason() {
+  case "$1" in
+    *'Unsupported Kotlin plugin version'*)
+      printf 'Gradle embeds its own Kotlin and differs from the pinned plugin'
+      ;;
+    *'flutter_tools/gradle/src/main/kotlin'*)
+      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.44.7"
+      ;;
+    *"'android.builtInKotlin=false' is deprecated"* | \
+      *"'android.newDsl=false' is deprecated"*)
+      printf 'Flutter template flag; AGP removes it in 10.0'
+      ;;
+    *"Deprecated 'org.jetbrains.kotlin.android' plugin usage"*)
+      printf 'Follows the Flutter template flags, also for bundled plugins'
+      ;;
+    *'Deprecated Gradle features were used'*)
+      printf 'Aggregate notice for the deprecations listed above'
+      ;;
+    *'Setting the namespace via the package attribute'* | \
+      *'Recommendation: remove package='* | \
+      *'found in source AndroidManifest.xml'*)
+      printf 'Third-party plugin manifest owned by an upstream package'
+      ;;
+    *'is deprecated. Deprecated in Java.'* | *'Unchecked cast of'* | \
+      *'This annotation is currently applied to the value parameter only'*)
+      printf 'Upstream Kotlin source of Flutter or a bundled plugin'
+      ;;
+    *'packages have newer versions incompatible with dependency constraints'*)
+      printf 'Pins held by the Flutter SDK; upgrading is a separate decision'
+      ;;
+    *'is newer than'*'language version'*)
+      printf 'Analyzer version pinned by the Flutter SDK'
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+# Reports only. A new warning must be judged by a person, and failing here on
+# an upstream rewording would teach people to ignore this gate.
+review_warnings() {
+  local -a scanned=(dependencies generated-sources android-lint clean-builds)
+  local -A expected=()
+  local -a unreviewed=()
+  local name path line reason
+
+  for name in "${scanned[@]}"; do
+    path="${REPORT_DIR}/${name}.log"
+    [[ -f "${path}" ]] || continue
+    while IFS= read -r line; do
+      if reason="$(accepted_warning_reason "${line}")"; then
+        expected["${reason}"]=$((${expected["${reason}"]:-0} + 1))
+      else
+        unreviewed+=("${name}: ${line}")
+      fi
+    done < <(
+      sed 's/\x1b\[[0-9;]*m//g' "${path}" \
+        | grep -E '^(w: |W |WARNING: |Warning: |warning: )|Deprecated Gradle features were used|Setting the namespace via the package attribute|Recommendation: remove package=|found in source AndroidManifest.xml|packages have newer versions incompatible' \
+        || true
+    )
+  done
+
+  if ((${#expected[@]} > 0)); then
+    printf 'Expected upstream warnings, nothing to fix in this repository:\n'
+    for reason in "${!expected[@]}"; do
+      printf '  %3dx %s\n' "${expected["${reason}"]}" "${reason}"
+    done | sort -k2
+  fi
+
+  if ((${#unreviewed[@]} == 0)); then
+    printf 'No unreviewed warnings.\n'
+    return 0
+  fi
+
+  printf '\nUnreviewed warnings, decide whether they matter:\n'
+  printf '  %s\n' "${unreviewed[@]}"
+  printf 'This stage reports only; it never fails the pipeline.\n'
+}
+
 # Never abort the run: this report is diagnostic, and a failing pipeline is
 # exactly when a missing tool must still be recorded rather than hide the
 # summary.
@@ -403,5 +489,7 @@ elif [[ "${RUN_APP}" == false ]]; then
 else
   record "Linux launch" SKIP "quality gate failed"
 fi
+
+run_stage "Warning review" review_warnings
 
 finish_pipeline || exit 1
