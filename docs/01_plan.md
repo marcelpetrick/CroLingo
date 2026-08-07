@@ -177,7 +177,9 @@ Correctness always combines color with icon, label, and shape. Touch targets are
 
 A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, custom/framework linting, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, and artifact/manifest inspection.
 
-Every new behavior includes tests. Authored Dart code targets at least 85% line coverage; grading, progression, streak, review, migrations, and validation target at least 95%. Threshold reductions require explicit approval.
+Every new behavior includes tests. Authored Dart code and all critical learning,
+persistence, scheduling, and validation logic require at least 95% line
+coverage. Threshold reductions require explicit approval.
 
 ## MVP acceptance
 

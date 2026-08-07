@@ -1,7 +1,6 @@
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/core/theme/app_colors.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
-import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/concept_mastery.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class _VocabularyScreenState extends ConsumerState<VocabularyScreen> {
   late final Future<List<ConceptMastery>> _mastery = _load();
 
   Future<List<ConceptMastery>> _load() async {
-    final course = await AssetCourseRepository().load();
+    final course = await ref.read(courseProvider.future);
     final attempts = await ref
         .read(progressRepositoryProvider)
         .loadAttemptHistory();

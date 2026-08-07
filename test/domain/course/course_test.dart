@@ -88,4 +88,120 @@ void main() {
       ]),
     );
   });
+
+  test('validator reports every malformed course structure', () {
+    const malformed = Course(
+      id: 'duplicate',
+      title: 'Malformed',
+      concepts: [
+        Concept(id: 'duplicate', croatian: 'Bok', german: 'Hallo'),
+      ],
+      units: [
+        CourseUnit(
+          id: 'duplicate',
+          title: 'Empty',
+          description: 'Empty unit',
+          lessons: [],
+        ),
+        CourseUnit(
+          id: 'unit',
+          title: 'Unit',
+          description: 'Description',
+          lessons: [
+            Lesson(id: 'empty', title: 'Empty', exercises: []),
+            Lesson(
+              id: 'lesson',
+              title: 'Lesson',
+              exercises: [
+                Exercise(
+                  id: 'bad-matching',
+                  type: ExerciseType.matching,
+                  masteryDimension: MasteryDimension.grammarApplication,
+                  prompt: 'Prompt',
+                  acceptedAnswers: [],
+                  explanation: 'Explanation',
+                  conceptIds: ['duplicate'],
+                  pairs: [],
+                  tiles: [],
+                ),
+                Exercise(
+                  id: 'bad-sentence',
+                  type: ExerciseType.sentence,
+                  masteryDimension: MasteryDimension.recognition,
+                  prompt: 'Prompt',
+                  acceptedAnswers: ['Answer'],
+                  explanation: 'Explanation',
+                  conceptIds: ['duplicate'],
+                  pairs: [],
+                  tiles: [],
+                ),
+                Exercise(
+                  id: 'bad-translation',
+                  type: ExerciseType.translation,
+                  masteryDimension: MasteryDimension.recognition,
+                  prompt: 'Prompt',
+                  acceptedAnswers: ['Answer'],
+                  explanation: 'Explanation',
+                  conceptIds: ['duplicate'],
+                  pairs: [],
+                  tiles: [],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+
+    expect(
+      CourseValidator.validate(malformed),
+      containsAll([
+        'Duplicate concept id: duplicate',
+        'Duplicate unit id: duplicate',
+        'Unit duplicate has no lessons',
+        'Lesson empty has no exercises',
+        'Exercise bad-matching has no accepted answer',
+        'Matching exercise bad-matching needs two pairs',
+        'Sentence exercise bad-sentence needs two tiles',
+        'Exercise bad-matching has incompatible mastery dimension',
+        'Exercise bad-sentence has incompatible mastery dimension',
+        'Translation bad-translation needs a recall direction',
+      ]),
+    );
+  });
+
+  test('rejects malformed JSON field types', () {
+    expect(
+      () => Course.fromJson(const {
+        'id': '',
+        'title': 'Title',
+        'units': <Object?>[],
+        'concepts': <Object?>[],
+      }),
+      throwsFormatException,
+    );
+    expect(
+      () => Exercise.fromJson(const {
+        'id': 'exercise',
+        'type': 'translation',
+        'masteryDimension': 'germanToCroatian',
+        'prompt': 'Prompt',
+        'acceptedAnswers': [1],
+        'explanation': 'Explanation',
+        'conceptIds': <Object?>[],
+        'pairs': <Object?>[],
+        'tiles': <Object?>[],
+      }),
+      throwsFormatException,
+    );
+    expect(
+      () => Course.fromJson(const {
+        'id': 'course',
+        'title': 'Title',
+        'units': ['not an object'],
+        'concepts': <Object?>[],
+      }),
+      throwsFormatException,
+    );
+  });
 }

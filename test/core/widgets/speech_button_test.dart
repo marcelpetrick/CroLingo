@@ -39,6 +39,26 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Keine kroatische Stimme verfügbar.'), findsOneWidget);
   });
+
+  testWidgets('explains a failed playback attempt', (tester) async {
+    final service = _FakeSpeechService(SpeechOutcome.failed);
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: SpeechButton(text: 'Da.', service: service),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Kroatisch anhören: Da.'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Aussprache konnte nicht wiedergegeben werden.'),
+      findsOneWidget,
+    );
+  });
 }
 
 class _FakeSpeechService implements SpeechService {

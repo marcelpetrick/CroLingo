@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:crolingo/data/speech/platform_speech_service.dart';
 import 'package:crolingo/domain/speech/speech_service.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -48,5 +49,63 @@ void main() {
 
     expect(await service.speakCroatian('Molim.'), SpeechOutcome.unavailable);
     expect(await service.speakCroatian('  '), SpeechOutcome.failed);
+  });
+
+  test('maps Android outcomes and treats platform failures safely', () async {
+    var result = 'unavailable';
+    final service = PlatformSpeechService(
+      platform: SpeechPlatform.android,
+      androidInvoker: (method, arguments) async {
+        if (result == 'exception') {
+          throw PlatformException(code: 'tts-error');
+        }
+        return result;
+      },
+    );
+
+    expect(await service.speakCroatian('Bok!'), SpeechOutcome.unavailable);
+    result = 'unexpected';
+    expect(await service.speakCroatian('Bok!'), SpeechOutcome.failed);
+    result = 'exception';
+    expect(await service.speakCroatian('Bok!'), SpeechOutcome.failed);
+    await service.stop();
+  });
+
+  test('stops Android playback and ignores optional stop failures', () async {
+    final calls = <String>[];
+    final service = PlatformSpeechService(
+      platform: SpeechPlatform.android,
+      androidInvoker: (method, arguments) async {
+        calls.add(method);
+        return null;
+      },
+    );
+    await service.stop();
+    expect(calls, ['stop']);
+
+    final failing = PlatformSpeechService(
+      platform: SpeechPlatform.android,
+      androidInvoker: (method, arguments) =>
+          throw PlatformException(code: 'stop-error'),
+    );
+    await failing.stop();
+  });
+
+  test('selects Linux by default and tolerates failed commands', () async {
+    final service = PlatformSpeechService(
+      commandRunner: (executable, arguments) async =>
+          ProcessResult(1, 1, '', ''),
+    );
+
+    expect(service.platform, SpeechPlatform.linux);
+    expect(await service.speakCroatian('Da.'), SpeechOutcome.unavailable);
+    await service.stop();
+  });
+
+  test('reports unsupported platforms without invoking an adapter', () async {
+    final service = PlatformSpeechService(platform: SpeechPlatform.unsupported);
+
+    expect(await service.speakCroatian('Ne.'), SpeechOutcome.unavailable);
+    await service.stop();
   });
 }

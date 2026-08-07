@@ -15,10 +15,10 @@ native recordings and pronunciation assessment remain deferred.
 
 ## Ordered work
 
-1. **Restore verified development delivery.** Hidden report upload is fixed.
-   The first low-disk build sequence still exhausted the hosted runner, so a
-   guarded cleanup of unrelated preinstalled SDKs is now added locally. It must
-   be pushed and proven by a successful Quality and Development release run.
+1. **Restore verified development delivery.** Quality is proven on the hosted
+   runner with hidden report uploads, low-disk build sequencing, guarded SDK
+   cleanup, and verified build artifact upload. The Development release must be
+   rerun after the next owner push.
 2. **Make Home resume real course progress.** Complete. Home derives its
    primary action from ordered course data and durable checkpoints, including
    continuation across unit boundaries.
@@ -26,24 +26,26 @@ native recordings and pronunciation assessment remain deferred.
    courtesy, first-meeting, and origin phrases are validated JSON with both
    recall directions, mastery tags, explanations, tests, and two new concepts
    per lesson. Croatian/German human review remains an external checkpoint.
-4. **Expand the A1 path.** Add small reviewed units for family and people,
+4. **Maintain the 95% coverage floor.** Complete and enforced for authored
+   Dart code. New behavior must add tests without reducing this threshold.
+5. **Expand the A1 path.** Add small reviewed units for family and people,
    numbers and age, food and drinks, home, everyday actions, shopping, and
    travel/directions. Reuse known material in most exercises.
-5. **Complete learner controls.** Add concise grammar references and local
+6. **Complete learner controls.** Add concise grammar references and local
    settings for supported accessibility and playback preferences without
    weakening the offline or minimal-permission baseline.
-6. **Harden content authoring.** Version the course schema, produce
+7. **Harden content authoring.** Version the course schema, produce
    deterministic validated content packs, and support an optional separate
    authoring repository that exports reviewed snapshots. Do not add runtime
    downloads yet.
-7. **Finish device and accessibility qualification.** Verify TalkBack,
+8. **Finish device and accessibility qualification.** Verify TalkBack,
    keyboard traversal, contrast, reduced motion, 200% text, interruption
    recovery, upgrades, and airplane-mode operation on Linux and both reference
    phones.
-8. **Add production delivery.** Configure an external Android signing key and
+9. **Add production delivery.** Configure an external Android signing key and
    protected CI secrets, then publish production-signed artifacts. Development
    prereleases stay clearly marked until this is complete.
-9. **Integrate recorded media later.** When native-speaker recordings arrive,
+10. **Integrate recorded media later.** When native-speaker recordings arrive,
    implement the manifest, preparation, validation, licensing, and fallback
    contract from [the authoring guide](04_content_and_audio_authoring.md).
    Listening, learner recording, model-sample comparison, and pronunciation
