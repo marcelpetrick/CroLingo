@@ -1,5 +1,6 @@
 import 'package:crolingo/app/shell/crolingo_shell.dart';
 import 'package:crolingo/features/home/home_screen.dart';
+import 'package:crolingo/features/lesson/lesson_screen.dart';
 import 'package:crolingo/features/more/more_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/review/review_screen.dart';
@@ -9,6 +10,12 @@ import 'package:go_router/go_router.dart';
 /// Shared application router.
 final appRouter = GoRouter(
   routes: [
+    GoRoute(
+      path: '/lesson/:lessonId',
+      builder: (context, state) => LessonScreen(
+        lessonId: state.pathParameters['lessonId']!,
+      ),
+    ),
     ShellRoute(
       builder: (context, state, child) => CroLingoShell(
         location: state.uri.path,

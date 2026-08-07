@@ -1,5 +1,6 @@
 import 'package:crolingo/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Sequential Adriatic-journey learning path.
 class LearningPathScreen extends StatelessWidget {
@@ -69,34 +70,38 @@ class _LessonNode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: number.isEven ? 78 : 22, bottom: 22),
-      child: Row(
-        children: [
-          Container(
-            width: 68,
-            height: 68,
-            decoration: BoxDecoration(
-              color: current ? AppColors.primary : AppColors.selectedSurface,
-              border: Border.all(
-                color: current ? AppColors.primaryPressed : AppColors.border,
-                width: 2,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: current ? () => context.push('/lesson/begrussen') : null,
+        child: Row(
+          children: [
+            Container(
+              width: 68,
+              height: 68,
+              decoration: BoxDecoration(
+                color: current ? AppColors.primary : AppColors.selectedSurface,
+                border: Border.all(
+                  color: current ? AppColors.primaryPressed : AppColors.border,
+                  width: 2,
+                ),
+                shape: BoxShape.circle,
               ),
-              shape: BoxShape.circle,
+              alignment: Alignment.center,
+              child: Icon(
+                current ? Icons.play_arrow_rounded : Icons.lock_outline_rounded,
+                color: current ? Colors.white : AppColors.slate,
+                size: 32,
+              ),
             ),
-            alignment: Alignment.center,
-            child: Icon(
-              current ? Icons.play_arrow_rounded : Icons.lock_outline_rounded,
-              color: current ? Colors.white : AppColors.slate,
-              size: 32,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                current ? 'Lektion $number · Begrüßen' : 'Lektion $number',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              current ? 'Lektion $number · Begrüßen' : 'Lektion $number',
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
