@@ -63,6 +63,9 @@ human-reviewable everyday units.
 - Use the pipeline's low-disk build mode on hosted runners so verified APK and
   Linux outputs survive while disposable intermediates are reclaimed before
   the AAB build.
+- Reclaim unrelated preinstalled .NET, GHC, Boost, CodeQL, and Docker data on
+  disposable hosted runners before bootstrap; keep the Android SDK and refuse
+  this cleanup outside GitHub Actions.
 
 ### 2. Product and visual foundation
 

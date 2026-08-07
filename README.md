@@ -133,6 +133,8 @@ Actions:
 GitHub's constrained hosted runners use
 `./localPipeline.sh --noRun --low-disk-builds`. This preserves every final
 artifact while reclaiming disposable Android intermediates before the AAB.
+The workflows also remove unrelated preinstalled hosted-runner SDKs before
+bootstrap; the guarded cleanup script refuses to run outside GitHub Actions.
 
 Omit `--noRun` to launch the finished Linux bundle after all checks. The
 pipeline validates repository policy, version progression, dependencies,

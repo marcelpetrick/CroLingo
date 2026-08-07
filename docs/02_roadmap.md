@@ -15,9 +15,10 @@ native recordings and pronunciation assessment remain deferred.
 
 ## Ordered work
 
-1. **Restore verified development delivery.** The hosted-runner disk failure
-   and hidden report upload warning are fixed locally. The low-disk pipeline
-   must still be pushed and proven by a successful remote Development release.
+1. **Restore verified development delivery.** Hidden report upload is fixed.
+   The first low-disk build sequence still exhausted the hosted runner, so a
+   guarded cleanup of unrelated preinstalled SDKs is now added locally. It must
+   be pushed and proven by a successful Quality and Development release run.
 2. **Make Home resume real course progress.** Complete. Home derives its
    primary action from ordered course data and durable checkpoints, including
    continuation across unit boundaries.
