@@ -86,6 +86,7 @@ class DriftProgressRepository implements ProgressRepository {
   Future<LearningStats> loadStats() async {
     final lessons = await loadLessonProgress();
     final studyDays = await database.select(database.studyDayEntries).get();
+    studyDays.sort((left, right) => left.dayKey.compareTo(right.dayKey));
     final streaks = StreakCalculator.calculate(
       studyDays.map((day) => day.dayKey),
       DateTime.now(),
@@ -98,6 +99,9 @@ class DriftProgressRepository implements ProgressRepository {
       studyDays: studyDays.length,
       currentStreak: streaks.current,
       longestStreak: streaks.longest,
+      startedOn: studyDays.isEmpty
+          ? null
+          : DateTime.parse(studyDays.first.dayKey),
     );
   }
 

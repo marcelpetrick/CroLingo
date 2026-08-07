@@ -31,7 +31,9 @@ attempts/checkpoints, sequential unlocking, and all text exercise families.
 Streak statistics, recent-mistake and recently-learned replay, deterministic
 FSRS due dates, and fine-grained concept mastery from loop 6 are implemented. Automated
 320-pixel/200%-text accessibility checks are active; extended
-assistive-technology review and physical-device checks remain.
+assistive-technology review and physical-device checks remain. The complete
+local profile reports start date, XP, lessons, vocabulary, study days, and
+current/longest streaks.
 
 ### 1. Foundation and guardrails
 

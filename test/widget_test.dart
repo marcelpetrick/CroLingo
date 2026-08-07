@@ -1,7 +1,9 @@
 import 'package:crolingo/app/crolingo_app.dart';
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/app/router.dart';
+import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
+import 'package:crolingo/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -77,6 +79,47 @@ void main() {
     appRouter.go('/review');
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
+    appRouter.go('/more/vocabulary');
+    await _pumpFrames(tester);
+    expect(tester.takeException(), isNull);
+    appRouter.go('/more/profile');
+    await _pumpFrames(tester);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('shows complete private profile statistics', (tester) async {
+    await pumpApp(tester);
+    appRouter.go('/more');
+    await tester.pumpAndSettle();
+
+    final profile = find.text('Profil & Statistik');
+    await tester.ensureVisible(profile);
+    await tester.tap(profile);
+    await tester.pump();
+    expect(appRouter.state.uri.path, '/more/profile');
+  });
+
+  testWidgets('renders complete private profile statistics', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(_FakeProgress()),
+        ],
+        child: MaterialApp(
+          home: ProfileScreen(
+            course: Future<Course>.value(
+              const Course(id: 'test', title: 'Test', units: [], concepts: []),
+            ),
+          ),
+        ),
+      ),
+    );
+    await _pumpFrames(tester);
+    expect(find.text('XP insgesamt'), findsOneWidget);
+    expect(find.text('Wörter gelernt'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Gestartet'), 200);
+    expect(find.text('Längste Serie'), findsOneWidget);
+    expect(find.text('Gestartet'), findsOneWidget);
   });
 
   testWidgets('opens a recently completed lesson for review', (tester) async {
@@ -109,6 +152,12 @@ void main() {
   });
 }
 
+Future<void> _pumpFrames(WidgetTester tester) async {
+  for (var index = 0; index < 10; index++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
 class _FakeProgress implements ProgressRepository {
   _FakeProgress({this.progress = const []});
 
@@ -130,6 +179,7 @@ class _FakeProgress implements ProgressRepository {
     studyDays: 0,
     currentStreak: 0,
     longestStreak: 0,
+    startedOn: null,
   );
 
   @override

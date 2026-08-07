@@ -147,6 +147,7 @@ class _RecordingProgress implements ProgressRepository {
     studyDays: 0,
     currentStreak: 0,
     longestStreak: 0,
+    startedOn: null,
   );
 
   @override

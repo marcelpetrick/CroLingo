@@ -34,6 +34,8 @@ through Git history.
   replay of recently learned lessons;
 - a local vocabulary view with mastery for recognition, both recall directions,
   sentence production, and grammar application;
+- private on-device statistics for XP, lessons, learned words, study days,
+  streaks, and the first learning date;
 - reproducible Android APK/AAB and native Linux builds;
 - strict analysis, linting, tests, coverage, security scans, and CI.
 - automated narrow-phone and 200% text-scaling layout checks.

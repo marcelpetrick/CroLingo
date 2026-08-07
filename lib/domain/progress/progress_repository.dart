@@ -30,6 +30,7 @@ class LearningStats {
     required this.studyDays,
     required this.currentStreak,
     required this.longestStreak,
+    required this.startedOn,
   });
 
   /// Total earned XP.
@@ -46,6 +47,9 @@ class LearningStats {
 
   /// Longest historical sequence of study days.
   final int longestStreak;
+
+  /// Local calendar date of the first completed study day.
+  final DateTime? startedOn;
 }
 
 /// One recent incorrect answer available for focused review.

@@ -82,5 +82,6 @@ void main() {
     expect(stats.totalXp, 98);
     expect(stats.completedLessons, 2);
     expect(stats.studyDays, 1);
+    expect(stats.startedOn, DateTime(2026, 8, 7));
   });
 }

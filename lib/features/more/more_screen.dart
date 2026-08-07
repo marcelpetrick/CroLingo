@@ -25,10 +25,11 @@ class MoreScreen extends StatelessWidget {
           title: 'Grammatik',
           subtitle: 'Bereits eingeführte Regeln',
         ),
-        const _MoreTile(
+        _MoreTile(
           icon: Icons.bar_chart_rounded,
           title: 'Profil & Statistik',
           subtitle: 'Fortschritt, XP und Lerntage',
+          onTap: () => context.push('/more/profile'),
         ),
         const _MoreTile(
           icon: Icons.settings_outlined,
