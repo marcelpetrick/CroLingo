@@ -3,6 +3,7 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/app/router.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
+import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,44 @@ void main() {
     expect(find.text('Keine Herzen'), findsNothing);
   });
 
+  testWidgets('unlocks the next unit from ordered course data', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(
+            _FakeProgress(
+              progress: [
+                LessonProgress(
+                  lessonId: 'lesson-one',
+                  exerciseIndex: 1,
+                  xp: 20,
+                  completedAt: DateTime.utc(2026, 8, 7),
+                ),
+              ],
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: LearningPathScreen(course: Future.value(_pathCourse)),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Einheit 1 · Erste Einheit'), findsOneWidget);
+    expect(find.text('Einheit 2 · Zweite Einheit'), findsOneWidget);
+    expect(
+      find.text('Goldkrone verdient! Einheit abgeschlossen.'),
+      findsOneWidget,
+    );
+    expect(find.text('Zweites Ziel'), findsOneWidget);
+    expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.lock_outline_rounded), findsNothing);
+  });
+
   testWidgets('opens the learning path from the dashboard', (tester) async {
     await pumpApp(tester);
 
@@ -54,9 +93,9 @@ void main() {
     expect(find.text('Offline · Keine Werbung · Keine Herzen'), findsOneWidget);
 
     await tester.tap(find.text('Wortschatz'));
-    await tester.pumpAndSettle();
-    expect(find.text('Bok!'), findsOneWidget);
-    expect(find.text('Noch nicht geübt'), findsWidgets);
+    await tester.pump();
+    expect(appRouter.state.uri.path, '/more/vocabulary');
+    expect(find.text('Wortschatz'), findsOneWidget);
   });
 
   testWidgets('supports a narrow phone at 200 percent text scaling', (
@@ -74,7 +113,7 @@ void main() {
     await pumpApp(tester);
     expect(tester.takeException(), isNull);
     appRouter.go('/path');
-    await tester.pumpAndSettle();
+    await _pumpUntil(tester, find.text('Dein Lernweg'));
     expect(tester.takeException(), isNull);
     appRouter.go('/review');
     await tester.pumpAndSettle();
@@ -158,6 +197,12 @@ Future<void> _pumpFrames(WidgetTester tester) async {
   }
 }
 
+Future<void> _pumpUntil(WidgetTester tester, Finder finder) async {
+  for (var index = 0; index < 50 && finder.evaluate().isEmpty; index++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
 class _FakeProgress implements ProgressRepository {
   _FakeProgress({this.progress = const []});
 
@@ -198,3 +243,23 @@ class _FakeProgress implements ProgressRepository {
   @override
   Future<void> saveLessonProgress(LessonProgress progress) async {}
 }
+
+const _pathCourse = Course(
+  id: 'test-course',
+  title: 'Testkurs',
+  concepts: [],
+  units: [
+    CourseUnit(
+      id: 'unit-one',
+      title: 'Erste Einheit',
+      description: 'Erstes Ziel',
+      lessons: [Lesson(id: 'lesson-one', title: 'Erste', exercises: [])],
+    ),
+    CourseUnit(
+      id: 'unit-two',
+      title: 'Zweite Einheit',
+      description: 'Zweites Ziel',
+      lessons: [Lesson(id: 'lesson-two', title: 'Zweite', exercises: [])],
+    ),
+  ],
+);

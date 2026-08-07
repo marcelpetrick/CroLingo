@@ -1,29 +1,26 @@
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/data/course/asset_course_repository.dart';
+import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-const _lessons = [
-  ('begrussen', 'Begrüßen'),
-  ('vorstellen', 'Sich vorstellen'),
-  ('befinden', 'Befinden'),
-  ('hoflichkeit', 'Höflich sein'),
-  ('ja-nein', 'Ja und nein'),
-];
-
 /// Sequential Adriatic-journey learning path.
 class LearningPathScreen extends ConsumerStatefulWidget {
   /// Creates the learning path.
-  const LearningPathScreen({super.key});
+  const LearningPathScreen({this.course, super.key});
+
+  /// Optional course source for deterministic tests.
+  final Future<Course>? course;
 
   @override
   ConsumerState<LearningPathScreen> createState() => _LearningPathScreenState();
 }
 
 class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
-  late Future<List<LessonProgress>> _progress;
+  late Future<_PathData> _data;
 
   @override
   void initState() {
@@ -32,7 +29,54 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
   }
 
   void _reload() {
-    _progress = ref.read(progressRepositoryProvider).loadLessonProgress();
+    _data = _loadData();
+  }
+
+  Future<_PathData> _loadData() async => _PathData(
+    await (widget.course ?? AssetCourseRepository().load()),
+    await ref.read(progressRepositoryProvider).loadLessonProgress(),
+  );
+
+  List<Widget> _sections(Course course, Set<String> completed) {
+    final children = <Widget>[];
+    String? previousLessonId;
+    for (var unitIndex = 0; unitIndex < course.units.length; unitIndex++) {
+      final unit = course.units[unitIndex];
+      final unitCompleted = unit.lessons.every(
+        (lesson) => completed.contains(lesson.id),
+      );
+      if (unitIndex > 0) children.add(const SizedBox(height: 12));
+      children
+        ..add(Text('Einheit ${unitIndex + 1} · ${unit.title}'))
+        ..add(const SizedBox(height: 20))
+        ..add(
+          _UnitBanner(
+            completed: unitCompleted,
+            description: unit.description,
+          ),
+        )
+        ..add(const SizedBox(height: 28));
+      for (
+        var lessonIndex = 0;
+        lessonIndex < unit.lessons.length;
+        lessonIndex++
+      ) {
+        final lesson = unit.lessons[lessonIndex];
+        final unlocked =
+            previousLessonId == null || completed.contains(previousLessonId);
+        children.add(
+          _LessonNode(
+            number: lessonIndex + 1,
+            title: lesson.title,
+            completed: completed.contains(lesson.id),
+            unlocked: unlocked,
+            onTap: () => _open(lesson.id),
+          ),
+        );
+        previousLessonId = lesson.id;
+      }
+    }
+    return children;
   }
 
   Future<void> _open(String lessonId) async {
@@ -41,15 +85,20 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => FutureBuilder<List<LessonProgress>>(
-    future: _progress,
+  Widget build(BuildContext context) => FutureBuilder<_PathData>(
+    future: _data,
     builder: (context, snapshot) {
-      final completed =
-          snapshot.data
-              ?.where((item) => item.completedAt != null)
-              .map((item) => item.lessonId)
-              .toSet() ??
-          <String>{};
+      if (snapshot.hasError) {
+        return const Center(
+          child: Text('Lernweg konnte nicht geladen werden.'),
+        );
+      }
+      final data = snapshot.data;
+      if (data == null) return const Center(child: CircularProgressIndicator());
+      final completed = data.progress
+          .where((item) => item.completedAt != null)
+          .map((item) => item.lessonId)
+          .toSet();
       return ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
         children: [
@@ -58,19 +107,7 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 6),
-          const Text('Einheit 1 · Erste Worte'),
-          const SizedBox(height: 20),
-          _UnitBanner(completed: completed.length == _lessons.length),
-          const SizedBox(height: 28),
-          for (var index = 0; index < _lessons.length; index++)
-            _LessonNode(
-              number: index + 1,
-              title: _lessons[index].$2,
-              completed: completed.contains(_lessons[index].$1),
-              unlocked:
-                  index == 0 || completed.contains(_lessons[index - 1].$1),
-              onTap: () => _open(_lessons[index].$1),
-            ),
+          ..._sections(data.course, completed),
         ],
       );
     },
@@ -78,9 +115,10 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
 }
 
 class _UnitBanner extends StatelessWidget {
-  const _UnitBanner({required this.completed});
+  const _UnitBanner({required this.completed, required this.description});
 
   final bool completed;
+  final String description;
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -104,7 +142,7 @@ class _UnitBanner extends StatelessWidget {
             child: Text(
               completed
                   ? 'Goldkrone verdient! Einheit abgeschlossen.'
-                  : 'Begrüße Menschen und stelle dich vor.',
+                  : description,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -116,6 +154,13 @@ class _UnitBanner extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _PathData {
+  const _PathData(this.course, this.progress);
+
+  final Course course;
+  final List<LessonProgress> progress;
 }
 
 class _LessonNode extends StatelessWidget {
