@@ -1,5 +1,8 @@
 # CroLingo implementation plan
 
+Execution status and the prioritized next steps are maintained in
+`02_roadmap.md`.
+
 ## Outcome
 
 CroLingo will be a polished, offline-first Flutter application that teaches Croatian to German-speaking families. Android is the distribution target; Linux is a native development and desktop companion using the same phone interface.

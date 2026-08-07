@@ -131,6 +131,7 @@ check_repository() {
     README.md \
     docs/00_product_spec.md \
     docs/01_plan.md \
+    docs/02_roadmap.md \
     docs/03_questions.md \
     .github/workflows/release.yml \
     android/gradlew \

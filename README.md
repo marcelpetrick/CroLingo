@@ -59,8 +59,9 @@ learner recording, and pronunciation comparison remain later work.
 
 FSRS-based due-date scheduling drives recommended reviews with 90% desired
 retention. Fine-grained concept mastery is derived from durable answer history
-without collecting personal data. The current status and sequence live in
-[the implementation plan](docs/01_plan.md).
+without collecting personal data. Product direction lives in
+[the implementation plan](docs/01_plan.md), while current priorities and
+external checkpoints live in [the development roadmap](docs/02_roadmap.md).
 
 ## Bootstrap a fresh clone
 
@@ -229,6 +230,7 @@ Start with these documents before changing product behavior:
 
 - [Product specification](docs/00_product_spec.md)
 - [Implementation plan](docs/01_plan.md)
+- [Prioritized development roadmap](docs/02_roadmap.md)
 - [Questions and adopted defaults](docs/03_questions.md)
 - [Course content and audio authoring](docs/04_content_and_audio_authoring.md)
 - [AI agent working agreement](docs/AGENTS.md)

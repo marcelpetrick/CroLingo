@@ -1,6 +1,8 @@
 # CroLingo agent agreement
 
-- Read `docs/00_product_spec.md`, `docs/01_plan.md`, and `docs/03_questions.md` before changing product behavior. Newer documents override conflicts in the original specification.
+- Read `docs/00_product_spec.md`, `docs/01_plan.md`, `docs/02_roadmap.md`, and
+  `docs/03_questions.md` before changing product behavior. Newer documents
+  override conflicts in the original specification.
 - CroLingo is an offline-first Flutter app for Android and Linux. Keep behavior equivalent; Linux uses a fixed 412×915 phone viewport, while Android is responsive.
 - System-provided Croatian TTS playback is in scope behind a replaceable Android/Linux adapter. Native recordings, listening exercises, learner recording, and pronunciation assessment remain deferred.
 - Keep presentation, application/domain logic, persistence, content, and platform adapters separated. Dependencies must support Android and Linux.
