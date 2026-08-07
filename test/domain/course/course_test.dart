@@ -18,15 +18,31 @@ void main() {
       course = Course.fromJson(decoded);
     });
 
-    test('contains the complete starter unit', () {
+    test('contains two ordered beginner units', () {
       expect(course.id, 'de-hr-a1');
-      expect(course.units, hasLength(1));
-      expect(course.units.single.lessons, hasLength(5));
+      expect(course.units, hasLength(2));
       expect(
-        course.units.single.lessons.expand((lesson) => lesson.exercises),
-        hasLength(35),
+        course.units.map((unit) => unit.id),
+        ['erste-worte', 'begegnung-und-abschied'],
       );
-      expect(course.concepts, hasLength(10));
+      expect(course.units.expand((unit) => unit.lessons), hasLength(10));
+      expect(
+        course.units
+            .expand((unit) => unit.lessons)
+            .expand((lesson) => lesson.exercises),
+        hasLength(70),
+      );
+      expect(course.concepts, hasLength(20));
+      expect(
+        course.units.last.lessons.map((lesson) => lesson.id),
+        [
+          'morgen-und-abschied',
+          'bis-bald',
+          'entschuldigung',
+          'kennenlernen',
+          'herkunft',
+        ],
+      );
     });
 
     test('passes semantic validation', () {

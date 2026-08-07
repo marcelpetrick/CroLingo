@@ -11,7 +11,17 @@
     {"id": "hvala", "croatian": "Hvala.", "german": "Danke."},
     {"id": "molim", "croatian": "Molim.", "german": "Bitte."},
     {"id": "da", "croatian": "Da.", "german": "Ja."},
-    {"id": "ne", "croatian": "Ne.", "german": "Nein."}
+    {"id": "ne", "croatian": "Ne.", "german": "Nein."},
+    {"id": "dobro-jutro", "croatian": "Dobro jutro!", "german": "Guten Morgen!"},
+    {"id": "dovidenja", "croatian": "Doviđenja!", "german": "Auf Wiedersehen!"},
+    {"id": "laku-noc", "croatian": "Laku noć!", "german": "Gute Nacht!"},
+    {"id": "vidimo-se", "croatian": "Vidimo se!", "german": "Bis bald!"},
+    {"id": "oprostite", "croatian": "Oprostite.", "german": "Entschuldigung."},
+    {"id": "nema-na-cemu", "croatian": "Nema na čemu.", "german": "Gern geschehen."},
+    {"id": "kako-se-zoves", "croatian": "Kako se zoveš?", "german": "Wie heißt du?"},
+    {"id": "drago-mi-je", "croatian": "Drago mi je.", "german": "Freut mich."},
+    {"id": "odakle-si", "croatian": "Odakle si?", "german": "Woher kommst du?"},
+    {"id": "ja-sam-iz-njemacke", "croatian": "Ja sam iz Njemačke.", "german": "Ich komme aus Deutschland."}
   ],
   "units": [
     {
@@ -446,6 +456,443 @@
               "conceptIds": ["da", "ne"],
               "pairs": [],
               "tiles": ["hvala.", "Da,"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "begegnung-und-abschied",
+      "title": "Begegnung und Abschied",
+      "description": "Verabschiede dich höflich und führe ein erstes Gespräch.",
+      "lessons": [
+        {
+          "id": "morgen-und-abschied",
+          "title": "Morgen und Abschied",
+          "exercises": [
+            {
+              "id": "morgen-abschied-match",
+              "type": "matching",
+              "masteryDimension": "recognition",
+              "prompt": "Verbinde Begrüßung und Abschied.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Dobro jutro begrüßt am Morgen; Doviđenja verabschiedet höflich.",
+              "conceptIds": ["dobro-jutro", "dovidenja"],
+              "pairs": [
+                {"croatian": "Dobro jutro!", "german": "Guten Morgen!"},
+                {"croatian": "Doviđenja!", "german": "Auf Wiedersehen!"}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "dobro-jutro-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Guten Morgen!",
+              "acceptedAnswers": ["Dobro jutro!"],
+              "explanation": "Dobro jutro ist die Begrüßung am Morgen.",
+              "conceptIds": ["dobro-jutro"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "dobro-jutro-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Dobro jutro!",
+              "acceptedAnswers": ["Guten Morgen!"],
+              "explanation": "Dobro jutro bedeutet Guten Morgen.",
+              "conceptIds": ["dobro-jutro"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "dovidenja-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Auf Wiedersehen!",
+              "acceptedAnswers": ["Doviđenja!"],
+              "explanation": "Doviđenja ist eine höfliche Verabschiedung.",
+              "conceptIds": ["dovidenja"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "dovidenja-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Doviđenja!",
+              "acceptedAnswers": ["Auf Wiedersehen!"],
+              "explanation": "Doviđenja bedeutet Auf Wiedersehen.",
+              "conceptIds": ["dovidenja"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "dobro-jutro-blank",
+              "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
+              "prompt": "Ergänze die Begrüßung: Dobro ___!",
+              "acceptedAnswers": ["jutro"],
+              "explanation": "Jutro bedeutet Morgen; zusammen heißt es Guten Morgen.",
+              "conceptIds": ["dobro-jutro"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "morgen-abschied-satz",
+              "type": "sentence",
+              "masteryDimension": "sentenceProduction",
+              "prompt": "Baue: Guten Morgen! Auf Wiedersehen!",
+              "acceptedAnswers": ["Dobro jutro! Doviđenja!"],
+              "explanation": "Die Begrüßung steht vor der höflichen Verabschiedung.",
+              "conceptIds": ["dobro-jutro", "dovidenja"],
+              "pairs": [],
+              "tiles": ["Doviđenja!", "jutro!", "Dobro"]
+            }
+          ]
+        },
+        {
+          "id": "bis-bald",
+          "title": "Bis bald",
+          "exercises": [
+            {
+              "id": "bis-bald-match",
+              "type": "matching",
+              "masteryDimension": "recognition",
+              "prompt": "Verbinde die Verabschiedungen.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Laku noć wünscht eine gute Nacht; Vidimo se kündigt ein Wiedersehen an.",
+              "conceptIds": ["laku-noc", "vidimo-se"],
+              "pairs": [
+                {"croatian": "Laku noć!", "german": "Gute Nacht!"},
+                {"croatian": "Vidimo se!", "german": "Bis bald!"}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "laku-noc-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Gute Nacht!",
+              "acceptedAnswers": ["Laku noć!"],
+              "explanation": "Laku noć wünscht eine gute Nacht.",
+              "conceptIds": ["laku-noc"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "laku-noc-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Laku noć!",
+              "acceptedAnswers": ["Gute Nacht!"],
+              "explanation": "Laku noć bedeutet Gute Nacht.",
+              "conceptIds": ["laku-noc"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vidimo-se-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Bis bald!",
+              "acceptedAnswers": ["Vidimo se!"],
+              "explanation": "Vidimo se wird beim Abschied im Sinn von Bis bald verwendet.",
+              "conceptIds": ["vidimo-se"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vidimo-se-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Vidimo se!",
+              "acceptedAnswers": ["Bis bald!", "Wir sehen uns!"],
+              "explanation": "Vidimo se heißt wörtlich Wir sehen uns und entspricht Bis bald.",
+              "conceptIds": ["vidimo-se"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "laku-noc-blank",
+              "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
+              "prompt": "Ergänze: Laku ___!",
+              "acceptedAnswers": ["noć"],
+              "explanation": "Noć bedeutet Nacht; die feste Wendung lautet Laku noć.",
+              "conceptIds": ["laku-noc"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "bis-bald-satz",
+              "type": "sentence",
+              "masteryDimension": "sentenceProduction",
+              "prompt": "Baue: Gute Nacht! Bis bald!",
+              "acceptedAnswers": ["Laku noć! Vidimo se!"],
+              "explanation": "Zuerst steht der Nachtgruß, danach die Aussicht auf ein Wiedersehen.",
+              "conceptIds": ["laku-noc", "vidimo-se"],
+              "pairs": [],
+              "tiles": ["se!", "Laku", "Vidimo", "noć!"]
+            }
+          ]
+        },
+        {
+          "id": "entschuldigung",
+          "title": "Entschuldigung",
+          "exercises": [
+            {
+              "id": "entschuldigung-match",
+              "type": "matching",
+              "masteryDimension": "recognition",
+              "prompt": "Verbinde die höflichen Wendungen.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Oprostite bittet um Entschuldigung; Nema na čemu antwortet auf Dank.",
+              "conceptIds": ["oprostite", "nema-na-cemu"],
+              "pairs": [
+                {"croatian": "Oprostite.", "german": "Entschuldigung."},
+                {"croatian": "Nema na čemu.", "german": "Gern geschehen."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "oprostite-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Entschuldigung.",
+              "acceptedAnswers": ["Oprostite."],
+              "explanation": "Oprostite ist eine höfliche Bitte um Entschuldigung.",
+              "conceptIds": ["oprostite"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "oprostite-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Oprostite.",
+              "acceptedAnswers": ["Entschuldigung."],
+              "explanation": "Oprostite bedeutet Entschuldigung.",
+              "conceptIds": ["oprostite"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "nema-na-cemu-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Gern geschehen.",
+              "acceptedAnswers": ["Nema na čemu."],
+              "explanation": "Nema na čemu ist eine übliche Antwort auf Hvala.",
+              "conceptIds": ["nema-na-cemu"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "nema-na-cemu-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Nema na čemu.",
+              "acceptedAnswers": ["Gern geschehen."],
+              "explanation": "Nema na čemu bedeutet Gern geschehen.",
+              "conceptIds": ["nema-na-cemu"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "oprostite-blank",
+              "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
+              "prompt": "Bitte höflich um Entschuldigung: ___.",
+              "acceptedAnswers": ["Oprostite"],
+              "explanation": "Oprostite ist die höfliche Form in dieser Situation.",
+              "conceptIds": ["oprostite"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "dank-antwort-satz",
+              "type": "sentence",
+              "masteryDimension": "sentenceProduction",
+              "prompt": "Baue die Antwort: Gern geschehen.",
+              "acceptedAnswers": ["Nema na čemu."],
+              "explanation": "Die feste Antwort auf Hvala lautet Nema na čemu.",
+              "conceptIds": ["hvala", "nema-na-cemu"],
+              "pairs": [],
+              "tiles": ["čemu.", "Nema", "na"]
+            }
+          ]
+        },
+        {
+          "id": "kennenlernen",
+          "title": "Kennenlernen",
+          "exercises": [
+            {
+              "id": "kennenlernen-match",
+              "type": "matching",
+              "masteryDimension": "recognition",
+              "prompt": "Verbinde Frage und Reaktion.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Kako se zoveš fragt nach dem Namen; Drago mi je reagiert auf eine Vorstellung.",
+              "conceptIds": ["kako-se-zoves", "drago-mi-je"],
+              "pairs": [
+                {"croatian": "Kako se zoveš?", "german": "Wie heißt du?"},
+                {"croatian": "Drago mi je.", "german": "Freut mich."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "kako-se-zoves-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Wie heißt du?",
+              "acceptedAnswers": ["Kako se zoveš?"],
+              "explanation": "Kako se zoveš fragt eine einzelne vertraute Person nach ihrem Namen.",
+              "conceptIds": ["kako-se-zoves"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "kako-se-zoves-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Kako se zoveš?",
+              "acceptedAnswers": ["Wie heißt du?"],
+              "explanation": "Kako se zoveš bedeutet Wie heißt du.",
+              "conceptIds": ["kako-se-zoves"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "drago-mi-je-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Freut mich.",
+              "acceptedAnswers": ["Drago mi je."],
+              "explanation": "Drago mi je ist eine freundliche Reaktion beim Kennenlernen.",
+              "conceptIds": ["drago-mi-je"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "drago-mi-je-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Drago mi je.",
+              "acceptedAnswers": ["Freut mich."],
+              "explanation": "Drago mi je bedeutet Freut mich.",
+              "conceptIds": ["drago-mi-je"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "kako-se-zoves-blank",
+              "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
+              "prompt": "Ergänze die Namensfrage: Kako se ___?",
+              "acceptedAnswers": ["zoveš"],
+              "explanation": "Zoveš ist hier die Form für du heißt.",
+              "conceptIds": ["kako-se-zoves"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "kennenlernen-satz",
+              "type": "sentence",
+              "masteryDimension": "sentenceProduction",
+              "prompt": "Baue: Hallo! Wie heißt du?",
+              "acceptedAnswers": ["Bok! Kako se zoveš?"],
+              "explanation": "Bok eröffnet locker das Gespräch, danach folgt die Namensfrage.",
+              "conceptIds": ["bok", "kako-se-zoves"],
+              "pairs": [],
+              "tiles": ["zoveš?", "Bok!", "se", "Kako"]
+            }
+          ]
+        },
+        {
+          "id": "herkunft",
+          "title": "Woher kommst du?",
+          "exercises": [
+            {
+              "id": "herkunft-match",
+              "type": "matching",
+              "masteryDimension": "recognition",
+              "prompt": "Verbinde Frage und Herkunft.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Odakle si fragt nach der Herkunft; Ja sam iz Njemačke nennt Deutschland.",
+              "conceptIds": ["odakle-si", "ja-sam-iz-njemacke"],
+              "pairs": [
+                {"croatian": "Odakle si?", "german": "Woher kommst du?"},
+                {"croatian": "Ja sam iz Njemačke.", "german": "Ich komme aus Deutschland."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "odakle-si-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Woher kommst du?",
+              "acceptedAnswers": ["Odakle si?"],
+              "explanation": "Odakle fragt woher; si ist die Form von sein für du.",
+              "conceptIds": ["odakle-si"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "odakle-si-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Odakle si?",
+              "acceptedAnswers": ["Woher kommst du?"],
+              "explanation": "Odakle si bedeutet Woher kommst du.",
+              "conceptIds": ["odakle-si"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "iz-njemacke-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Ich komme aus Deutschland.",
+              "acceptedAnswers": ["Ja sam iz Njemačke."],
+              "explanation": "Ja sam iz nennt die Herkunft; Njemačke ist hier die Form für Deutschland.",
+              "conceptIds": ["ja-sam-iz-njemacke"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "iz-njemacke-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Ja sam iz Njemačke.",
+              "acceptedAnswers": ["Ich komme aus Deutschland.", "Ich bin aus Deutschland."],
+              "explanation": "Ja sam iz Njemačke nennt Deutschland als Herkunft.",
+              "conceptIds": ["ja-sam-iz-njemacke"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "odakle-si-blank",
+              "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
+              "prompt": "Ergänze die Herkunftsfrage: Odakle ___?",
+              "acceptedAnswers": ["si"],
+              "explanation": "Si ist die Form von sein für du.",
+              "conceptIds": ["odakle-si"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "herkunft-satz",
+              "type": "sentence",
+              "masteryDimension": "sentenceProduction",
+              "prompt": "Baue: Ich komme aus Deutschland.",
+              "acceptedAnswers": ["Ja sam iz Njemačke."],
+              "explanation": "Die Herkunft folgt auf Ja sam iz.",
+              "conceptIds": ["ja-sam", "ja-sam-iz-njemacke"],
+              "pairs": [],
+              "tiles": ["Njemačke.", "iz", "Ja", "sam"]
             }
           ]
         }

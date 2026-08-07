@@ -46,8 +46,10 @@ Phase two is active. Both translation directions are present for every existing
 concept. Accessible Android/Linux playback controls are implemented; path
 rendering and sequential unlocking now derive from ordered course data across
 unit boundaries. The dashboard starts or resumes the actual first incomplete
-lesson. Expansion toward A1 through small human-reviewable everyday units comes
-next.
+lesson. A second five-lesson unit adds farewells, courtesy, first meetings, and
+origin phrases; its automated content gates pass and human Croatian/German
+review remains required. Expansion toward A1 continues through small
+human-reviewable everyday units.
 
 ### 1. Foundation and guardrails
 

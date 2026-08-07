@@ -21,10 +21,10 @@ native recordings and pronunciation assessment remain deferred.
 2. **Make Home resume real course progress.** Complete. Home derives its
    primary action from ordered course data and durable checkpoints, including
    continuation across unit boundaries.
-3. **Add the second course unit.** Add farewells, courtesy, and first-meeting
-   phrases as validated JSON with both recall directions, mastery tags,
-   explanations, tests, and about two new concepts per lesson. Automated checks
-   do not replace Croatian/German human review.
+3. **Add the second course unit.** Implementation complete. Farewells,
+   courtesy, first-meeting, and origin phrases are validated JSON with both
+   recall directions, mastery tags, explanations, tests, and two new concepts
+   per lesson. Croatian/German human review remains an external checkpoint.
 4. **Expand the A1 path.** Add small reviewed units for family and people,
    numbers and age, food and drinks, home, everyday actions, shopping, and
    travel/directions. Reuse known material in most exercises.
