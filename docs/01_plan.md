@@ -122,6 +122,9 @@ expansion toward A1 through small human-reviewable everyday units comes next.
   directions, tests, and human Croatian/German review for every unit.
 - Keep one bundled offline course and sequential cross-unit progression until
   the content model has enough evidence to justify optional paths.
+- Keep authored material independent from Dart code and use deterministic,
+  schema-versioned JSON packs. A separate authoring repository may export an
+  approved snapshot, but runtime downloads remain deferred.
 
 ## Design tokens
 
@@ -173,6 +176,9 @@ Native-speaker audio, listening exercises, microphone access, learner
 recordings, sample comparison, pronunciation grading, backend, accounts,
 synchronization, social features, monetization, web, iOS, Git tags, and GitHub
 Releases are not part of phase two. System-provided TTS playback is included.
+The future recording and course-authoring contract is documented in
+`04_content_and_audio_authoring.md`; raw recordings are not bundled or played
+until its manifest, preparation, validation, and fallback work is implemented.
 
 ## Physical-device checklist
 

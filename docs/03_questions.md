@@ -23,6 +23,10 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Navigation?** `go_router` with Home, Path, Review, and More routes.
 - **Persistence?** Drift/SQLite in app-private storage, repositories at the boundary, and forward-only tested migrations.
 - **Course representation?** Bundled JSON validated structurally and semantically, then parsed into typed immutable models.
+- **Can curriculum authoring be separated from application development?** Yes.
+  JSON remains the canonical app format; a separate repository or editor may
+  export deterministic validated snapshots. Do not add XML or unreviewed
+  runtime downloads.
 - **Spaced repetition?** FSRS behind a replaceable interface using default parameters and 90% desired retention until enough learner history exists for justified tuning.
 - **Time handling?** Persist UTC; calculate learning days in Europe/Berlin.
 - **How is pronunciation played before recordings exist?** Use replaceable,

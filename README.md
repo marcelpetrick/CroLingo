@@ -70,6 +70,18 @@ with `sudo pacman -S espeak-ng`; on Ubuntu use
 the repository installs its pinned Flutter and quality tools into the ignored
 `.tooling/` directory:
 
+For a complete Manjaro/Arch workstation setup, run:
+
+```bash
+sudo pacman -Syu
+sudo pacman -S --needed base-devel git curl unzip xz cmake ninja clang pkgconf gtk3 jdk21-openjdk android-tools android-udev nodejs npm espeak-ng
+sudo archlinux-java set java-21-openjdk
+```
+
+The Android SDK command-line tools must exist below `ANDROID_HOME`. This
+workstation already uses `$HOME/Android/Sdk`; a fresh machine can install them
+with Android Studio or Google's command-line tools before continuing.
+
 ```bash
 ./scripts/bootstrap.sh
 ```
@@ -191,6 +203,7 @@ Start with these documents before changing product behavior:
 - [Product specification](docs/00_product_spec.md)
 - [Implementation plan](docs/01_plan.md)
 - [Questions and adopted defaults](docs/03_questions.md)
+- [Course content and audio authoring](docs/04_content_and_audio_authoring.md)
 - [AI agent working agreement](docs/AGENTS.md)
 
 ## Privacy and security
