@@ -5,6 +5,7 @@ import 'package:crolingo/features/lesson/lesson_screen.dart';
 import 'package:crolingo/features/more/more_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/review/review_screen.dart';
+import 'package:crolingo/features/vocabulary/vocabulary_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +32,10 @@ final appRouter = GoRouter(
         GoRoute(path: '/path', builder: _path),
         GoRoute(path: '/review', builder: _review),
         GoRoute(path: '/more', builder: _more),
+        GoRoute(
+          path: '/more/vocabulary',
+          builder: _vocabulary,
+        ),
       ],
     ),
   ],
@@ -45,3 +50,6 @@ Widget _review(BuildContext context, GoRouterState state) =>
     const ReviewScreen();
 
 Widget _more(BuildContext context, GoRouterState state) => const MoreScreen();
+
+Widget _vocabulary(BuildContext context, GoRouterState state) =>
+    const VocabularyScreen();

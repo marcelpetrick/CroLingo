@@ -90,6 +90,29 @@ class DueReview {
   final DateTime due;
 }
 
+/// One persisted answer attempt used for learning analytics.
+class ExerciseAttempt {
+  /// Creates an immutable attempt snapshot.
+  const ExerciseAttempt({
+    required this.exerciseId,
+    required this.correct,
+    required this.incorrectBefore,
+    required this.occurredAt,
+  });
+
+  /// Stable exercise ID.
+  final String exerciseId;
+
+  /// Whether this submission was accepted.
+  final bool correct;
+
+  /// Number of errors already made on this exercise in the session.
+  final int incorrectBefore;
+
+  /// UTC submission time.
+  final DateTime occurredAt;
+}
+
 /// Platform-independent persistence contract.
 abstract interface class ProgressRepository {
   /// Records every submitted answer with its grading context.
@@ -116,4 +139,7 @@ abstract interface class ProgressRepository {
 
   /// Reconstructs and returns currently due FSRS reviews.
   Future<List<DueReview>> loadDueReviews({DateTime? now});
+
+  /// Loads persisted attempts for local mastery calculations.
+  Future<List<ExerciseAttempt>> loadAttemptHistory();
 }

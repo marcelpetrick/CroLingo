@@ -113,6 +113,7 @@ const _narrowLesson = Lesson(
     Exercise(
       id: 'match',
       type: ExerciseType.matching,
+      masteryDimension: MasteryDimension.recognition,
       prompt: 'Verbinde die Wörter.',
       acceptedAnswers: ['vollständig'],
       explanation: 'Explanation',
@@ -132,6 +133,9 @@ class _RecordingProgress implements ProgressRepository {
 
   @override
   Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
+
+  @override
+  Future<List<ExerciseAttempt>> loadAttemptHistory() async => [];
 
   @override
   Future<List<LessonProgress>> loadLessonProgress() async => progress;

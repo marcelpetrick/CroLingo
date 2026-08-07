@@ -26,6 +26,7 @@
             {
               "id": "begrussen-match",
               "type": "matching",
+              "masteryDimension": "recognition",
               "prompt": "Verbinde die Begrüßungen.",
               "acceptedAnswers": ["vollständig"],
               "explanation": "Bok ist locker, Dobar dan ist höflich und tagsüber passend.",
@@ -39,6 +40,7 @@
             {
               "id": "begrussen-de-hr",
               "type": "translation",
+              "masteryDimension": "germanToCroatian",
               "prompt": "Übersetze: Guten Tag!",
               "acceptedAnswers": ["Dobar dan!"],
               "explanation": "Dobar dan ist die höfliche Begrüßung am Tag.",
@@ -49,6 +51,7 @@
             {
               "id": "begrussen-blank",
               "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
               "prompt": "Ergänze die lockere Begrüßung: ___!",
               "acceptedAnswers": ["Bok"],
               "explanation": "Bok entspricht einem lockeren Hallo.",
@@ -59,6 +62,7 @@
             {
               "id": "begrussen-satz",
               "type": "sentence",
+              "masteryDimension": "sentenceProduction",
               "prompt": "Baue: Guten Tag!",
               "acceptedAnswers": ["Dobar dan!"],
               "explanation": "Das Adjektiv dobar steht vor dan, dem Tag.",
@@ -75,6 +79,7 @@
             {
               "id": "vorstellen-match",
               "type": "matching",
+              "masteryDimension": "recognition",
               "prompt": "Verbinde die Vorstellungen.",
               "acceptedAnswers": ["vollständig"],
               "explanation": "Ja sam nennt, wer du bist; zovem se nennt deinen Namen.",
@@ -88,6 +93,7 @@
             {
               "id": "vorstellen-de-hr",
               "type": "translation",
+              "masteryDimension": "germanToCroatian",
               "prompt": "Übersetze: Ich bin Ana.",
               "acceptedAnswers": ["Ja sam Ana."],
               "explanation": "Ja bedeutet ich und sam bedeutet bin.",
@@ -98,6 +104,7 @@
             {
               "id": "vorstellen-blank",
               "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
               "prompt": "Ergänze: ___ se Luka.",
               "acceptedAnswers": ["Zovem"],
               "explanation": "Zovem se heißt wörtlich etwa ich nenne mich.",
@@ -108,6 +115,7 @@
             {
               "id": "vorstellen-satz",
               "type": "sentence",
+              "masteryDimension": "sentenceProduction",
               "prompt": "Baue: Ich heiße Mia.",
               "acceptedAnswers": ["Zovem se Mia."],
               "explanation": "Zovem se bleibt als Wendung zusammen.",
@@ -124,6 +132,7 @@
             {
               "id": "befinden-match",
               "type": "matching",
+              "masteryDimension": "recognition",
               "prompt": "Verbinde Frage und Antwort.",
               "acceptedAnswers": ["vollständig"],
               "explanation": "Kako si fragt eine vertraute Person, wie es ihr geht.",
@@ -137,6 +146,7 @@
             {
               "id": "befinden-hr-de",
               "type": "translation",
+              "masteryDimension": "croatianToGerman",
               "prompt": "Übersetze: Kako si?",
               "acceptedAnswers": ["Wie geht es dir?", "Wie geht's dir?"],
               "explanation": "Kako heißt wie; si ist die du-Form von sein.",
@@ -147,6 +157,7 @@
             {
               "id": "befinden-blank",
               "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
               "prompt": "Antworte kurz: Kako si? — ___.",
               "acceptedAnswers": ["Dobro"],
               "explanation": "Dobro ist eine natürliche kurze Antwort: gut.",
@@ -157,6 +168,7 @@
             {
               "id": "befinden-satz",
               "type": "sentence",
+              "masteryDimension": "sentenceProduction",
               "prompt": "Baue: Wie geht es dir?",
               "acceptedAnswers": ["Kako si?"],
               "explanation": "Im Kroatischen reichen hier zwei Wörter.",
@@ -173,6 +185,7 @@
             {
               "id": "hoflichkeit-match",
               "type": "matching",
+              "masteryDimension": "recognition",
               "prompt": "Verbinde die höflichen Wörter.",
               "acceptedAnswers": ["vollständig"],
               "explanation": "Hvala bedankt sich; molim kann bitte oder gern geschehen heißen.",
@@ -186,6 +199,7 @@
             {
               "id": "hoflichkeit-de-hr",
               "type": "translation",
+              "masteryDimension": "germanToCroatian",
               "prompt": "Übersetze: Danke.",
               "acceptedAnswers": ["Hvala."],
               "explanation": "Hvala ist das allgemeine Wort für danke.",
@@ -196,6 +210,7 @@
             {
               "id": "hoflichkeit-blank",
               "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
               "prompt": "Ergänze: ___! (Bitte!)",
               "acceptedAnswers": ["Molim"],
               "explanation": "Molim wird für bitte und als Antwort auf danke verwendet.",
@@ -206,6 +221,7 @@
             {
               "id": "hoflichkeit-satz",
               "type": "sentence",
+              "masteryDimension": "sentenceProduction",
               "prompt": "Baue: Danke, bitte.",
               "acceptedAnswers": ["Hvala, molim."],
               "explanation": "Diese Übung festigt beide Höflichkeitswörter.",
@@ -222,6 +238,7 @@
             {
               "id": "ja-nein-match",
               "type": "matching",
+              "masteryDimension": "recognition",
               "prompt": "Verbinde Zustimmung und Ablehnung.",
               "acceptedAnswers": ["vollständig"],
               "explanation": "Da stimmt zu, ne lehnt ab.",
@@ -235,6 +252,7 @@
             {
               "id": "ja-nein-hr-de",
               "type": "translation",
+              "masteryDimension": "croatianToGerman",
               "prompt": "Übersetze: Ne.",
               "acceptedAnswers": ["Nein."],
               "explanation": "Ne ist die kurze Verneinung.",
@@ -245,6 +263,7 @@
             {
               "id": "ja-nein-blank",
               "type": "fillBlank",
+              "masteryDimension": "grammarApplication",
               "prompt": "Stimme zu: ___!",
               "acceptedAnswers": ["Da"],
               "explanation": "Da bedeutet ja.",
@@ -255,6 +274,7 @@
             {
               "id": "ja-nein-satz",
               "type": "sentence",
+              "masteryDimension": "sentenceProduction",
               "prompt": "Baue: Ja, danke.",
               "acceptedAnswers": ["Da, hvala."],
               "explanation": "Da und hvala ergeben eine höfliche Zustimmung.",

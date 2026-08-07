@@ -21,7 +21,12 @@ class CroLingoShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final index = _locations.indexOf(location);
+    final exactIndex = _locations.indexOf(location);
+    final index = exactIndex >= 0
+        ? exactIndex
+        : _locations.indexWhere(
+            (candidate) => candidate != '/' && location.startsWith(candidate),
+          );
     return Scaffold(
       body: SafeArea(child: child),
       bottomNavigationBar: NavigationBar(

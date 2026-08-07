@@ -31,13 +31,15 @@ through Git history.
 - matching, two-way translation, gaps, and sentence tiles;
 - immediate correction, explanations, unlimited retries, and XP;
 - durable local progress, lesson resume/unlocking, streaks, and recent mistakes;
+- a local vocabulary view with mastery for recognition, both recall directions,
+  sentence production, and grammar application;
 - reproducible Android APK/AAB and native Linux builds;
 - strict analysis, linting, tests, coverage, security scans, and CI.
 - automated narrow-phone and 200% text-scaling layout checks.
 
-FSRS-based due-date scheduling now drives recommended reviews with 90% desired
-retention. Fine-grained concept mastery remains a future learning loop. The
-current status and sequence live in
+FSRS-based due-date scheduling drives recommended reviews with 90% desired
+retention. Fine-grained concept mastery is derived from durable answer history
+without collecting personal data. The current status and sequence live in
 [the implementation plan](docs/01_plan.md).
 
 ## Bootstrap a fresh clone

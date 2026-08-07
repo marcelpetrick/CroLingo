@@ -148,4 +148,20 @@ class DriftProgressRepository implements ProgressRepository {
     ]..sort((left, right) => left.due.compareTo(right.due));
     return due;
   }
+
+  @override
+  Future<List<ExerciseAttempt>> loadAttemptHistory() async {
+    final query = database.select(database.attemptEntries)
+      ..orderBy([(row) => OrderingTerm.asc(row.occurredAt)]);
+    final rows = await query.get();
+    return [
+      for (final row in rows)
+        ExerciseAttempt(
+          exerciseId: row.exerciseId,
+          correct: row.correct,
+          incorrectBefore: row.incorrectBefore,
+          occurredAt: row.occurredAt.toUtc(),
+        ),
+    ];
+  }
 }

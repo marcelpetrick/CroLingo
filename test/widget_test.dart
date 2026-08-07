@@ -50,6 +50,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Wortschatz'), findsOneWidget);
     expect(find.text('Offline · Keine Werbung · Keine Herzen'), findsOneWidget);
+
+    await tester.tap(find.text('Wortschatz'));
+    await tester.pumpAndSettle();
+    expect(find.text('Bok!'), findsOneWidget);
+    expect(find.text('Noch nicht geübt'), findsWidgets);
   });
 
   testWidgets('supports a narrow phone at 200 percent text scaling', (
@@ -76,6 +81,9 @@ void main() {
 }
 
 class _FakeProgress implements ProgressRepository {
+  @override
+  Future<List<ExerciseAttempt>> loadAttemptHistory() async => [];
+
   @override
   Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
 

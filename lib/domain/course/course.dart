@@ -101,12 +101,31 @@ enum ExerciseType {
   sentence,
 }
 
+/// Learning ability measured by an exercise.
+enum MasteryDimension {
+  /// Recognize Croatian and German forms as a pair.
+  recognition,
+
+  /// Recall Croatian from a German prompt.
+  germanToCroatian,
+
+  /// Recall German from a Croatian prompt.
+  croatianToGerman,
+
+  /// Produce a complete Croatian sentence.
+  sentenceProduction,
+
+  /// Apply vocabulary or grammar in context.
+  grammarApplication,
+}
+
 /// One gradable text exercise.
 class Exercise {
   /// Creates an exercise.
   const Exercise({
     required this.id,
     required this.type,
+    required this.masteryDimension,
     required this.prompt,
     required this.acceptedAnswers,
     required this.explanation,
@@ -119,6 +138,9 @@ class Exercise {
   factory Exercise.fromJson(Map<String, Object?> json) => Exercise(
     id: _string(json, 'id'),
     type: ExerciseType.values.byName(_string(json, 'type')),
+    masteryDimension: MasteryDimension.values.byName(
+      _string(json, 'masteryDimension'),
+    ),
     prompt: _string(json, 'prompt'),
     acceptedAnswers: _strings(json, 'acceptedAnswers'),
     explanation: _string(json, 'explanation'),
@@ -132,6 +154,9 @@ class Exercise {
 
   /// Rendering and grading family.
   final ExerciseType type;
+
+  /// Fine-grained learning ability practiced by this exercise.
+  final MasteryDimension masteryDimension;
 
   /// German instruction or source sentence.
   final String prompt;

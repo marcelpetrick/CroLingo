@@ -34,11 +34,14 @@ void main() {
     );
 
     final rows = await database.select(database.attemptEntries).get();
+    final history = await repository.loadAttemptHistory();
     final mistakes = await repository.loadRecentMistakes(limit: 1);
     final due = await repository.loadDueReviews(
       now: DateTime.utc(2026, 8, 8),
     );
     expect(rows, hasLength(2));
+    expect(history, hasLength(2));
+    expect(history.first.correct, isTrue);
     expect(rows.first.lessonId, 'begrussen');
     expect(rows.first.incorrectBefore, 1);
     expect(rows.first.occurredAt.toUtc(), DateTime.utc(2026, 8, 7, 8));

@@ -38,6 +38,7 @@ void main() {
     const exercise = Exercise(
       id: 'exercise',
       type: ExerciseType.translation,
+      masteryDimension: MasteryDimension.germanToCroatian,
       prompt: 'Prompt',
       acceptedAnswers: ['Answer'],
       explanation: 'Explanation',

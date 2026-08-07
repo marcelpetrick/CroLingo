@@ -6,6 +6,7 @@ void main() {
   const exercise = Exercise(
     id: 'hello',
     type: ExerciseType.translation,
+    masteryDimension: MasteryDimension.germanToCroatian,
     prompt: 'Hallo',
     acceptedAnswers: ['Dobar dan!'],
     explanation: 'Greeting',
@@ -29,6 +30,7 @@ void main() {
     const croatian = Exercise(
       id: 'croatian',
       type: ExerciseType.translation,
+      masteryDimension: MasteryDimension.germanToCroatian,
       prompt: 'Croatian',
       acceptedAnswers: ['Č'],
       explanation: 'Character',

@@ -39,6 +39,25 @@ abstract final class CourseValidator {
               exercise.tiles.length < 2) {
             errors.add('Sentence exercise ${exercise.id} needs two tiles');
           }
+          final expectedDimension = switch (exercise.type) {
+            ExerciseType.matching => MasteryDimension.recognition,
+            ExerciseType.fillBlank => MasteryDimension.grammarApplication,
+            ExerciseType.sentence => MasteryDimension.sentenceProduction,
+            ExerciseType.translation => null,
+          };
+          if (expectedDimension != null &&
+              exercise.masteryDimension != expectedDimension) {
+            errors.add(
+              'Exercise ${exercise.id} has incompatible mastery dimension',
+            );
+          }
+          if (exercise.type == ExerciseType.translation &&
+              exercise.masteryDimension != MasteryDimension.germanToCroatian &&
+              exercise.masteryDimension != MasteryDimension.croatianToGerman) {
+            errors.add(
+              'Translation ${exercise.id} needs a recall direction',
+            );
+          }
           for (final conceptId in exercise.conceptIds) {
             if (!conceptIds.contains(conceptId)) {
               errors.add('Exercise ${exercise.id} references $conceptId');
