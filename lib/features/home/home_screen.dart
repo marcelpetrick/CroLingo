@@ -77,8 +77,8 @@ class _Stats extends ConsumerWidget {
               Expanded(
                 child: _StatCard(
                   icon: Icons.local_fire_department_outlined,
-                  value: '${stats?.studyDays ?? 0}',
-                  label: 'Tage',
+                  value: '${stats?.currentStreak ?? 0}',
+                  label: 'Tage Serie',
                 ),
               ),
               const SizedBox(width: 12),

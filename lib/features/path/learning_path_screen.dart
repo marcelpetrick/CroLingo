@@ -60,7 +60,7 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
           const SizedBox(height: 6),
           const Text('Einheit 1 · Erste Worte'),
           const SizedBox(height: 20),
-          const _UnitBanner(),
+          _UnitBanner(completed: completed.length == _lessons.length),
           const SizedBox(height: 28),
           for (var index = 0; index < _lessons.length; index++)
             _LessonNode(
@@ -78,7 +78,9 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
 }
 
 class _UnitBanner extends StatelessWidget {
-  const _UnitBanner();
+  const _UnitBanner({required this.completed});
+
+  final bool completed;
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -86,16 +88,24 @@ class _UnitBanner extends StatelessWidget {
       color: AppColors.primary,
       borderRadius: BorderRadius.circular(20),
     ),
-    child: const Padding(
-      padding: EdgeInsets.all(18),
+    child: Padding(
+      padding: const EdgeInsets.all(18),
       child: Row(
         children: [
-          Icon(Icons.waving_hand_rounded, color: Colors.white, size: 34),
-          SizedBox(width: 14),
+          Icon(
+            completed
+                ? Icons.workspace_premium_rounded
+                : Icons.waving_hand_rounded,
+            color: completed ? AppColors.crown : Colors.white,
+            size: 34,
+          ),
+          const SizedBox(width: 14),
           Expanded(
             child: Text(
-              'Begrüße Menschen und stelle dich vor.',
-              style: TextStyle(
+              completed
+                  ? 'Goldkrone verdient! Einheit abgeschlossen.'
+                  : 'Begrüße Menschen und stelle dich vor.',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,

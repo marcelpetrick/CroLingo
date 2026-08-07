@@ -30,11 +30,12 @@ through Git history.
 - strict offline grading with Croatian characters preserved;
 - matching, two-way translation, gaps, and sentence tiles;
 - immediate correction, explanations, unlimited retries, and XP;
+- durable local progress, lesson resume/unlocking, streaks, and recent mistakes;
 - reproducible Android APK/AAB and native Linux builds;
 - strict analysis, linting, tests, coverage, security scans, and CI.
 
-Persistent progress, lesson unlocking, streaks, mastery, and spaced review are
-the next implementation loops. The current status and sequence live in
+Concept mastery and FSRS-based due-date scheduling are the next learning loops.
+The current status and sequence live in
 [the implementation plan](docs/01_plan.md).
 
 ## Bootstrap a fresh clone

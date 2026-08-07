@@ -93,7 +93,12 @@ class _RecordingProgress implements ProgressRepository {
     totalXp: 0,
     completedLessons: 0,
     studyDays: 0,
+    currentStreak: 0,
+    longestStreak: 0,
   );
+
+  @override
+  Future<List<RecentMistake>> loadRecentMistakes({int limit = 20}) async => [];
 
   @override
   Future<void> recordAttempt({

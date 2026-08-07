@@ -28,6 +28,8 @@ class LearningStats {
     required this.totalXp,
     required this.completedLessons,
     required this.studyDays,
+    required this.currentStreak,
+    required this.longestStreak,
   });
 
   /// Total earned XP.
@@ -38,6 +40,35 @@ class LearningStats {
 
   /// Number of distinct local study dates.
   final int studyDays;
+
+  /// Consecutive study days ending today or yesterday.
+  final int currentStreak;
+
+  /// Longest historical sequence of study days.
+  final int longestStreak;
+}
+
+/// One recent incorrect answer available for focused review.
+class RecentMistake {
+  /// Creates a recent mistake.
+  const RecentMistake({
+    required this.lessonId,
+    required this.exerciseId,
+    required this.submittedAnswer,
+    required this.occurredAt,
+  });
+
+  /// Lesson containing the exercise.
+  final String lessonId;
+
+  /// Stable exercise ID.
+  final String exerciseId;
+
+  /// Learner's submitted answer.
+  final String submittedAnswer;
+
+  /// UTC attempt time.
+  final DateTime occurredAt;
 }
 
 /// Platform-independent persistence contract.
@@ -60,4 +91,7 @@ abstract interface class ProgressRepository {
 
   /// Returns local aggregate statistics.
   Future<LearningStats> loadStats();
+
+  /// Loads recent incorrect attempts, newest first.
+  Future<List<RecentMistake>> loadRecentMistakes({int limit = 20});
 }

@@ -1,5 +1,6 @@
 import 'package:crolingo/data/progress/app_database.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
+import 'package:crolingo/domain/progress/streak_calculator.dart';
 import 'package:drift/drift.dart';
 
 /// SQLite implementation of local learning progress.
@@ -79,12 +80,36 @@ class DriftProgressRepository implements ProgressRepository {
   Future<LearningStats> loadStats() async {
     final lessons = await loadLessonProgress();
     final studyDays = await database.select(database.studyDayEntries).get();
+    final streaks = StreakCalculator.calculate(
+      studyDays.map((day) => day.dayKey),
+      DateTime.now(),
+    );
     return LearningStats(
       totalXp: lessons.fold(0, (sum, lesson) => sum + lesson.xp),
       completedLessons: lessons
           .where((lesson) => lesson.completedAt != null)
           .length,
       studyDays: studyDays.length,
+      currentStreak: streaks.current,
+      longestStreak: streaks.longest,
     );
+  }
+
+  @override
+  Future<List<RecentMistake>> loadRecentMistakes({int limit = 20}) async {
+    final query = database.select(database.attemptEntries)
+      ..where((row) => row.correct.equals(false))
+      ..orderBy([(row) => OrderingTerm.desc(row.occurredAt)])
+      ..limit(limit);
+    final rows = await query.get();
+    return [
+      for (final row in rows)
+        RecentMistake(
+          lessonId: row.lessonId,
+          exerciseId: row.exerciseId,
+          submittedAnswer: row.submittedAnswer,
+          occurredAt: row.occurredAt.toUtc(),
+        ),
+    ];
   }
 }

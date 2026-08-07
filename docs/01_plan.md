@@ -26,9 +26,11 @@ Listening, native audio, TTS, learner recordings, sample comparison, and pronunc
 
 ## Delivery loops
 
-Current status: loops 1 and 2 are complete. The bundled five-lesson course and
-the end-to-end text exercise player from loop 3 onward are implemented; durable
-SQLite progress, unlocking, review scheduling, and final device hardening remain.
+Current status: loops 1 through 5 are complete, including durable SQLite
+attempts/checkpoints, sequential unlocking, and all text exercise families.
+Streak statistics and recent-mistake replay from loop 6 are implemented; concept
+mastery, FSRS due dates, accessibility hardening, and physical-device checks
+remain.
 
 ### 1. Foundation and guardrails
 

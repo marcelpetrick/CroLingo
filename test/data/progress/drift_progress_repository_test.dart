@@ -24,12 +24,22 @@ void main() {
       incorrectBefore: 1,
       occurredAt: DateTime.parse('2026-08-07T10:00:00+02:00'),
     );
+    await repository.recordAttempt(
+      lessonId: 'begrussen',
+      exerciseId: 'hello',
+      submittedAnswer: 'Falsch',
+      correct: false,
+      incorrectBefore: 0,
+      occurredAt: DateTime.parse('2026-08-07T10:01:00+02:00'),
+    );
 
     final rows = await database.select(database.attemptEntries).get();
-    expect(rows, hasLength(1));
-    expect(rows.single.lessonId, 'begrussen');
-    expect(rows.single.incorrectBefore, 1);
-    expect(rows.single.occurredAt.toUtc(), DateTime.utc(2026, 8, 7, 8));
+    final mistakes = await repository.loadRecentMistakes(limit: 1);
+    expect(rows, hasLength(2));
+    expect(rows.first.lessonId, 'begrussen');
+    expect(rows.first.incorrectBefore, 1);
+    expect(rows.first.occurredAt.toUtc(), DateTime.utc(2026, 8, 7, 8));
+    expect(mistakes.single.submittedAnswer, 'Falsch');
   });
 
   test('upserts resumable progress and aggregates local stats', () async {
