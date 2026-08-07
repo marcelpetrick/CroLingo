@@ -1,5 +1,11 @@
 # CroLingo
 
+[![Quality](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml)
+![Coverage gate](https://img.shields.io/badge/coverage-%E2%89%A585%25-brightgreen)
+![Flutter](https://img.shields.io/badge/Flutter-3.44.7-02569B?logo=flutter)
+![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20Linux-1769D2)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+
 CroLingo is a friendly, offline-first app for German-speaking beginners who
 want to learn Croatian. It combines a short Adriatic-themed learning path with
 matching, translation, fill-in-the-blank, and sentence-building exercises.
@@ -13,14 +19,21 @@ The app is built once with Flutter and runs on:
 - current ARM64 phones such as Xiaomi/Poco devices;
 - Linux x64 in a fixed 412×915 phone-shaped desktop window.
 
-The first milestone is deliberately text-only. Native-speaker audio and any
-learner-recording or pronunciation comparison will be designed after the core
-learning loop has been evaluated.
+The first text-learning milestone is complete. The next phase expands the
+course and adds device-provided Croatian playback. Native-speaker recordings,
+learner recording, and pronunciation comparison remain later work.
+
+## Current state
+
+![](media/currentState.png)
 
 ## Author
 
-CroLingo was created by **Marcel Petrick**. Contributions remain attributed
-through Git history.
+**Author: Marcel Petrick <mail@marcelpetrick.it>**
+
+**License: GPLv3 or later. See `LICENSE`.**
+
+**Note: projected is generated with AI.**
 
 ## What works today
 
@@ -129,10 +142,19 @@ development release APK uses a development signing setup; public distribution
 must use a private release key stored outside this repository. Never commit a
 keystore, password, service-account file, or generated artifact.
 
-To install a local APK on a connected test phone:
+For either reference phone, install the smaller ARM64 development release APK:
 
 ```bash
 adb install -r build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+```
+
+Alternatively, copy that APK to the phone and open it there. Android may ask
+you to allow installation from the file-manager application. This locally
+built APK is signed with Flutter's development key and is suitable for testing,
+not public distribution. Rebuild it at any time with:
+
+```bash
+./scripts/flutterw build apk --release --split-per-abi
 ```
 
 For a repeatable compatibility report, and optionally a safe development

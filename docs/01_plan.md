@@ -6,7 +6,10 @@ CroLingo will be a polished, offline-first Flutter application that teaches Croa
 
 The first usable milestone is one human-reviewed starter unit of about five lessons. It implements vocabulary matching, typed translation in both directions, fill-in-the-blank, sentence construction, strict grading, unlimited retries, XP, sequential progression, crowns, streaks, local statistics, concept mastery, and spaced review.
 
-Listening, native audio, TTS, learner recordings, sample comparison, and pronunciation grading are deferred until the text-learning loop is proven.
+The text-learning loop is proven. Phase two adds optional system-provided
+Croatian playback without microphone access or network services. Native-speaker
+recordings, listening exercises, learner recordings, sample comparison, and
+pronunciation grading remain deferred.
 
 ## Fixed decisions
 
@@ -34,6 +37,10 @@ FSRS due dates, and fine-grained concept mastery from loop 6 are implemented. Au
 assistive-technology review and physical-device checks remain. The complete
 local profile reports start date, XP, lessons, vocabulary, study days, and
 current/longest streaks.
+
+Phase two is active. It deepens both translation directions for every existing
+concept, adds accessible playback controls, and then expands the path toward A1
+through small human-reviewable everyday units.
 
 ### 1. Foundation and guardrails
 
@@ -90,6 +97,30 @@ current/longest streaks.
 - Build universal and split APKs, an Android App Bundle, and a Linux release bundle.
 - Use a manual signing workflow with secrets outside Git. Quality workflows never publish or tag.
 
+### 8. Phase two: course depth and playback
+
+- Give every starter concept an explicit German-to-Croatian and
+  Croatian-to-German recall exercise before introducing more vocabulary.
+- Add a reusable Croatian playback control to vocabulary and exercise strings.
+- Use Android's installed text-to-speech engine and a Linux local speech
+  service behind one replaceable adapter; never require network or microphone
+  permissions.
+- Announce playback state and unavailable voices accessibly, and remain fully
+  usable when no Croatian voice is installed.
+- Keep generated speech clearly distinct from future native-speaker recordings.
+
+### 9. Phase two: A1 expansion
+
+- Add compact units in order: farewells and courtesy, family and people,
+  numbers and age, food and drinks, home, everyday actions, shopping, and
+  travel/directions.
+- Introduce roughly two genuinely new concepts in each early lesson and reuse
+  prior concepts in most exercises.
+- Require the same semantic content validation, mastery tags, both recall
+  directions, tests, and human Croatian/German review for every unit.
+- Keep one bundled offline course and sequential cross-unit progression until
+  the content model has enough evidence to justify optional paths.
+
 ## Design tokens
 
 | Role | Color |
@@ -136,7 +167,10 @@ Every new behavior includes tests. Authored Dart code targets at least 85% line 
 
 ## Deferred scope
 
-Native audio, listening, TTS, microphone access, learner recordings, sample comparison, pronunciation grading, backend, accounts, synchronization, social features, monetization, web, iOS, Git tags, and GitHub Releases are not part of this milestone.
+Native-speaker audio, listening exercises, microphone access, learner
+recordings, sample comparison, pronunciation grading, backend, accounts,
+synchronization, social features, monetization, web, iOS, Git tags, and GitHub
+Releases are not part of phase two. System-provided TTS playback is included.
 
 ## Physical-device checklist
 

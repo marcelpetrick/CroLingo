@@ -25,6 +25,10 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Course representation?** Bundled JSON validated structurally and semantically, then parsed into typed immutable models.
 - **Spaced repetition?** FSRS behind a replaceable interface using default parameters and 90% desired retention until enough learner history exists for justified tuning.
 - **Time handling?** Persist UTC; calculate learning days in Europe/Berlin.
+- **How is pronunciation played before recordings exist?** Use replaceable,
+  device-local system TTS with Croatian locale `hr-HR`; fail accessibly when a
+  Croatian voice or Linux speech service is unavailable, and never add network
+  or microphone permissions.
 
 ## Design
 
