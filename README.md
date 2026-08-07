@@ -255,8 +255,3 @@ network permission, analytics, ads, accounts, or telemetry, and disables
 cleartext traffic and Android backup. Learning data stays in app-private local
 storage. An outdated phone's operating-system vulnerabilities cannot be fixed
 by an app; CroLingo limits its own attack surface and stores no secrets.
-
-## License
-
-CroLingo is free software licensed under the
-[GNU General Public License version 3](LICENSE).
