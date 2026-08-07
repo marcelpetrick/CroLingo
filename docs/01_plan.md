@@ -26,6 +26,10 @@ Listening, native audio, TTS, learner recordings, sample comparison, and pronunc
 
 ## Delivery loops
 
+Current status: loops 1 and 2 are complete. The bundled five-lesson course and
+the end-to-end text exercise player from loop 3 onward are implemented; durable
+SQLite progress, unlocking, review scheduling, and final device hardening remain.
+
 ### 1. Foundation and guardrails
 
 - Install and pin Flutter 3.44.7 with Java 21 and Android API 36.
