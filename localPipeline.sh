@@ -16,7 +16,7 @@ Usage: ./localPipeline.sh [--noRun] [--report-dir PATH]
 
 Runs the complete CroLingo commit gate: repository policy, locked dependencies,
 course-content validation, formatting, strict analysis, framework linting,
-documentation/workflow/shell
+Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
 builds, and artifact inspection. The Linux app is launched once unless --noRun
 is supplied. Reports are temporary unless --report-dir is supplied.
@@ -125,6 +125,10 @@ check_repository() {
     docs/00_product_spec.md \
     docs/01_plan.md \
     docs/03_questions.md \
+    android/gradlew \
+    android/gradlew.bat \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
     pubspec.lock; do
     if [[ ! -f "${required}" ]]; then
       printf 'Required file is missing: %s\n' "${required}" >&2
@@ -136,6 +140,20 @@ check_repository() {
     return 1
   fi
   git diff --check
+}
+
+check_gradle_wrapper() {
+  if [[ ! -x android/gradlew ]]; then
+    printf '%s\n' 'android/gradlew must be executable.' >&2
+    return 1
+  fi
+  printf '%s  %s\n' \
+    '76805e32c009c0cf0dd5d206bddc9fb22ea42e84db904b764f3047de095493f3' \
+    'android/gradle/wrapper/gradle-wrapper.jar' \
+    | sha256sum --check
+  grep -Fqx \
+    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip' \
+    android/gradle/wrapper/gradle-wrapper.properties
 }
 
 resolve_dependencies() {
@@ -259,6 +277,7 @@ write_environment() {
 
 run_stage Environment ensure_tools
 run_stage "Repository policy" check_repository
+run_stage "Gradle wrapper" check_gradle_wrapper
 run_stage Version dart run tool/check_version.dart
 run_stage Dependencies resolve_dependencies
 run_stage "Content validation" dart run tool/validate_content.dart

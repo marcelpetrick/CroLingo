@@ -129,7 +129,8 @@ Actions:
 
 Omit `--noRun` to launch the finished Linux bundle after all checks. The
 pipeline validates repository policy, version progression, dependencies,
-course content, formatting, static analysis, Flutter-specific linting, shell
+course content, Gradle-wrapper integrity, formatting, static analysis,
+Flutter-specific linting, shell
 and workflow files, Markdown, tests, coverage, Android lint, secrets,
 vulnerabilities, clean builds, and final APK permissions.
 
