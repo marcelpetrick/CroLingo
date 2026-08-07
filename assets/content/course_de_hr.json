@@ -1,0 +1,270 @@
+{
+  "id": "de-hr-a1",
+  "title": "Kroatisch für den Alltag",
+  "concepts": [
+    {"id": "bok", "croatian": "Bok!", "german": "Hallo!"},
+    {"id": "dobar-dan", "croatian": "Dobar dan!", "german": "Guten Tag!"},
+    {"id": "ja-sam", "croatian": "Ja sam …", "german": "Ich bin …"},
+    {"id": "zovem-se", "croatian": "Zovem se …", "german": "Ich heiße …"},
+    {"id": "kako-si", "croatian": "Kako si?", "german": "Wie geht es dir?"},
+    {"id": "dobro", "croatian": "Dobro.", "german": "Gut."},
+    {"id": "hvala", "croatian": "Hvala.", "german": "Danke."},
+    {"id": "molim", "croatian": "Molim.", "german": "Bitte."},
+    {"id": "da", "croatian": "Da.", "german": "Ja."},
+    {"id": "ne", "croatian": "Ne.", "german": "Nein."}
+  ],
+  "units": [
+    {
+      "id": "erste-worte",
+      "title": "Erste Worte",
+      "description": "Begrüße Menschen und stelle dich vor.",
+      "lessons": [
+        {
+          "id": "begrussen",
+          "title": "Begrüßen",
+          "exercises": [
+            {
+              "id": "begrussen-match",
+              "type": "matching",
+              "prompt": "Verbinde die Begrüßungen.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Bok ist locker, Dobar dan ist höflich und tagsüber passend.",
+              "conceptIds": ["bok", "dobar-dan"],
+              "pairs": [
+                {"croatian": "Bok!", "german": "Hallo!"},
+                {"croatian": "Dobar dan!", "german": "Guten Tag!"}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "begrussen-de-hr",
+              "type": "translation",
+              "prompt": "Übersetze: Guten Tag!",
+              "acceptedAnswers": ["Dobar dan!"],
+              "explanation": "Dobar dan ist die höfliche Begrüßung am Tag.",
+              "conceptIds": ["dobar-dan"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "begrussen-blank",
+              "type": "fillBlank",
+              "prompt": "Ergänze die lockere Begrüßung: ___!",
+              "acceptedAnswers": ["Bok"],
+              "explanation": "Bok entspricht einem lockeren Hallo.",
+              "conceptIds": ["bok"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "begrussen-satz",
+              "type": "sentence",
+              "prompt": "Baue: Guten Tag!",
+              "acceptedAnswers": ["Dobar dan!"],
+              "explanation": "Das Adjektiv dobar steht vor dan, dem Tag.",
+              "conceptIds": ["bok", "dobar-dan"],
+              "pairs": [],
+              "tiles": ["dan!", "Dobar"]
+            }
+          ]
+        },
+        {
+          "id": "vorstellen",
+          "title": "Sich vorstellen",
+          "exercises": [
+            {
+              "id": "vorstellen-match",
+              "type": "matching",
+              "prompt": "Verbinde die Vorstellungen.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Ja sam nennt, wer du bist; zovem se nennt deinen Namen.",
+              "conceptIds": ["ja-sam", "zovem-se"],
+              "pairs": [
+                {"croatian": "Ja sam Ana.", "german": "Ich bin Ana."},
+                {"croatian": "Zovem se Luka.", "german": "Ich heiße Luka."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "vorstellen-de-hr",
+              "type": "translation",
+              "prompt": "Übersetze: Ich bin Ana.",
+              "acceptedAnswers": ["Ja sam Ana."],
+              "explanation": "Ja bedeutet ich und sam bedeutet bin.",
+              "conceptIds": ["ja-sam"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vorstellen-blank",
+              "type": "fillBlank",
+              "prompt": "Ergänze: ___ se Luka.",
+              "acceptedAnswers": ["Zovem"],
+              "explanation": "Zovem se heißt wörtlich etwa ich nenne mich.",
+              "conceptIds": ["zovem-se"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vorstellen-satz",
+              "type": "sentence",
+              "prompt": "Baue: Ich heiße Mia.",
+              "acceptedAnswers": ["Zovem se Mia."],
+              "explanation": "Zovem se bleibt als Wendung zusammen.",
+              "conceptIds": ["ja-sam", "zovem-se"],
+              "pairs": [],
+              "tiles": ["Mia.", "se", "Zovem"]
+            }
+          ]
+        },
+        {
+          "id": "befinden",
+          "title": "Nach dem Befinden fragen",
+          "exercises": [
+            {
+              "id": "befinden-match",
+              "type": "matching",
+              "prompt": "Verbinde Frage und Antwort.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Kako si fragt eine vertraute Person, wie es ihr geht.",
+              "conceptIds": ["kako-si", "dobro"],
+              "pairs": [
+                {"croatian": "Kako si?", "german": "Wie geht es dir?"},
+                {"croatian": "Dobro.", "german": "Gut."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "befinden-hr-de",
+              "type": "translation",
+              "prompt": "Übersetze: Kako si?",
+              "acceptedAnswers": ["Wie geht es dir?", "Wie geht's dir?"],
+              "explanation": "Kako heißt wie; si ist die du-Form von sein.",
+              "conceptIds": ["kako-si"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "befinden-blank",
+              "type": "fillBlank",
+              "prompt": "Antworte kurz: Kako si? — ___.",
+              "acceptedAnswers": ["Dobro"],
+              "explanation": "Dobro ist eine natürliche kurze Antwort: gut.",
+              "conceptIds": ["dobro"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "befinden-satz",
+              "type": "sentence",
+              "prompt": "Baue: Wie geht es dir?",
+              "acceptedAnswers": ["Kako si?"],
+              "explanation": "Im Kroatischen reichen hier zwei Wörter.",
+              "conceptIds": ["kako-si", "dobro"],
+              "pairs": [],
+              "tiles": ["si?", "Kako"]
+            }
+          ]
+        },
+        {
+          "id": "hoflichkeit",
+          "title": "Höflich sein",
+          "exercises": [
+            {
+              "id": "hoflichkeit-match",
+              "type": "matching",
+              "prompt": "Verbinde die höflichen Wörter.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Hvala bedankt sich; molim kann bitte oder gern geschehen heißen.",
+              "conceptIds": ["hvala", "molim"],
+              "pairs": [
+                {"croatian": "Hvala.", "german": "Danke."},
+                {"croatian": "Molim.", "german": "Bitte."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "hoflichkeit-de-hr",
+              "type": "translation",
+              "prompt": "Übersetze: Danke.",
+              "acceptedAnswers": ["Hvala."],
+              "explanation": "Hvala ist das allgemeine Wort für danke.",
+              "conceptIds": ["hvala"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "hoflichkeit-blank",
+              "type": "fillBlank",
+              "prompt": "Ergänze: ___! (Bitte!)",
+              "acceptedAnswers": ["Molim"],
+              "explanation": "Molim wird für bitte und als Antwort auf danke verwendet.",
+              "conceptIds": ["molim"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "hoflichkeit-satz",
+              "type": "sentence",
+              "prompt": "Baue: Danke, bitte.",
+              "acceptedAnswers": ["Hvala, molim."],
+              "explanation": "Diese Übung festigt beide Höflichkeitswörter.",
+              "conceptIds": ["hvala", "molim"],
+              "pairs": [],
+              "tiles": ["molim.", "Hvala,"]
+            }
+          ]
+        },
+        {
+          "id": "ja-nein",
+          "title": "Ja und nein",
+          "exercises": [
+            {
+              "id": "ja-nein-match",
+              "type": "matching",
+              "prompt": "Verbinde Zustimmung und Ablehnung.",
+              "acceptedAnswers": ["vollständig"],
+              "explanation": "Da stimmt zu, ne lehnt ab.",
+              "conceptIds": ["da", "ne"],
+              "pairs": [
+                {"croatian": "Da.", "german": "Ja."},
+                {"croatian": "Ne.", "german": "Nein."}
+              ],
+              "tiles": []
+            },
+            {
+              "id": "ja-nein-hr-de",
+              "type": "translation",
+              "prompt": "Übersetze: Ne.",
+              "acceptedAnswers": ["Nein."],
+              "explanation": "Ne ist die kurze Verneinung.",
+              "conceptIds": ["ne"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "ja-nein-blank",
+              "type": "fillBlank",
+              "prompt": "Stimme zu: ___!",
+              "acceptedAnswers": ["Da"],
+              "explanation": "Da bedeutet ja.",
+              "conceptIds": ["da"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "ja-nein-satz",
+              "type": "sentence",
+              "prompt": "Baue: Ja, danke.",
+              "acceptedAnswers": ["Da, hvala."],
+              "explanation": "Da und hvala ergeben eine höfliche Zustimmung.",
+              "conceptIds": ["da", "ne"],
+              "pairs": [],
+              "tiles": ["hvala.", "Da,"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
