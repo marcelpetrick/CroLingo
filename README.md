@@ -74,10 +74,12 @@ external checkpoints live in [the development roadmap](docs/02_roadmap.md).
 ## Bootstrap a fresh clone
 
 Linux development requires Git, `curl`, `unzip`, `xz`, CMake, Ninja, Clang,
-GTK 3 development headers, Java 21, and an Android SDK. Croatian playback on
-Linux additionally uses `espeak-ng` or Speech Dispatcher. On Manjaro install it
-with `sudo pacman -S espeak-ng`; on Ubuntu use
-`sudo apt-get install espeak-ng`. With those system prerequisites available,
+GTK 3 and GStreamer development headers, Java 21, and an Android SDK. Croatian
+speech on Linux additionally uses `espeak-ng` or Speech Dispatcher. On Manjaro
+install the media dependencies with
+`sudo pacman -S espeak-ng gstreamer gst-plugins-base`; on Ubuntu use
+`sudo apt-get install espeak-ng libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev`.
+With those system prerequisites available,
 the repository installs its pinned Flutter and quality tools into the ignored
 `.tooling/` directory:
 
@@ -85,7 +87,7 @@ For a complete Manjaro/Arch workstation setup, run:
 
 ```bash
 sudo pacman -Syu
-sudo pacman -S --needed base-devel git curl unzip xz cmake ninja clang pkgconf gtk3 jdk21-openjdk android-tools android-udev nodejs npm espeak-ng
+sudo pacman -S --needed base-devel git curl unzip xz cmake ninja clang pkgconf gtk3 gstreamer gst-plugins-base jdk21-openjdk android-tools android-udev nodejs npm espeak-ng
 sudo archlinux-java set java-21-openjdk
 ```
 

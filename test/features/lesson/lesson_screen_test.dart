@@ -1,3 +1,4 @@
+import 'package:crolingo/domain/audio/feedback_audio_service.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/lesson/lesson_screen.dart';
@@ -9,6 +10,7 @@ void main() {
     tester,
   ) async {
     final progress = _RecordingProgress();
+    final audio = _RecordingAudio();
     tester.view
       ..physicalSize = const Size(412, 915)
       ..devicePixelRatio = 1;
@@ -19,6 +21,7 @@ void main() {
           lessonId: 'begrussen',
           lesson: Future<Lesson>.value(_completeLesson),
           repository: progress,
+          feedbackAudioService: audio,
         ),
       ),
     );
@@ -30,6 +33,7 @@ void main() {
     await _choose(tester, 1, 'Guten Tag!');
     await _pressButton(tester, 'Prüfen');
     expect(find.text('Richtig!'), findsOneWidget);
+    expect(audio.sounds, [AnswerFeedbackSound.success]);
     await _pressButton(tester, 'Weiter');
 
     expect(find.text('🇩🇪 Deutsch → 🇭🇷 Hrvatski'), findsOneWidget);
@@ -40,6 +44,7 @@ void main() {
     await _pressButton(tester, 'Prüfen');
     expect(find.text('Noch nicht richtig'), findsOneWidget);
     expect(find.text('Lösung: Dobar dan!'), findsOneWidget);
+    expect(audio.sounds.last, AnswerFeedbackSound.failure);
     await _pressButton(tester, 'Noch einmal');
     await tester.enterText(find.byKey(const Key('answerField')), 'Dobar dan!');
     await tester.pump();
@@ -62,6 +67,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(progress.attempts, 5);
     expect(progress.progress.single.completedAt, isNotNull);
+    expect(audio.sounds, hasLength(5));
   });
 
   testWidgets('shows a safe error for an unknown lesson', (tester) async {
@@ -126,6 +132,28 @@ void main() {
     }
     expect(tester.takeException(), isNull);
     expect(find.bySemanticsLabel('0 Prozent abgeschlossen'), findsOneWidget);
+  });
+
+  testWidgets('does not play answer tones when the preference is off', (
+    tester,
+  ) async {
+    final audio = _RecordingAudio();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'reverse',
+          lesson: Future<Lesson>.value(_reverseLesson),
+          feedbackAudioService: audio,
+          feedbackSoundsEnabled: false,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('answerField')), 'Hallo!');
+    await tester.pump();
+    await _pressButton(tester, 'Prüfen');
+
+    expect(audio.sounds, isEmpty);
   });
 }
 
@@ -266,6 +294,16 @@ class _RecordingProgress implements ProgressRepository {
       ..removeWhere((item) => item.lessonId == value.lessonId)
       ..add(value);
   }
+}
+
+class _RecordingAudio implements FeedbackAudioService {
+  final sounds = <AnswerFeedbackSound>[];
+
+  @override
+  Future<void> play(AnswerFeedbackSound sound) async => sounds.add(sound);
+
+  @override
+  Future<void> dispose() async {}
 }
 
 Future<void> _choose(

@@ -31,10 +31,11 @@ class MoreScreen extends StatelessWidget {
           subtitle: 'Fortschritt, XP und Lerntage',
           onTap: () => context.push('/more/profile'),
         ),
-        const _MoreTile(
+        _MoreTile(
           icon: Icons.settings_outlined,
           title: 'Einstellungen',
           subtitle: 'Darstellung, Bewegung und Feedback',
+          onTap: () => context.push('/more/settings'),
         ),
         const SizedBox(height: 24),
         const Center(

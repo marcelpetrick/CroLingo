@@ -151,10 +151,22 @@ check_linux_speech() {
     '[bootstrap] Install espeak-ng with your system package manager.' >&2
 }
 
+check_linux_audio() {
+  if pkg-config --exists gstreamer-1.0 gstreamer-app-1.0; then
+    return
+  fi
+  printf '%s\n' \
+    '[bootstrap] Linux feedback audio needs GStreamer development files.' \
+    '[bootstrap] Install gstreamer and gst-plugins-base (Arch/Manjaro),' \
+    '[bootstrap] or libgstreamer1.0-dev and libgstreamer-plugins-base1.0-dev (Debian/Ubuntu).' >&2
+  return 1
+}
+
 install_flutter
 install_android_packages
 install_quality_tools
 check_linux_speech
+check_linux_audio
 
 FLUTTER="${TOOLING_DIR}/flutter/bin/flutter"
 if [[ ! -x "${FLUTTER}" ]]; then

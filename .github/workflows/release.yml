@@ -43,7 +43,8 @@ jobs:
       - name: Install Linux build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes clang cmake espeak-ng libgtk-3-dev ninja-build pkg-config
+          sudo apt-get install --yes clang cmake espeak-ng libgstreamer1.0-dev \
+            libgstreamer-plugins-base1.0-dev libgtk-3-dev ninja-build pkg-config
 
       - name: Bootstrap pinned tools
         run: |

@@ -57,9 +57,26 @@ class StudyDayEntries extends Table {
   Set<Column<Object>> get primaryKey => {dayKey};
 }
 
+/// Extensible application preferences retained across app upgrades.
+class AppSettingEntries extends Table {
+  /// Stable preference key.
+  TextColumn get key => text()();
+
+  /// Version-independent serialized scalar value.
+  TextColumn get value => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {key};
+}
+
 /// App-private SQLite database shared by Android and Linux.
 @DriftDatabase(
-  tables: [AttemptEntries, LessonProgressEntries, StudyDayEntries],
+  tables: [
+    AttemptEntries,
+    LessonProgressEntries,
+    StudyDayEntries,
+    AppSettingEntries,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   /// Opens the production database, or an injected executor for tests.
@@ -67,5 +84,15 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'crolingo'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (migrator) => migrator.createAll(),
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        await migrator.createTable(appSettingEntries);
+      }
+    },
+  );
 }

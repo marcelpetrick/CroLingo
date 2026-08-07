@@ -6,6 +6,7 @@ import 'package:crolingo/features/more/more_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
 import 'package:crolingo/features/review/review_screen.dart';
+import 'package:crolingo/features/settings/settings_screen.dart';
 import 'package:crolingo/features/vocabulary/vocabulary_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,10 +18,21 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/lesson/:lessonId',
       builder: (context, state) => Consumer(
-        builder: (context, ref, child) => LessonScreen(
-          lessonId: state.pathParameters['lessonId']!,
-          repository: ref.read(progressRepositoryProvider),
-        ),
+        builder: (context, ref, child) {
+          final soundsEnabled = ref
+              .watch(appSettingsProvider)
+              .when(
+                data: (settings) => settings.feedbackSoundsEnabled,
+                error: (error, stackTrace) => true,
+                loading: () => true,
+              );
+          return LessonScreen(
+            lessonId: state.pathParameters['lessonId']!,
+            repository: ref.read(progressRepositoryProvider),
+            feedbackAudioService: ref.read(feedbackAudioServiceProvider),
+            feedbackSoundsEnabled: soundsEnabled,
+          );
+        },
       ),
     ),
     ShellRoute(
@@ -38,6 +50,7 @@ final appRouter = GoRouter(
           builder: _vocabulary,
         ),
         GoRoute(path: '/more/profile', builder: _profile),
+        GoRoute(path: '/more/settings', builder: _settings),
       ],
     ),
   ],
@@ -58,3 +71,6 @@ Widget _vocabulary(BuildContext context, GoRouterState state) =>
 
 Widget _profile(BuildContext context, GoRouterState state) =>
     const ProfileScreen();
+
+Widget _settings(BuildContext context, GoRouterState state) =>
+    const SettingsScreen();

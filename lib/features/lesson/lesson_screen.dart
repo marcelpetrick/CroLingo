@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:crolingo/core/theme/app_colors.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
+import 'package:crolingo/domain/audio/feedback_audio_service.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/learning/answer_grader.dart';
 import 'package:crolingo/domain/learning/lesson_session.dart';
@@ -17,6 +18,8 @@ class LessonScreen extends StatefulWidget {
     required this.lessonId,
     this.lesson,
     this.repository,
+    this.feedbackAudioService,
+    this.feedbackSoundsEnabled = true,
     super.key,
   });
 
@@ -28,6 +31,12 @@ class LessonScreen extends StatefulWidget {
 
   /// Local progress storage; omitted only by isolated widget tests.
   final ProgressRepository? repository;
+
+  /// Optional sound boundary, injected by the application host.
+  final FeedbackAudioService? feedbackAudioService;
+
+  /// Current persistent sound preference.
+  final bool feedbackSoundsEnabled;
 
   @override
   State<LessonScreen> createState() => _LessonScreenState();
@@ -69,6 +78,8 @@ class _LessonScreenState extends State<LessonScreen> {
             lesson: payload.lesson,
             progress: payload.progress,
             repository: widget.repository,
+            feedbackAudioService: widget.feedbackAudioService,
+            feedbackSoundsEnabled: widget.feedbackSoundsEnabled,
           );
         },
       ),
@@ -81,11 +92,15 @@ class _LessonPlayer extends StatefulWidget {
     required this.lesson,
     required this.progress,
     required this.repository,
+    required this.feedbackAudioService,
+    required this.feedbackSoundsEnabled,
   });
 
   final Lesson lesson;
   final LessonProgress? progress;
   final ProgressRepository? repository;
+  final FeedbackAudioService? feedbackAudioService;
+  final bool feedbackSoundsEnabled;
 
   @override
   State<_LessonPlayer> createState() => _LessonPlayerState();
@@ -109,6 +124,18 @@ class _LessonPlayerState extends State<_LessonPlayer> {
     final incorrectBefore = _session.state.incorrectAttempts;
     _refresh(() => _session.submit(answer));
     final grade = _session.state.grade!;
+    if (widget.feedbackSoundsEnabled) {
+      final service = widget.feedbackAudioService;
+      if (service != null) {
+        unawaited(
+          service.play(
+            grade.isCorrect
+                ? AnswerFeedbackSound.success
+                : AnswerFeedbackSound.failure,
+          ),
+        );
+      }
+    }
     final repository = widget.repository;
     if (repository != null) {
       _enqueue(() async {

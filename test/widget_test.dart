@@ -3,6 +3,7 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/app/router.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
+import 'package:crolingo/domain/settings/app_settings.dart';
 import 'package:crolingo/features/home/home_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
@@ -16,6 +17,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
           courseProvider.overrideWith((ref) => _dashboardCourse),
           progressRepositoryProvider.overrideWithValue(_FakeProgress()),
         ],
@@ -42,6 +46,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
           progressRepositoryProvider.overrideWithValue(
             _FakeProgress(
               progress: [
@@ -72,6 +79,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
           progressRepositoryProvider.overrideWithValue(
             _FakeProgress(
               progress: [
@@ -177,6 +187,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
           progressRepositoryProvider.overrideWithValue(_FakeProgress()),
         ],
         child: MaterialApp(
@@ -201,6 +214,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
           progressRepositoryProvider.overrideWithValue(
             _FakeProgress(
               progress: [
