@@ -13,10 +13,14 @@ void main(List<String> arguments) {
 
   var found = 0;
   var hit = 0;
+  var authoredFile = true;
   for (final line in file.readAsLinesSync()) {
-    if (line.startsWith('LF:')) {
+    if (line.startsWith('SF:')) {
+      final source = line.substring(3);
+      authoredFile = !source.endsWith('.g.dart');
+    } else if (authoredFile && line.startsWith('LF:')) {
       found += int.parse(line.substring(3));
-    } else if (line.startsWith('LH:')) {
+    } else if (authoredFile && line.startsWith('LH:')) {
       hit += int.parse(line.substring(3));
     }
   }

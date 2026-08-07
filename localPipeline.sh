@@ -143,6 +143,11 @@ resolve_dependencies() {
   git diff --exit-code -- pubspec.lock
 }
 
+check_generated_sources() {
+  dart run build_runner build
+  git diff --exit-code -- lib/data/progress/app_database.g.dart
+}
+
 check_format() {
   dart format --output=none --set-exit-if-changed lib test tool
 }
@@ -257,6 +262,7 @@ run_stage "Repository policy" check_repository
 run_stage Version dart run tool/check_version.dart
 run_stage Dependencies resolve_dependencies
 run_stage "Content validation" dart run tool/validate_content.dart
+run_stage "Generated sources" check_generated_sources
 run_stage Formatting check_format
 run_stage "Dart analysis" run_analysis
 run_stage "Framework lint" run_custom_lint
