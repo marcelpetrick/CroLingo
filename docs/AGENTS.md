@@ -17,6 +17,9 @@
 - Keep the active language direction visible with Croatian/German flag cues and
   written language names; flags are decorative reinforcement, never the only
   accessible signal.
+- Treat `designIdeas/` as reviewed concept material, not runtime assets. Keep
+  visual work original, record its generation brief, and add selected assets to
+  application bundles only through a separately tested product decision.
 - Use minimal permissions, app-private storage, no release networking, no telemetry, and no committed secrets or signing material.
 - Keep the complete Gradle wrapper tracked and executable; update it only with
   Gradle's wrapper task and update the pinned pipeline checksum in the same

@@ -73,7 +73,9 @@ everyday units.
 
 - Replace the generated sample with a feature-oriented architecture and application shell.
 - Implement the Croatian design system: Adriatic blue primary, restrained Croatian red/white checker accents, bright surfaces, accessible state colors, rounded pebble-like controls, Fredoka display type, and Atkinson Hyperlegible body type.
-- Use an original geometric crow mascot and Adriatic-journey path; do not copy Duolingo assets, green, fonts, exact screens, terminology, rewards, or mascot treatment.
+- Use an original geometric crow mascot and Adriatic-journey path; do not copy
+  third-party assets, palettes, fonts, exact screens, terminology, rewards, or
+  mascot treatment.
 - Implement Home, Path, Review, and More navigation. More contains Vocabulary, Grammar, Profile, and Settings.
 
 ### 3. Content and persistence

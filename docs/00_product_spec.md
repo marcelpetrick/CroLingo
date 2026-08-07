@@ -13,7 +13,7 @@ use flutter. for desktop linux and android (state 2026)
 **CroLingo** is a Flutter application for learning Croatian on Android phones
 and in a phone-shaped Linux desktop window.
 
-The application is inspired by the effective learning mechanics of products such as Duolingo, particularly:
+The application uses established language-learning mechanics, particularly:
 
 * Short learning sessions
 * A predefined progressive learning path
@@ -1180,7 +1180,8 @@ The name intentionally connects:
 * Language learning
 * A crow/raven mascot
 
-The application should have an original visual identity rather than copying Duolingo's green owl.
+The application must have an original visual identity and must not copy another
+product's mascot, palette, or trade dress.
 
 ---
 

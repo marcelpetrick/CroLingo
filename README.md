@@ -28,6 +28,10 @@ learner recording, and pronunciation comparison remain later work.
 
 ![CroLingo learning path in the Linux phone-sized window](media/currentState.png)
 
+Ten original crow explorations for future success and learning moments are
+available in [the visual design ideas](designIdeas/README.md). They are review
+material and are not bundled into the app.
+
 ## Author
 
 **Author: Marcel Petrick <mail@marcelpetrick.it>**
@@ -219,6 +223,7 @@ and a later development release may require uninstalling the previous build.
 
 ```text
 assets/content/   validated offline Croatian course
+designIdeas/      original visual concepts, excluded from runtime bundles
 docs/             specification, implementation plan, and open decisions
 lib/app/          routing, shell, and app composition
 lib/data/         asset and persistence adapters

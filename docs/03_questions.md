@@ -36,7 +36,9 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 
 ## Design
 
-- **How closely should CroLingo resemble Duolingo?** Use only general learning-UX principles. Keep original colors, type, crow, path, components, wording, rewards, sounds, and illustrations.
+- **How should CroLingo relate to other learning products?** Use only general
+  learning-UX principles. Keep original colors, type, crow, path, components,
+  wording, rewards, sounds, and illustrations.
 - **Dark mode?** Token-ready but deferred until the light theme is complete and accessible.
 - **Orientation?** Portrait-first on Android; Linux fixed portrait. Landscape is not an MVP acceptance requirement.
 
