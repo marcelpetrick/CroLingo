@@ -1,4 +1,5 @@
 import 'package:crolingo/domain/course/course.dart';
+import 'package:unorm_dart/unorm_dart.dart' as unicode;
 
 /// Result of grading one submitted text answer.
 class GradeResult {
@@ -25,8 +26,11 @@ abstract final class AnswerGrader {
     );
   }
 
-  static String _normalize(String value) =>
-      value.trim().toLowerCase().replaceAll(
+  static String _normalize(String value) => unicode
+      .nfc(value)
+      .trim()
+      .toLowerCase()
+      .replaceAll(
         RegExp(r'\s+'),
         ' ',
       );

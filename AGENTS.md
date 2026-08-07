@@ -6,6 +6,7 @@
 - Keep presentation, application/domain logic, persistence, content, and platform adapters separated. Dependencies must support Android and Linux.
 - Treat bundled course JSON as authored product data: validate it in the pipeline, use stable IDs, and test every parser and grading rule.
 - Persist attempts and checkpoints through the progress repository; store timestamps in UTC and derive local calendar dates only at the boundary.
+- Keep core screens overflow-free at 320 logical pixels and 200% text scaling; preserve semantic labels and non-color feedback.
 - Use minimal permissions, app-private storage, no release networking, no telemetry, and no committed secrets or signing material.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
 - Every commit must be atomic, conventional, locally committed, usable, buildable, and must bump the single `pubspec.yaml` version. Never create tags or push unless explicitly requested.

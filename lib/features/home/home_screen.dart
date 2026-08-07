@@ -104,18 +104,20 @@ class _Header extends StatelessWidget {
       children: [
         CrowMark(size: 58),
         SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'CroLingo',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-            ),
-            Text(
-              'Deutsch → Hrvatski',
-              style: TextStyle(color: AppColors.slate),
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'CroLingo',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+              ),
+              Text(
+                'Deutsch → Hrvatski',
+                style: TextStyle(color: AppColors.slate),
+              ),
+            ],
+          ),
         ),
       ],
     );

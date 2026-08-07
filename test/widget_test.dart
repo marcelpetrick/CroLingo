@@ -51,6 +51,28 @@ void main() {
     expect(find.text('Wortschatz'), findsOneWidget);
     expect(find.text('Offline · Keine Werbung · Keine Herzen'), findsOneWidget);
   });
+
+  testWidgets('supports a narrow phone at 200 percent text scaling', (
+    tester,
+  ) async {
+    tester.view
+      ..physicalSize = const Size(320, 800)
+      ..devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(() {
+      tester.view.reset();
+      tester.platformDispatcher.clearTextScaleFactorTestValue();
+    });
+
+    await pumpApp(tester);
+    expect(tester.takeException(), isNull);
+    appRouter.go('/path');
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    appRouter.go('/review');
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }
 
 class _FakeProgress implements ProgressRepository {

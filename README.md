@@ -33,6 +33,7 @@ through Git history.
 - durable local progress, lesson resume/unlocking, streaks, and recent mistakes;
 - reproducible Android APK/AAB and native Linux builds;
 - strict analysis, linting, tests, coverage, security scans, and CI.
+- automated narrow-phone and 200% text-scaling layout checks.
 
 FSRS-based due-date scheduling now drives recommended reviews with 90% desired
 retention. Fine-grained concept mastery remains a future learning loop. The

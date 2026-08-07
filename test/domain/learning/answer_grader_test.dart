@@ -24,4 +24,18 @@ void main() {
     expect(AnswerGrader.grade(exercise, 'Dobar dan').isCorrect, isFalse);
     expect(AnswerGrader.grade(exercise, 'Dobar dán!').isCorrect, isFalse);
   });
+
+  test('normalizes canonically equivalent Unicode input', () {
+    const croatian = Exercise(
+      id: 'croatian',
+      type: ExerciseType.translation,
+      prompt: 'Croatian',
+      acceptedAnswers: ['Č'],
+      explanation: 'Character',
+      conceptIds: ['character'],
+      pairs: [],
+      tiles: [],
+    );
+    expect(AnswerGrader.grade(croatian, 'C\u030C').isCorrect, isTrue);
+  });
 }

@@ -79,7 +79,52 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('fits a narrow phone with 200 percent text', (tester) async {
+    tester.view
+      ..physicalSize = const Size(320, 800)
+      ..devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(() {
+      tester.view.reset();
+      tester.platformDispatcher.clearTextScaleFactorTestValue();
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'narrow',
+          lesson: Future<Lesson>.value(_narrowLesson),
+        ),
+      ),
+    );
+    for (var index = 0; index < 10; index++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(tester.takeException(), isNull);
+    expect(find.bySemanticsLabel('0 Prozent abgeschlossen'), findsOneWidget);
+  });
 }
+
+const _narrowLesson = Lesson(
+  id: 'narrow',
+  title: 'Narrow',
+  exercises: [
+    Exercise(
+      id: 'match',
+      type: ExerciseType.matching,
+      prompt: 'Verbinde die Wörter.',
+      acceptedAnswers: ['vollständig'],
+      explanation: 'Explanation',
+      conceptIds: ['one', 'two'],
+      pairs: [
+        WordPair(croatian: 'Dobar dan!', german: 'Guten Tag!'),
+        WordPair(croatian: 'Bok!', german: 'Hallo!'),
+      ],
+      tiles: [],
+    ),
+  ],
+);
 
 class _RecordingProgress implements ProgressRepository {
   final progress = <LessonProgress>[];

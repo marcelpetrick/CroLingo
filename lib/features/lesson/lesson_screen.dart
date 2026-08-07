@@ -360,6 +360,7 @@ class _ExerciseViewState extends State<_ExerciseView> {
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: DropdownButtonFormField<String>(
+              isExpanded: true,
               initialValue: _matching[pair.croatian],
               decoration: InputDecoration(
                 labelText: pair.croatian,
