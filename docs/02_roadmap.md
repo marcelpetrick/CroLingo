@@ -13,12 +13,29 @@ Linux builds, and mandatory local/online quality gates. Phase two is active.
 System-provided Croatian playback and cross-unit progression are implemented;
 native recordings and pronunciation assessment remain deferred.
 
+Session checkpoint on 2026-08-07:
+
+- Remote Quality run
+  [31199047430](https://github.com/marcelpetrick/CroLingo/actions/runs/31199047430)
+  passed for pushed commit `619afd5` (`0.0.32+33`), including verified build
+  uploads.
+- Development release run
+  [31200380595](https://github.com/marcelpetrick/CroLingo/actions/runs/31200380595)
+  passed for the same commit. It created prerelease
+  [v0.0.32](https://github.com/marcelpetrick/CroLingo/releases/tag/v0.0.32)
+  and published checksummed ARM64, ARM32, x86_64, universal APK, AAB, and Linux
+  x64 artifacts. The remote tag resolves to `619afd5`.
+- Local commit `65ebe76` documents GitHub Actions billing and advances the
+  version to `0.0.33+34`. It passed the complete local pipeline and remains for
+  the owner to push.
+
 ## Ordered work
 
-1. **Restore verified development delivery.** Quality is proven on the hosted
+1. **Restore verified development delivery.** Complete. Quality is proven on the hosted
    runner with hidden report uploads, low-disk build sequencing, guarded SDK
-   cleanup, and verified build artifact upload. The Development release must be
-   rerun after the next owner push.
+   cleanup, and verified build artifact upload. Development release run
+   `31200380595` passed and published all expected artifacts as prerelease
+   `v0.0.32`.
 2. **Make Home resume real course progress.** Complete. Home derives its
    primary action from ordered course data and durable checkpoints, including
    continuation across unit boundaries.
@@ -53,11 +70,13 @@ native recordings and pronunciation assessment remain deferred.
 
 ## Immediate release checkpoint
 
-The repository is locally ready for the owner to push. After pushing, run the
-manual Development release workflow and confirm that it publishes the Linux
-bundle, universal and split APKs, AAB, and checksums. Then install the ARM64 APK
-on both reference phones and record the results of the physical-device
-checklist in the release notes or an issue.
+Download the ARM64 APK from prerelease `v0.0.32`, verify it against
+`SHA256SUMS.txt`, install it on both reference phones, and record the results of
+the physical-device checklist in the release notes or an issue.
+
+The owner can push the local documentation commits when work resumes. A later
+Development release should only be dispatched when that newer version is
+intended for device testing.
 
 The remote workflow, physical devices, human language review, and future
 production signing material are external checkpoints. They must never be
