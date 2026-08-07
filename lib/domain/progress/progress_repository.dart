@@ -71,6 +71,25 @@ class RecentMistake {
   final DateTime occurredAt;
 }
 
+/// One exercise whose scheduled review is due.
+class DueReview {
+  /// Creates a due-review entry.
+  const DueReview({
+    required this.lessonId,
+    required this.exerciseId,
+    required this.due,
+  });
+
+  /// Lesson containing the exercise.
+  final String lessonId;
+
+  /// Stable exercise ID.
+  final String exerciseId;
+
+  /// UTC due time.
+  final DateTime due;
+}
+
 /// Platform-independent persistence contract.
 abstract interface class ProgressRepository {
   /// Records every submitted answer with its grading context.
@@ -94,4 +113,7 @@ abstract interface class ProgressRepository {
 
   /// Loads recent incorrect attempts, newest first.
   Future<List<RecentMistake>> loadRecentMistakes({int limit = 20});
+
+  /// Reconstructs and returns currently due FSRS reviews.
+  Future<List<DueReview>> loadDueReviews({DateTime? now});
 }

@@ -1,15 +1,21 @@
 import 'package:crolingo/data/progress/app_database.dart';
+import 'package:crolingo/data/review/fsrs_review_scheduler.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/domain/progress/streak_calculator.dart';
+import 'package:crolingo/domain/review/review_scheduler.dart';
 import 'package:drift/drift.dart';
 
 /// SQLite implementation of local learning progress.
 class DriftProgressRepository implements ProgressRepository {
   /// Creates a repository backed by [database].
-  const DriftProgressRepository(this.database);
+  DriftProgressRepository(this.database, {ReviewScheduler? reviewScheduler})
+    : reviewScheduler = reviewScheduler ?? FsrsReviewScheduler();
 
   /// Owned database connection.
   final AppDatabase database;
+
+  /// Replaceable due-date algorithm.
+  final ReviewScheduler reviewScheduler;
 
   @override
   Future<void> recordAttempt({
@@ -111,5 +117,35 @@ class DriftProgressRepository implements ProgressRepository {
           occurredAt: row.occurredAt.toUtc(),
         ),
     ];
+  }
+
+  @override
+  Future<List<DueReview>> loadDueReviews({DateTime? now}) async {
+    final query = database.select(database.attemptEntries)
+      ..where((row) => row.correct.equals(true))
+      ..orderBy([(row) => OrderingTerm.asc(row.occurredAt)]);
+    final rows = await query.get();
+    final states = <String, ReviewSchedule>{};
+    final lessons = <String, String>{};
+    for (final row in rows) {
+      final previous = states[row.exerciseId];
+      states[row.exerciseId] = reviewScheduler.review(
+        previousState: previous?.state,
+        priorIncorrectAttempts: row.incorrectBefore,
+        reviewedAt: row.occurredAt.toUtc(),
+      );
+      lessons[row.exerciseId] = row.lessonId;
+    }
+    final current = (now ?? DateTime.now()).toUtc();
+    final due = <DueReview>[
+      for (final entry in states.entries)
+        if (!entry.value.due.isAfter(current))
+          DueReview(
+            lessonId: lessons[entry.key]!,
+            exerciseId: entry.key,
+            due: entry.value.due,
+          ),
+    ]..sort((left, right) => left.due.compareTo(right.due));
+    return due;
   }
 }

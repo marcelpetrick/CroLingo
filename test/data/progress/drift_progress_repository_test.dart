@@ -35,11 +35,15 @@ void main() {
 
     final rows = await database.select(database.attemptEntries).get();
     final mistakes = await repository.loadRecentMistakes(limit: 1);
+    final due = await repository.loadDueReviews(
+      now: DateTime.utc(2026, 8, 8),
+    );
     expect(rows, hasLength(2));
     expect(rows.first.lessonId, 'begrussen');
     expect(rows.first.incorrectBefore, 1);
     expect(rows.first.occurredAt.toUtc(), DateTime.utc(2026, 8, 7, 8));
     expect(mistakes.single.submittedAnswer, 'Falsch');
+    expect(due.single.exerciseId, 'hello');
   });
 
   test('upserts resumable progress and aggregates local stats', () async {

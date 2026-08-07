@@ -55,6 +55,9 @@ void main() {
 
 class _FakeProgress implements ProgressRepository {
   @override
+  Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
+
+  @override
   Future<List<LessonProgress>> loadLessonProgress() async => [];
 
   @override

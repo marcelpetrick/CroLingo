@@ -28,9 +28,9 @@ Listening, native audio, TTS, learner recordings, sample comparison, and pronunc
 
 Current status: loops 1 through 5 are complete, including durable SQLite
 attempts/checkpoints, sequential unlocking, and all text exercise families.
-Streak statistics and recent-mistake replay from loop 6 are implemented; concept
-mastery, FSRS due dates, accessibility hardening, and physical-device checks
-remain.
+Streak statistics, recent-mistake replay, and deterministic FSRS due dates from
+loop 6 are implemented; fine-grained concept mastery, accessibility hardening,
+and physical-device checks remain.
 
 ### 1. Foundation and guardrails
 

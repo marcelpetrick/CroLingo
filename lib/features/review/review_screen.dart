@@ -13,10 +13,11 @@ class ReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
-      FutureBuilder<List<RecentMistake>>(
-        future: ref.read(progressRepositoryProvider).loadRecentMistakes(),
+      FutureBuilder<_ReviewData>(
+        future: _loadReview(ref.read(progressRepositoryProvider)),
         builder: (context, snapshot) {
-          final mistakes = snapshot.data ?? const <RecentMistake>[];
+          final mistakes = snapshot.data?.mistakes ?? const <RecentMistake>[];
+          final due = snapshot.data?.due ?? const <DueReview>[];
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
@@ -30,37 +31,62 @@ class ReviewScreen extends ConsumerWidget {
                 'bleiben dabei auf diesem Gerät.',
               ),
               const SizedBox(height: 24),
-              if (mistakes.isEmpty)
+              if (mistakes.isEmpty && due.isEmpty)
                 const _EmptyReview()
               else ...[
-                Text(
-                  '${mistakes.length} letzte Fehler',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 10),
-                for (final mistake in mistakes)
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(
-                        Icons.refresh_rounded,
-                        color: AppColors.primary,
-                      ),
-                      title: Text(_readableId(mistake.exerciseId)),
-                      subtitle: Text(
-                        'Deine Antwort: ${mistake.submittedAnswer}',
-                      ),
-                      trailing: const Icon(Icons.play_arrow_rounded),
-                      onTap: () => context.push('/lesson/${mistake.lessonId}'),
-                    ),
+                if (due.isNotEmpty) ...[
+                  Text(
+                    '${due.length} Übungen fällig',
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
+                  const SizedBox(height: 10),
+                  for (final item in due)
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.schedule_rounded,
+                          color: AppColors.primary,
+                        ),
+                        title: Text(_readableId(item.exerciseId)),
+                        subtitle: const Text('Jetzt wiederholen'),
+                        trailing: const Icon(Icons.play_arrow_rounded),
+                        onTap: () => context.push('/lesson/${item.lessonId}'),
+                      ),
+                    ),
+                  const SizedBox(height: 14),
+                ],
+                if (mistakes.isNotEmpty) ...[
+                  Text(
+                    '${mistakes.length} letzte Fehler',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  for (final mistake in mistakes)
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.refresh_rounded,
+                          color: AppColors.primary,
+                        ),
+                        title: Text(_readableId(mistake.exerciseId)),
+                        subtitle: Text(
+                          'Deine Antwort: ${mistake.submittedAnswer}',
+                        ),
+                        trailing: const Icon(Icons.play_arrow_rounded),
+                        onTap: () =>
+                            context.push('/lesson/${mistake.lessonId}'),
+                      ),
+                    ),
+                ],
               ],
               const SizedBox(height: 18),
-              const _ReviewOption(
+              _ReviewOption(
                 icon: Icons.schedule_rounded,
                 title: 'Empfohlen & fällig',
-                subtitle:
-                    'Der Zeitplan folgt im nächsten Lernalgorithmus-Loop.',
-                enabled: false,
+                subtitle: due.isEmpty
+                    ? 'Im Moment ist nichts fällig.'
+                    : '${due.length} Übungen warten',
+                enabled: due.isNotEmpty,
               ),
               _ReviewOption(
                 icon: Icons.error_outline_rounded,
@@ -80,6 +106,19 @@ class ReviewScreen extends ConsumerWidget {
           );
         },
       );
+}
+
+Future<_ReviewData> _loadReview(ProgressRepository repository) async =>
+    _ReviewData(
+      due: await repository.loadDueReviews(),
+      mistakes: await repository.loadRecentMistakes(),
+    );
+
+class _ReviewData {
+  const _ReviewData({required this.due, required this.mistakes});
+
+  final List<DueReview> due;
+  final List<RecentMistake> mistakes;
 }
 
 String _readableId(String value) {

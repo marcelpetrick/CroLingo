@@ -34,8 +34,9 @@ through Git history.
 - reproducible Android APK/AAB and native Linux builds;
 - strict analysis, linting, tests, coverage, security scans, and CI.
 
-Concept mastery and FSRS-based due-date scheduling are the next learning loops.
-The current status and sequence live in
+FSRS-based due-date scheduling now drives recommended reviews with 90% desired
+retention. Fine-grained concept mastery remains a future learning loop. The
+current status and sequence live in
 [the implementation plan](docs/01_plan.md).
 
 ## Bootstrap a fresh clone
