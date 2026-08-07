@@ -34,6 +34,7 @@ migrate_working_dir/
 /coverage/
 /.pipeline-reports/
 /.tooling/
+media/*.zip
 /.fvm/
 /.packages
 /.env

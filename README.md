@@ -26,7 +26,11 @@ learner recording, and pronunciation comparison remain later work.
 
 ## Current state
 
-![CroLingo learning path in the Linux phone-sized window](media/currentState.png)
+<p align="center">
+  <img src="media/screen0.jpg" width="30%" alt="CroLingo home screen">
+  <img src="media/screen01.jpg" width="30%" alt="CroLingo learning path">
+  <img src="media/screen02.jpg" width="30%" alt="CroLingo profile statistics">
+</p>
 
 Ten original crow explorations for future success and learning moments are
 available in [the visual design ideas](designIdeas/README.md). They are review
