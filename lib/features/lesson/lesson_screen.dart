@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/learning/answer_grader.dart';
@@ -288,7 +289,7 @@ class _ExerciseViewState extends State<_ExerciseView> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 14),
-            Text(widget.exercise.prompt),
+            _prompt(),
             const SizedBox(height: 28),
             _input(),
           ],
@@ -299,6 +300,12 @@ class _ExerciseViewState extends State<_ExerciseView> {
           correct: _isCorrect,
           submitted: widget.submittedAnswer ?? '',
           correction: widget.exercise.acceptedAnswers.first,
+          croatianCorrection:
+              widget.exercise.type != ExerciseType.matching &&
+                  widget.exercise.masteryDimension !=
+                      MasteryDimension.croatianToGerman
+              ? widget.exercise.acceptedAnswers.first
+              : null,
           explanation: widget.exercise.explanation,
         ),
       Padding(
@@ -352,6 +359,20 @@ class _ExerciseViewState extends State<_ExerciseView> {
     ),
   };
 
+  Widget _prompt() {
+    final croatianSource =
+        widget.exercise.masteryDimension == MasteryDimension.croatianToGerman
+        ? widget.exercise.prompt.replaceFirst('Übersetze:', '').trim()
+        : null;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: Text(widget.exercise.prompt)),
+        if (croatianSource != null) SpeechButton(text: croatianSource),
+      ],
+    );
+  }
+
   Widget _matchingInput() {
     final choices = widget.exercise.pairs.map((pair) => pair.german).toList();
     return Column(
@@ -359,22 +380,38 @@ class _ExerciseViewState extends State<_ExerciseView> {
         for (final pair in widget.exercise.pairs)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: DropdownButtonFormField<String>(
-              isExpanded: true,
-              initialValue: _matching[pair.croatian],
-              decoration: InputDecoration(
-                labelText: pair.croatian,
-                border: const OutlineInputBorder(),
-              ),
-              items: [
-                for (final choice in choices.reversed)
-                  DropdownMenuItem(value: choice, child: Text(choice)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        pair.croatian,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    SpeechButton(text: pair.croatian),
+                  ],
+                ),
+                DropdownButtonFormField<String>(
+                  isExpanded: true,
+                  initialValue: _matching[pair.croatian],
+                  decoration: const InputDecoration(
+                    labelText: 'Deutsche Bedeutung',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    for (final choice in choices.reversed)
+                      DropdownMenuItem(value: choice, child: Text(choice)),
+                  ],
+                  onChanged: _hasFeedback
+                      ? null
+                      : (value) => setState(() {
+                          if (value != null) _matching[pair.croatian] = value;
+                        }),
+                ),
               ],
-              onChanged: _hasFeedback
-                  ? null
-                  : (value) => setState(() {
-                      if (value != null) _matching[pair.croatian] = value;
-                    }),
             ),
           ),
       ],
@@ -432,12 +469,14 @@ class _Feedback extends StatelessWidget {
     required this.correct,
     required this.submitted,
     required this.correction,
+    required this.croatianCorrection,
     required this.explanation,
   });
 
   final bool correct;
   final String submitted;
   final String correction;
+  final String? croatianCorrection;
   final String explanation;
 
   @override
@@ -464,7 +503,13 @@ class _Feedback extends StatelessWidget {
             ],
           ),
           if (!correct) Text('Deine Antwort: $submitted'),
-          Text('Lösung: $correction'),
+          Row(
+            children: [
+              Expanded(child: Text('Lösung: $correction')),
+              if (croatianCorrection != null)
+                SpeechButton(text: croatianCorrection!),
+            ],
+          ),
           Text(explanation),
         ],
       ),

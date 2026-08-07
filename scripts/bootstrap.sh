@@ -141,9 +141,20 @@ install_quality_tools() {
     markdownlint-cli2@0.22.0
 }
 
+check_linux_speech() {
+  if command -v spd-say >/dev/null 2>&1 \
+    || command -v espeak-ng >/dev/null 2>&1; then
+    return
+  fi
+  printf '%s\n' \
+    '[bootstrap] Optional Croatian playback needs spd-say or espeak-ng.' \
+    '[bootstrap] Install espeak-ng with your system package manager.' >&2
+}
+
 install_flutter
 install_android_packages
 install_quality_tools
+check_linux_speech
 
 FLUTTER="${TOOLING_DIR}/flutter/bin/flutter"
 if [[ ! -x "${FLUTTER}" ]]; then

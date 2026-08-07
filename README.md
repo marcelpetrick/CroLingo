@@ -41,6 +41,7 @@ learner recording, and pronunciation comparison remain later work.
 - shared Android and Linux navigation;
 - a validated, bundled five-lesson starter course with 35 exercises;
 - both recall directions for every starter concept;
+- accessible Croatian playback using Android system TTS or local Linux speech;
 - strict offline grading with Croatian characters preserved;
 - matching, two-way translation, gaps, and sentence tiles;
 - immediate correction, explanations, unlimited retries, and XP;
@@ -62,9 +63,12 @@ without collecting personal data. The current status and sequence live in
 ## Bootstrap a fresh clone
 
 Linux development requires Git, `curl`, `unzip`, `xz`, CMake, Ninja, Clang,
-GTK 3 development headers, Java 21, and an Android SDK. With those system
-prerequisites available, the repository installs its pinned Flutter and quality
-tools into the ignored `.tooling/` directory:
+GTK 3 development headers, Java 21, and an Android SDK. Croatian playback on
+Linux additionally uses `espeak-ng` or Speech Dispatcher. On Manjaro install it
+with `sudo pacman -S espeak-ng`; on Ubuntu use
+`sudo apt-get install espeak-ng`. With those system prerequisites available,
+the repository installs its pinned Flutter and quality tools into the ignored
+`.tooling/` directory:
 
 ```bash
 ./scripts/bootstrap.sh

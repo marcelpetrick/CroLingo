@@ -1,5 +1,6 @@
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/concept_mastery.dart';
@@ -93,6 +94,7 @@ class _ConceptCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                SpeechButton(text: mastery.concept.croatian),
                 Text(
                   '$percent %',
                   semanticsLabel: '$percent Prozent gelernt',
