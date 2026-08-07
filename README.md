@@ -128,6 +128,10 @@ Actions:
 ./localPipeline.sh --noRun
 ```
 
+GitHub's constrained hosted runners use
+`./localPipeline.sh --noRun --low-disk-builds`. This preserves every final
+artifact while reclaiming disposable Android intermediates before the AAB.
+
 Omit `--noRun` to launch the finished Linux bundle after all checks. The
 pipeline validates repository policy, version progression, dependencies,
 course content, Gradle-wrapper integrity, formatting, static analysis,

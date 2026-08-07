@@ -54,6 +54,9 @@ units comes next.
 - Run the same pipeline in GitHub Actions for pushes, pull requests, and manual checks.
 - Preserve bootstrap diagnostics as workflow artifacts even when setup fails,
   and keep all workflow actions pinned to Node 24-compatible revisions.
+- Use the pipeline's low-disk build mode on hosted runners so verified APK and
+  Linux outputs survive while disposable intermediates are reclaimed before
+  the AAB build.
 
 ### 2. Product and visual foundation
 

@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TOOLING_BIN="${ROOT_DIR}/.tooling/bin"
 FLUTTER="${ROOT_DIR}/scripts/flutterw"
 RUN_APP=true
+LOW_DISK_BUILDS=false
 REPORT_DIR=""
 TEMP_REPORTS=false
 FAILURES=0
@@ -12,7 +13,7 @@ declare -a SUMMARY=()
 
 usage() {
   cat <<'EOF'
-Usage: ./localPipeline.sh [--noRun] [--report-dir PATH]
+Usage: ./localPipeline.sh [--noRun] [--low-disk-builds] [--report-dir PATH]
 
 Runs the complete CroLingo commit gate: repository policy, locked dependencies,
 course-content validation, formatting, strict analysis, framework linting,
@@ -20,6 +21,8 @@ Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
 builds, and artifact inspection. The Linux app is launched once unless --noRun
 is supplied. Reports are temporary unless --report-dir is supplied.
+Use --low-disk-builds on constrained CI runners to discard generated Android
+intermediates before the AAB build while preserving every verified artifact.
 EOF
 }
 
@@ -27,6 +30,10 @@ while (($# > 0)); do
   case "$1" in
     --noRun)
       RUN_APP=false
+      shift
+      ;;
+    --low-disk-builds)
+      LOW_DISK_BUILDS=true
       shift
       ;;
     --report-dir)
@@ -85,7 +92,7 @@ run_stage() {
   local log_path="${REPORT_DIR}/${slug}.log"
   printf '\n[PIPELINE] %s\n' "${label}"
   set +e
-  "$@" 2>&1 | tee "${log_path}"
+  (set -Eeuo pipefail; "$@") 2>&1 | tee "${log_path}"
   local status=${PIPESTATUS[0]}
   set -e
   if ((status == 0)); then
@@ -221,7 +228,34 @@ clean_builds() {
   "${FLUTTER}" build apk --debug
   "${FLUTTER}" build apk --release
   "${FLUTTER}" build apk --release --split-per-abi
-  "${FLUTTER}" build appbundle --release
+  if [[ "${LOW_DISK_BUILDS}" == true ]]; then
+    build_aab_with_reclaimed_space
+  else
+    "${FLUTTER}" build appbundle --release
+  fi
+}
+
+build_aab_with_reclaimed_space() {
+  local staging_dir
+  local build_status
+  staging_dir="$(mktemp -d "${TMPDIR:-/tmp}/crolingo-artifacts.XXXXXX")"
+  cp -a build/linux "${staging_dir}/linux"
+  mkdir -p "${staging_dir}/flutter-apk"
+  cp build/app/outputs/flutter-apk/*.apk "${staging_dir}/flutter-apk/"
+
+  "${FLUTTER}" clean
+  "${FLUTTER}" pub get --enforce-lockfile
+  build_status=0
+  "${FLUTTER}" build appbundle --release || build_status=$?
+  if ((build_status != 0)); then
+    rm -rf "${staging_dir}"
+    return "${build_status}"
+  fi
+
+  mkdir -p build/app/outputs/flutter-apk
+  cp "${staging_dir}/flutter-apk/"*.apk build/app/outputs/flutter-apk/
+  cp -a "${staging_dir}/linux" build/linux
+  rm -rf "${staging_dir}"
 }
 
 inspect_artifacts() {

@@ -49,7 +49,7 @@ jobs:
           ./scripts/bootstrap.sh 2>&1 | tee .pipeline-reports/bootstrap.log
 
       - name: Run complete pipeline
-        run: ./localPipeline.sh --noRun --report-dir .pipeline-reports
+        run: ./localPipeline.sh --noRun --low-disk-builds --report-dir .pipeline-reports
 
       - name: Upload pipeline reports
         if: always()
@@ -58,6 +58,7 @@ jobs:
           name: pipeline-reports
           path: .pipeline-reports
           if-no-files-found: warn
+          include-hidden-files: true
 
       - name: Upload verified builds
         if: success()
