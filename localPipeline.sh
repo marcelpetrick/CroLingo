@@ -20,7 +20,9 @@ course-content validation, formatting, strict analysis, framework linting,
 Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
 builds, and artifact inspection. The Linux app is launched once unless --noRun
-is supplied. Reports are temporary unless --report-dir is supplied.
+is supplied. Missing pinned tools are restored by running scripts/bootstrap.sh
+automatically before the first gate. Reports are temporary unless --report-dir
+is supplied, and are kept on failure so a failing run stays diagnosable.
 Use --low-disk-builds on constrained CI runners to discard generated Android
 intermediates before the AAB build while preserving every verified artifact.
 EOF
@@ -67,11 +69,17 @@ else
 fi
 
 cleanup() {
-  if [[ "${TEMP_REPORTS}" == true ]]; then
+  local status="$1"
+  if [[ "${TEMP_REPORTS}" != true ]]; then
+    return 0
+  fi
+  if ((status == 0)); then
     rm -rf "${REPORT_DIR}"
+  else
+    printf 'Pipeline logs kept for inspection: %s\n' "${REPORT_DIR}" >&2
   fi
 }
-trap cleanup EXIT
+trap 'cleanup $?' EXIT
 
 export PATH="${TOOLING_BIN}:${ROOT_DIR}/.tooling/npm/node_modules/.bin:${PATH}"
 export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk}"
@@ -103,17 +111,32 @@ run_stage() {
   fi
 }
 
-ensure_tools() {
+report_missing_tools() {
   local missing=0
   local tool
   for tool in actionlint gitleaks osv-scanner shellcheck zizmor markdownlint-cli2; do
     if ! command -v "${tool}" >/dev/null 2>&1; then
-      printf 'Missing required tool: %s\n' "${tool}" >&2
+      if [[ "$1" == report ]]; then
+        printf 'Missing required tool: %s\n' "${tool}" >&2
+      fi
       missing=1
     fi
   done
-  if ((missing != 0)); then
-    printf 'Run ./scripts/bootstrap.sh to install pinned tools.\n' >&2
+  return "${missing}"
+}
+
+ensure_tools() {
+  # A pinned tool is absent after a fresh clone or `git clean -xfd`. Bootstrap
+  # is idempotent, so restore the toolchain here instead of asking a person to
+  # repeat a documented command by hand.
+  if ! report_missing_tools quiet; then
+    printf 'Pinned tools are missing. Running ./scripts/bootstrap.sh once.\n'
+    ./scripts/bootstrap.sh
+    hash -r
+  fi
+  if ! report_missing_tools report; then
+    printf 'Bootstrap did not provide every pinned tool.\n' >&2
+    printf 'Install the missing system prerequisites, then rerun this pipeline.\n' >&2
     return 1
   fi
   "${FLUTTER}" --version
@@ -296,22 +319,58 @@ launch_linux() {
   return "${status}"
 }
 
+# Never abort the run: this report is diagnostic, and a failing pipeline is
+# exactly when a missing tool must still be recorded rather than hide the
+# summary.
+report_version() {
+  local label="$1"
+  shift
+  if ! "$@"; then
+    printf '%s: unavailable\n' "${label}"
+  fi
+}
+
 write_environment() {
   {
     printf 'commit=%s\n' "$(git rev-parse HEAD)"
     printf 'version=%s\n' "$(grep '^version:' pubspec.yaml | cut -d ' ' -f 2)"
     printf 'generated_at=%s\n' "$(date --utc +'%Y-%m-%dT%H:%M:%SZ')"
-    "${FLUTTER}" --version
-    java -version 2>&1
-    actionlint --version
-    gitleaks version
-    osv-scanner --version
-    shellcheck --version
-    zizmor --version
-  } >"${REPORT_DIR}/environment.txt"
+    report_version flutter "${FLUTTER}" --version
+    report_version java java -version
+    report_version actionlint actionlint --version
+    report_version gitleaks gitleaks version
+    report_version osv-scanner osv-scanner --version
+    report_version shellcheck shellcheck --version
+    report_version zizmor zizmor --version
+  } >"${REPORT_DIR}/environment.txt" 2>&1
+}
+
+finish_pipeline() {
+  write_environment
+
+  {
+    printf '\n========== CroLingo Pipeline Summary ==========\n'
+    printf '%s\n' "${SUMMARY[@]}"
+    printf '================================================\n'
+  } | tee "${REPORT_DIR}/summary.txt"
+
+  if ((FAILURES != 0)); then
+    printf 'Pipeline failed with %d mandatory failing stage(s).\n' "${FAILURES}" >&2
+    return 1
+  fi
+
+  printf 'Pipeline completed successfully.\n'
 }
 
 run_stage Environment ensure_tools
+if ((FAILURES != 0)); then
+  printf '\n%s\n' 'The environment is incomplete, so no later gate can run honestly.' >&2
+  printf '%s\n' 'Automatic bootstrap could not repair it; see the message above.' >&2
+  record "Remaining stages" SKIP "environment incomplete"
+  finish_pipeline
+  exit 1
+fi
+
 run_stage "Repository policy" check_repository
 run_stage "Gradle wrapper" check_gradle_wrapper
 run_stage Version dart run tool/check_version.dart
@@ -345,17 +404,4 @@ else
   record "Linux launch" SKIP "quality gate failed"
 fi
 
-write_environment
-
-{
-  printf '\n========== CroLingo Pipeline Summary ==========\n'
-  printf '%s\n' "${SUMMARY[@]}"
-  printf '================================================\n'
-} | tee "${REPORT_DIR}/summary.txt"
-
-if ((FAILURES != 0)); then
-  printf 'Pipeline failed with %d mandatory failing stage(s).\n' "${FAILURES}" >&2
-  exit 1
-fi
-
-printf 'Pipeline completed successfully.\n'
+finish_pipeline || exit 1

@@ -140,6 +140,12 @@ Actions:
 ./localPipeline.sh --noRun
 ```
 
+If a pinned tool is missing, for example after a fresh clone or a
+`git clean -xfd`, the pipeline runs `./scripts/bootstrap.sh` itself before the
+first gate and continues once the toolchain is restored. When bootstrap cannot
+complete the environment, the run stops immediately instead of failing every
+later stage with `command not found`, and its logs are kept for inspection.
+
 GitHub's constrained hosted runners use
 `./localPipeline.sh --noRun --low-disk-builds`. This preserves every final
 artifact while reclaiming disposable Android intermediates before the AAB.
