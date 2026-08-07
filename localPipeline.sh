@@ -119,7 +119,7 @@ ensure_tools() {
 check_repository() {
   local required
   for required in \
-    AGENTS.md \
+    docs/AGENTS.md \
     LICENSE \
     README.md \
     docs/00_product_spec.md \

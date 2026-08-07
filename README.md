@@ -187,7 +187,7 @@ Start with these documents before changing product behavior:
 - [Product specification](docs/00_product_spec.md)
 - [Implementation plan](docs/01_plan.md)
 - [Questions and adopted defaults](docs/03_questions.md)
-- [AI agent working agreement](AGENTS.md)
+- [AI agent working agreement](docs/AGENTS.md)
 
 ## Privacy and security
 
