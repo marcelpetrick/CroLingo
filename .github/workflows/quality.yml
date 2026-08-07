@@ -32,7 +32,7 @@ jobs:
           java-version: "21"
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: 3.44.7
           channel: stable
@@ -41,10 +41,12 @@ jobs:
       - name: Install Linux build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes clang cmake libgtk-3-dev ninja-build pkg-config
+          sudo apt-get install --yes clang cmake espeak-ng libgtk-3-dev ninja-build pkg-config
 
       - name: Bootstrap pinned tools
-        run: ./scripts/bootstrap.sh
+        run: |
+          mkdir -p .pipeline-reports
+          ./scripts/bootstrap.sh 2>&1 | tee .pipeline-reports/bootstrap.log
 
       - name: Run complete pipeline
         run: ./localPipeline.sh --noRun --report-dir .pipeline-reports

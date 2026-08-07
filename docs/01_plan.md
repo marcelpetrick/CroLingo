@@ -49,6 +49,8 @@ expansion toward A1 through small human-reviewable everyday units comes next.
 - Add self-bootstrap scripts that reuse compatible system SDKs or install pinned tooling into ignored `.tooling/`.
 - Add a complete local pipeline, tracked Git hooks, strict analyzer configuration, framework-specific linting, coverage gates, content validation, security scans, Android lint, and clean Android/Linux builds.
 - Run the same pipeline in GitHub Actions for pushes, pull requests, and manual checks.
+- Preserve bootstrap diagnostics as workflow artifacts even when setup fails,
+  and keep all workflow actions pinned to Node 24-compatible revisions.
 
 ### 2. Product and visual foundation
 
