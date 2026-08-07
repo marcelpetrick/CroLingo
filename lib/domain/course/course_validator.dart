@@ -8,6 +8,9 @@ abstract final class CourseValidator {
     final ids = <String>{};
     final conceptIds = course.concepts.map((concept) => concept.id).toSet();
     final exposures = {for (final id in conceptIds) id: 0};
+    final recallDirections = {
+      for (final id in conceptIds) id: <MasteryDimension>{},
+    };
 
     void addId(String id, String kind) {
       if (!ids.add(id)) errors.add('Duplicate $kind id: $id');
@@ -63,6 +66,12 @@ abstract final class CourseValidator {
               errors.add('Exercise ${exercise.id} references $conceptId');
             } else {
               exposures[conceptId] = exposures[conceptId]! + 1;
+              if (exercise.masteryDimension ==
+                      MasteryDimension.germanToCroatian ||
+                  exercise.masteryDimension ==
+                      MasteryDimension.croatianToGerman) {
+                recallDirections[conceptId]!.add(exercise.masteryDimension);
+              }
             }
           }
         }
@@ -71,6 +80,16 @@ abstract final class CourseValidator {
     for (final entry in exposures.entries) {
       if (entry.value < 3) {
         errors.add('Concept ${entry.key} has only ${entry.value} exposures');
+      }
+      if (!recallDirections[entry.key]!.contains(
+        MasteryDimension.germanToCroatian,
+      )) {
+        errors.add('Concept ${entry.key} lacks German-to-Croatian recall');
+      }
+      if (!recallDirections[entry.key]!.contains(
+        MasteryDimension.croatianToGerman,
+      )) {
+        errors.add('Concept ${entry.key} lacks Croatian-to-German recall');
       }
     }
     return errors;

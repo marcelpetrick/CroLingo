@@ -49,6 +49,39 @@
               "tiles": []
             },
             {
+              "id": "begrussen-bok-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Hallo!",
+              "acceptedAnswers": ["Bok!"],
+              "explanation": "Bok ist die lockere kroatische Begrüßung.",
+              "conceptIds": ["bok"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "begrussen-bok-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Bok!",
+              "acceptedAnswers": ["Hallo!"],
+              "explanation": "Bok bedeutet in einer lockeren Situation Hallo.",
+              "conceptIds": ["bok"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "begrussen-dobar-dan-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Dobar dan!",
+              "acceptedAnswers": ["Guten Tag!"],
+              "explanation": "Dobar dan bedeutet Guten Tag.",
+              "conceptIds": ["dobar-dan"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
               "id": "begrussen-blank",
               "type": "fillBlank",
               "masteryDimension": "grammarApplication",
@@ -98,6 +131,39 @@
               "acceptedAnswers": ["Ja sam Ana."],
               "explanation": "Ja bedeutet ich und sam bedeutet bin.",
               "conceptIds": ["ja-sam"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vorstellen-ja-sam-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Ja sam Ana.",
+              "acceptedAnswers": ["Ich bin Ana."],
+              "explanation": "Ja sam bedeutet ich bin.",
+              "conceptIds": ["ja-sam"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vorstellen-zovem-se-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Ich heiße Luka.",
+              "acceptedAnswers": ["Zovem se Luka."],
+              "explanation": "Zovem se ist die übliche Wendung für ich heiße.",
+              "conceptIds": ["zovem-se"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "vorstellen-zovem-se-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Zovem se Mia.",
+              "acceptedAnswers": ["Ich heiße Mia."],
+              "explanation": "Zovem se bedeutet ich heiße.",
+              "conceptIds": ["zovem-se"],
               "pairs": [],
               "tiles": []
             },
@@ -155,6 +221,39 @@
               "tiles": []
             },
             {
+              "id": "befinden-kako-si-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Wie geht es dir?",
+              "acceptedAnswers": ["Kako si?"],
+              "explanation": "Kako si? fragt eine vertraute Person nach ihrem Befinden.",
+              "conceptIds": ["kako-si"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "befinden-dobro-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Gut.",
+              "acceptedAnswers": ["Dobro."],
+              "explanation": "Dobro ist die kurze Antwort für gut.",
+              "conceptIds": ["dobro"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "befinden-dobro-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Dobro.",
+              "acceptedAnswers": ["Gut."],
+              "explanation": "Dobro bedeutet gut.",
+              "conceptIds": ["dobro"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
               "id": "befinden-blank",
               "type": "fillBlank",
               "masteryDimension": "grammarApplication",
@@ -208,6 +307,39 @@
               "tiles": []
             },
             {
+              "id": "hoflichkeit-hvala-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Hvala.",
+              "acceptedAnswers": ["Danke."],
+              "explanation": "Hvala bedeutet danke.",
+              "conceptIds": ["hvala"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "hoflichkeit-molim-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Bitte.",
+              "acceptedAnswers": ["Molim."],
+              "explanation": "Molim bedeutet in diesem Zusammenhang bitte.",
+              "conceptIds": ["molim"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "hoflichkeit-molim-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Molim.",
+              "acceptedAnswers": ["Bitte."],
+              "explanation": "Molim bedeutet bitte.",
+              "conceptIds": ["molim"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
               "id": "hoflichkeit-blank",
               "type": "fillBlank",
               "masteryDimension": "grammarApplication",
@@ -257,6 +389,39 @@
               "acceptedAnswers": ["Nein."],
               "explanation": "Ne ist die kurze Verneinung.",
               "conceptIds": ["ne"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "ja-nein-ne-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Nein.",
+              "acceptedAnswers": ["Ne."],
+              "explanation": "Ne bedeutet nein.",
+              "conceptIds": ["ne"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "ja-nein-da-de-hr",
+              "type": "translation",
+              "masteryDimension": "germanToCroatian",
+              "prompt": "Übersetze: Ja.",
+              "acceptedAnswers": ["Da."],
+              "explanation": "Da bedeutet ja.",
+              "conceptIds": ["da"],
+              "pairs": [],
+              "tiles": []
+            },
+            {
+              "id": "ja-nein-da-hr-de",
+              "type": "translation",
+              "masteryDimension": "croatianToGerman",
+              "prompt": "Übersetze: Da.",
+              "acceptedAnswers": ["Ja."],
+              "explanation": "Da bedeutet ja.",
+              "conceptIds": ["da"],
               "pairs": [],
               "tiles": []
             },

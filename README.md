@@ -25,7 +25,7 @@ learner recording, and pronunciation comparison remain later work.
 
 ## Current state
 
-![](media/currentState.png)
+![CroLingo learning path in the Linux phone-sized window](media/currentState.png)
 
 ## Author
 
@@ -39,7 +39,8 @@ learner recording, and pronunciation comparison remain later work.
 
 - Croatian visual identity with an original crow mascot;
 - shared Android and Linux navigation;
-- a validated, bundled five-lesson starter course;
+- a validated, bundled five-lesson starter course with 35 exercises;
+- both recall directions for every starter concept;
 - strict offline grading with Croatian characters preserved;
 - matching, two-way translation, gaps, and sentence tiles;
 - immediate correction, explanations, unlimited retries, and XP;

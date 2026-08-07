@@ -38,9 +38,9 @@ assistive-technology review and physical-device checks remain. The complete
 local profile reports start date, XP, lessons, vocabulary, study days, and
 current/longest streaks.
 
-Phase two is active. It deepens both translation directions for every existing
-concept, adds accessible playback controls, and then expands the path toward A1
-through small human-reviewable everyday units.
+Phase two is active. Both translation directions are now present for every
+existing concept. Accessible playback controls come next, followed by path
+expansion toward A1 through small human-reviewable everyday units.
 
 ### 1. Foundation and guardrails
 

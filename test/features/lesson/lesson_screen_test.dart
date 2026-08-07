@@ -17,6 +17,7 @@ void main() {
       MaterialApp(
         home: LessonScreen(
           lessonId: 'begrussen',
+          lesson: Future<Lesson>.value(_completeLesson),
           repository: progress,
         ),
       ),
@@ -105,6 +106,60 @@ void main() {
     expect(find.bySemanticsLabel('0 Prozent abgeschlossen'), findsOneWidget);
   });
 }
+
+const _completeLesson = Lesson(
+  id: 'begrussen',
+  title: 'Begrüßen',
+  exercises: [
+    Exercise(
+      id: 'match',
+      type: ExerciseType.matching,
+      masteryDimension: MasteryDimension.recognition,
+      prompt: 'Verbinde die Begrüßungen.',
+      acceptedAnswers: ['vollständig'],
+      explanation: 'Begrüßungen',
+      conceptIds: ['bok', 'dobar-dan'],
+      pairs: [
+        WordPair(croatian: 'Bok!', german: 'Hallo!'),
+        WordPair(croatian: 'Dobar dan!', german: 'Guten Tag!'),
+      ],
+      tiles: [],
+    ),
+    Exercise(
+      id: 'translate',
+      type: ExerciseType.translation,
+      masteryDimension: MasteryDimension.germanToCroatian,
+      prompt: 'Übersetze: Guten Tag!',
+      acceptedAnswers: ['Dobar dan!'],
+      explanation: 'Dobar dan bedeutet Guten Tag.',
+      conceptIds: ['dobar-dan'],
+      pairs: [],
+      tiles: [],
+    ),
+    Exercise(
+      id: 'blank',
+      type: ExerciseType.fillBlank,
+      masteryDimension: MasteryDimension.grammarApplication,
+      prompt: 'Ergänze: ___!',
+      acceptedAnswers: ['Bok'],
+      explanation: 'Bok bedeutet Hallo.',
+      conceptIds: ['bok'],
+      pairs: [],
+      tiles: [],
+    ),
+    Exercise(
+      id: 'sentence',
+      type: ExerciseType.sentence,
+      masteryDimension: MasteryDimension.sentenceProduction,
+      prompt: 'Baue: Guten Tag!',
+      acceptedAnswers: ['Dobar dan!'],
+      explanation: 'Dobar steht vor dan.',
+      conceptIds: ['dobar-dan'],
+      pairs: [],
+      tiles: ['dan!', 'Dobar'],
+    ),
+  ],
+);
 
 const _narrowLesson = Lesson(
   id: 'narrow',

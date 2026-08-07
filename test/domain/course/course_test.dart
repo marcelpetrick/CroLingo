@@ -24,7 +24,7 @@ void main() {
       expect(course.units.single.lessons, hasLength(5));
       expect(
         course.units.single.lessons.expand((lesson) => lesson.exercises),
-        hasLength(20),
+        hasLength(35),
       );
       expect(course.concepts, hasLength(10));
     });
@@ -67,6 +67,8 @@ void main() {
       containsAll([
         'Exercise exercise references missing',
         'Concept known has only 0 exposures',
+        'Concept known lacks German-to-Croatian recall',
+        'Concept known lacks Croatian-to-German recall',
       ]),
     );
   });
