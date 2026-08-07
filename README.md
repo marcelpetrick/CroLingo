@@ -130,6 +130,14 @@ To install a local APK on a connected test phone:
 adb install -r build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 ```
 
+For a repeatable compatibility report, and optionally a safe development
+install/launch, use:
+
+```bash
+./scripts/check_android_device.sh --serial <device-id>
+./scripts/check_android_device.sh --serial <device-id> --install
+```
+
 Both reference phones are ARM64. The pipeline also produces `armeabi-v7a` and
 `x86_64` variants plus a universal APK.
 

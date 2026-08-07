@@ -135,3 +135,12 @@ Every new behavior includes tests. Authored Dart code targets at least 85% line 
 ## Deferred scope
 
 Native audio, listening, TTS, microphone access, learner recordings, sample comparison, pronunciation grading, backend, accounts, synchronization, social features, monetization, web, iOS, Git tags, and GitHub Releases are not part of this milestone.
+
+## Physical-device checklist
+
+Run `scripts/check_android_device.sh --serial ID --install` on each reference
+phone, then verify first launch, all exercise controls, process restart/resume,
+lesson unlock, streak/XP persistence, 200% system text, TalkBack focus order,
+upgrade with `adb install -r`, airplane-mode operation, and app-data removal on
+uninstall. Record the actual Android API, ABI, and security-patch date; do not
+infer them from the vendor UI label.
