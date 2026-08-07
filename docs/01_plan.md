@@ -117,8 +117,9 @@ everyday units.
 - Test API 24, Android 14, Android 16, the two physical phones, and Linux.
 - Build universal and split APKs, an Android App Bundle, and a Linux release bundle.
 - Use a manual signing workflow with secrets outside Git. Quality workflows
-  never publish or tag; the explicitly dispatched development-release workflow
-  publishes clearly marked debug-signed prereleases until signing exists.
+  never publish or tag; the explicitly dispatched release workflow publishes a
+  normal latest GitHub release whose notes clearly mark the artifacts as
+  development-signed until production signing exists.
 
 ### 8. Phase two: course depth and playback
 
@@ -199,7 +200,7 @@ Native-speaker audio, listening exercises, microphone access, learner
 recordings, sample comparison, pronunciation grading, backend, accounts,
 synchronization, social features, monetization, web, iOS, and production-signed
 releases are not part of phase two. System-provided TTS playback and manually
-dispatched development prereleases are included.
+dispatched development-signed releases are included.
 The future recording and course-authoring contract is documented in
 `04_content_and_audio_authoring.md`; raw recordings are not bundled or played
 until its manifest, preparation, validation, and fallback work is implemented.

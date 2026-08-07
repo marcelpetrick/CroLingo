@@ -60,8 +60,9 @@ Session checkpoint on 2026-08-07:
    recovery, upgrades, and airplane-mode operation on Linux and both reference
    phones.
 9. **Add production delivery.** Configure an external Android signing key and
-   protected CI secrets, then publish production-signed artifacts. Development
-   prereleases stay clearly marked until this is complete.
+   protected CI secrets, then publish production-signed artifacts. The release
+   workflow already publishes normal latest releases; their notes keep stating
+   that the artifacts are development-signed until this is complete.
 10. **Integrate recorded media later.** When native-speaker recordings arrive,
    implement the manifest, preparation, validation, licensing, and fallback
    contract from [the authoring guide](04_content_and_audio_authoring.md).
@@ -75,8 +76,8 @@ Download the ARM64 APK from prerelease `v0.0.32`, verify it against
 the physical-device checklist in the release notes or an issue.
 
 The owner can push the local documentation commits when work resumes. A later
-Development release should only be dispatched when that newer version is
-intended for device testing.
+release run should only be dispatched when that newer version is intended for
+device testing.
 
 The remote workflow, physical devices, human language review, and future
 production signing material are external checkpoints. They must never be

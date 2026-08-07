@@ -1,4 +1,4 @@
-name: Development release
+name: Release
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
   contents: write # zizmor: ignore[excessive-permissions]
 
 concurrency:
-  group: development-release
+  group: release
   cancel-in-progress: false
 
 jobs:
@@ -81,14 +81,14 @@ jobs:
       - name: Package verified artifacts
         run: ./scripts/package_release.sh dist
 
-      - name: Write development release notes
+      - name: Write release notes
         env:
           RELEASE_VERSION: ${{ steps.metadata.outputs.version }}
         run: |
-          printf 'CroLingo %s development release\n\n' \
+          printf 'CroLingo %s\n\n' \
             "${RELEASE_VERSION}" >.release-notes.md
           cat >>.release-notes.md <<'EOF'
-          This automated prerelease passed CroLingo's complete quality pipeline.
+          This automated release passed CroLingo's complete quality pipeline.
 
           For the Huawei Mate 20 and current Poco/Xiaomi phones, download the
           `arm64-v8a-development.apk`. Android may ask you to allow installation
@@ -102,7 +102,7 @@ jobs:
           Verify downloads with `SHA256SUMS.txt` when possible.
           EOF
 
-      - name: Create tag and GitHub prerelease
+      - name: Create tag and published GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.metadata.outputs.tag }}
@@ -110,6 +110,6 @@ jobs:
           gh release create "${RELEASE_TAG}" dist/* \
             --repo "${GITHUB_REPOSITORY}" \
             --target "${GITHUB_SHA}" \
-            --title "CroLingo ${RELEASE_TAG} development" \
+            --title "CroLingo ${RELEASE_TAG}" \
             --notes-file .release-notes.md \
-            --prerelease
+            --latest

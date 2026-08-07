@@ -28,7 +28,9 @@
 - Keep authored Dart line coverage at or above 95% with behavior-focused tests;
   do not exclude authored files or lower the threshold to accommodate a change.
 - Every commit must be atomic, conventional, locally committed, usable, buildable, and must bump the single `pubspec.yaml` version. Never create tags or push unless explicitly requested.
-- Only the manually dispatched development-release workflow may create a tag,
-  and only after the complete pipeline succeeds; local agents still never tag
-  or push unless separately requested.
+- Only the manually dispatched release workflow may create a tag, and only
+  after the complete pipeline succeeds; it publishes a normal latest release
+  rather than a prerelease, while the artifacts stay honestly marked as
+  development-signed. Local agents still never tag or push unless separately
+  requested.
 - Update this file only for durable working rules; keep product uncertainties and chosen defaults in `docs/03_questions.md`.

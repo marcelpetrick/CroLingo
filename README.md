@@ -1,7 +1,7 @@
 # CroLingo
 
 [![Quality](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml)
-[![Development release](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml)
+[![Release](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml)
 ![Coverage gate](https://img.shields.io/badge/coverage-%E2%89%A595%25-brightgreen)
 ![Flutter](https://img.shields.io/badge/Flutter-3.44.7-02569B?logo=flutter)
 ![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20Linux-1769D2)
@@ -203,15 +203,17 @@ install/launch, use:
 Both reference phones are ARM64. The pipeline also produces `armeabi-v7a` and
 `x86_64` variants plus a universal APK.
 
-## Download a development release
+## Download a release
 
-The manually triggered **Development release** GitHub Action first runs the
-complete quality pipeline. Only after every check and build passes does it
-create a `vX.Y.Z` tag and a GitHub prerelease containing APKs, the AAB, the
-Linux bundle, and SHA-256 checksums. No tag or release is created on failure.
+The manually triggered **Release** GitHub Action first runs the complete
+quality pipeline. Only after every check and build passes does it create a
+`vX.Y.Z` tag and a published GitHub release containing APKs, the AAB, the
+Linux bundle, and SHA-256 checksums. The release is marked as the latest one,
+so it appears on the repository landing page and resolves under
+`/releases/latest`. No tag or release is created on failure.
 
-After pushing the desired commit, start it from **Actions → Development
-release → Run workflow**, or with the installed GitHub CLI:
+After pushing the desired commit, start it from **Actions → Release → Run
+workflow**, or with the installed GitHub CLI:
 
 ```bash
 gh workflow run release.yml --ref master
@@ -221,7 +223,7 @@ gh run watch
 Open the repository's **Releases** page on either phone and download the file
 ending in `arm64-v8a-development.apk`. These artifacts use a development key:
 they are installable test packages, not production-signed Play Store releases,
-and a later development release may require uninstalling the previous build.
+and a later release may require uninstalling the previous build.
 
 ## Project map
 

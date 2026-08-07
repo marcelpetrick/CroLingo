@@ -49,9 +49,10 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Can an old phone be made risk-free?** No application can repair an unpatched OS. Minimize CroLingo's permissions, data, dependencies, exports, and network surface.
 - **How are releases signed?** With external local/CI secrets; never with committed keystores or passwords.
 - **What is distributed before signing exists?** Manually triggered GitHub
-  prereleases may distribute verified development-signed APKs, an AAB, Linux
-  bundle, and checksums. They are explicitly non-production; production
-  publication waits for signing material.
+  releases may distribute verified development-signed APKs, an AAB, Linux
+  bundle, and checksums. They are published as normal latest releases so they
+  stay discoverable, and their notes state explicitly that the artifacts are
+  non-production; production publication waits for signing material.
 
 ## Development process
 
