@@ -2,11 +2,16 @@ use flutter. for desktop linux and android (state 2026)
 
 ------
 
-# CrowLingo — Reviewed Product Specification
+# CroLingo — Reviewed Product Specification
+
+> This original product specification is refined by `01_plan.md` and
+> `03_questions.md`. Those documents are authoritative where this document's
+> earlier Android-only or audio-MVP assumptions conflict with the current plan.
 
 ## 1. Product Vision
 
-**CrowLingo** is a native Android smartphone application for learning Croatian.
+**CroLingo** is a Flutter application for learning Croatian on Android phones
+and in a phone-shaped Linux desktop window.
 
 The application is inspired by the effective learning mechanics of products such as Duolingo, particularly:
 
@@ -23,7 +28,7 @@ The application is inspired by the effective learning mechanics of products such
 * Unit-completion rewards
 * Personalized review
 
-CrowLingo must nevertheless have its **own visual identity, mascot, content, implementation, interaction design, terminology, and learning logic**.
+CroLingo must nevertheless have its **own visual identity, mascot, content, implementation, interaction design, terminology, and learning logic**.
 
 The primary goal is effective language learning. Monetization, competition, and artificial engagement restrictions are explicitly secondary.
 
@@ -31,16 +36,17 @@ The primary goal is effective language learning. Monetization, competition, and 
 
 # 2. Initial Platform
 
-CrowLingo is initially a **smartphone-only Android application**.
+CroLingo is initially an **Android-first application with a Linux desktop target**.
 
 The implementation should use:
 
-* Kotlin
-* Modern native Android development
-* Jetpack Compose for the UI
+* Flutter and Dart
+* A single shared Android/Linux codebase
+* Material 3 with an original CroLingo design system
 * A local/offline-first architecture
 
-Desktop, browser, and iOS versions are not part of the initial scope.
+Browser and iOS versions are not part of the initial scope. Linux runs the same
+phone experience in a fixed 412×915 logical-pixel window.
 
 The application should be structured so that future expansion remains technically possible without compromising the Android-first MVP.
 
@@ -185,7 +191,7 @@ The plate is on the table.
 
 # 7. Low Cognitive Load
 
-A central CrowLingo design principle is:
+A central CroLingo design principle is:
 
 > Do not overwhelm beginners with too much unknown material at once.
 
@@ -207,7 +213,7 @@ The intention is not to make the course artificially slow, but to ensure that ne
 
 # 8. Predefined Learning Path
 
-CrowLingo should use a **preselected learning path**.
+CroLingo should use a **preselected learning path**.
 
 The learner should not freely select arbitrary unlearned lessons.
 
@@ -486,7 +492,7 @@ It should not create impossible questions or introduce material the learner has 
 
 # 19. Strict Correctness
 
-CrowLingo should teach correct language from the beginning.
+CroLingo should teach correct language from the beginning.
 
 The grading philosophy is:
 
@@ -561,7 +567,7 @@ It should not merely flash red and continue.
 
 The MVP must explicitly **not implement a hearts/lives system**.
 
-CrowLingo should not contain mechanics where incorrect answers eventually prevent the learner from continuing.
+CroLingo should not contain mechanics where incorrect answers eventually prevent the learner from continuing.
 
 Explicitly excluded:
 
@@ -588,7 +594,7 @@ They should not block access to learning.
 
 # 23. XP System
 
-CrowLingo should award **experience points (XP)**.
+CroLingo should award **experience points (XP)**.
 
 XP provides immediate positive reinforcement and visible long-term progress.
 
@@ -620,7 +626,7 @@ The exact XP formula remains to be defined.
 
 # 24. Spaced Repetition — Core Requirement
 
-**Spaced repetition is one of the core features of CrowLingo and should be prominently documented in the project README and architecture.**
+**Spaced repetition is one of the core features of CroLingo and should be prominently documented in the project README and architecture.**
 
 The system must maintain progress information for individual learning concepts.
 
@@ -704,7 +710,7 @@ The primary recommended mode should eventually be driven by spaced repetition.
 
 # 27. Vocabulary Tracking
 
-CrowLingo should maintain a personal vocabulary record for each learner.
+CroLingo should maintain a personal vocabulary record for each learner.
 
 For each vocabulary item, possible stored information includes:
 
@@ -749,7 +755,7 @@ This requires the content schema to identify which learning concepts an exercise
 
 # 29. Daily Streak
 
-CrowLingo should include a daily learning streak.
+CroLingo should include a daily learning streak.
 
 A streak represents consecutive calendar days in which at least one lesson was completed.
 
@@ -909,7 +915,7 @@ The initial product does not need:
 
 These would require additional server infrastructure and are currently considered too far outside the core learning objective.
 
-CrowLingo should first prove that the local learning experience works well.
+CroLingo should first prove that the local learning experience works well.
 
 ---
 
@@ -965,7 +971,7 @@ Pronunciation assessment requires proper research into:
 * Privacy
 * Device compatibility
 
-If implemented well, automated pronunciation feedback could become an important differentiating CrowLingo feature.
+If implemented well, automated pronunciation feedback could become an important differentiating CroLingo feature.
 
 ---
 
@@ -1097,7 +1103,7 @@ This is particularly important for:
 
 # 40. Offline-First Application
 
-The initial CrowLingo application should work primarily locally.
+The initial CroLingo application should work primarily locally.
 
 Core learning should not depend on a cloud connection.
 
@@ -1142,7 +1148,7 @@ The initial local architecture should therefore have clean boundaries so a backe
 
 The visual design is a major product requirement.
 
-CrowLingo must not become a functionally correct application with an unattractive or improvised interface.
+CroLingo must not become a functionally correct application with an unattractive or improvised interface.
 
 Substantial application development should therefore follow a design-first process.
 
@@ -1162,11 +1168,11 @@ The intended process is:
 
 ---
 
-# 43. CrowLingo Identity
+# 43. CroLingo Identity
 
 The current project name is:
 
-# CrowLingo
+# CroLingo
 
 The name intentionally connects:
 
@@ -1180,7 +1186,7 @@ The application should have an original visual identity rather than copying Duol
 
 # 44. Crow Mascot
 
-CrowLingo should use a stylized crow as a recurring mascot.
+CroLingo should use a stylized crow as a recurring mascot.
 
 The crow should be:
 
@@ -1243,7 +1249,7 @@ Although the mascot is a crow, the application itself should feel:
 * Polished
 * Energetic
 
-CrowLingo should use Croatian-inspired colors.
+CroLingo should use Croatian-inspired colors.
 
 Important visual references include:
 
@@ -1264,7 +1270,7 @@ Possible uses include:
 * Mascot accessories
 * Achievement cards
 
-The goal is to make CrowLingo recognizably Croatian without making it look like an official government application or simply reproducing the Croatian flag everywhere.
+The goal is to make CroLingo recognizably Croatian without making it look like an official government application or simply reproducing the Croatian flag everywhere.
 
 ---
 
@@ -1293,7 +1299,7 @@ Sounds should have appropriate settings so they can be disabled.
 
 # 48. Accessibility and Device Usability
 
-Because CrowLingo is smartphone-first, interaction must work well on touch devices.
+Because CroLingo is smartphone-first, interaction must work well on touch devices.
 
 Design should account for:
 
@@ -1314,7 +1320,7 @@ Exercise interactions should remain understandable without relying exclusively o
 
 # 49. Open-Source Repository
 
-CrowLingo will initially be developed in a **public GitHub repository**.
+CroLingo will initially be developed in a **public GitHub repository**.
 
 People should be able to:
 
@@ -1340,7 +1346,7 @@ Relevant pushes and pull requests should automatically run quality checks.
 
 Expected checks include:
 
-* Kotlin compilation
+* Flutter/Dart compilation for Android and Linux
 * Unit tests
 * Android lint
 * Formatting verification
@@ -1398,8 +1404,8 @@ The project should therefore ultimately support all required Android release and
 
 The MVP should include:
 
-* Native Android smartphone application
-* Kotlin
+* Flutter Android application with Linux companion
+* Dart
 * German → Croatian course
 * Croatian → German exercises
 * Complete-beginner starting point
@@ -1428,16 +1434,14 @@ The MVP should include:
 * Grammar/concept tracking foundations
 * Spaced repetition
 * Dedicated review mode
-* Native-speaker Croatian audio
-* Pronunciation recording
-* Pronunciation replay/comparison
+* Audio-ready content identifiers for a later milestone
 * Daily streak
 * Current and longest streak statistics
 * User profile/statistics
 * Offline-first operation
 * Local persistence
 * No mandatory account
-* Original CrowLingo mascot
+* Original CroLingo mascot
 * Croatian-inspired visual identity
 * Polished smartphone UI
 * JSON-based course content
@@ -1516,7 +1520,7 @@ Every major product decision should improve language learning before engagement 
 
 ## Correct Croatian Matters
 
-CrowLingo should teach correct language from the beginning.
+CroLingo should teach correct language from the beginning.
 
 ## Low Frustration Does Not Mean Low Standards
 
@@ -1560,7 +1564,7 @@ Major screens and workflows should be designed and reviewed before substantial U
 
 ## Original Product Identity
 
-CrowLingo can borrow general educational ideas from successful language applications but must remain an independent product.
+CroLingo can borrow general educational ideas from successful language applications but must remain an independent product.
 
 ---
 
@@ -1650,4 +1654,4 @@ These should be resolved progressively during curriculum design, UX design, and 
 
 # 60. Consolidated Product Definition
 
-> **CrowLingo is an open-source, native Android application that teaches complete German-speaking beginners Croatian toward approximately CEFR A1 through a predefined path of very small, everyday lessons. Early lessons introduce roughly two new learning items at a time and reinforce them repeatedly through matching, typed translation, listening, fill-in-the-blank, sentence construction, and later pronunciation activities. Every task must eventually be solved correctly, but retries are unlimited and mistakes never block learning. Performance influences XP, mastery, and a prominent spaced-repetition system that schedules weak vocabulary, phrases, grammar, and other learning concepts more frequently. The application includes dedicated review, vocabulary tracking, daily streaks, unit rewards, native Croatian audio, a local profile with learning statistics, and an original animated crow mascot using a bright Croatian-inspired red, white, and blue visual identity. The MVP is offline-first, contains no hearts, pay-to-continue mechanics, social network, leaderboards, or mandatory account, stores initial course content in validated JSON, is developed publicly on GitHub under the currently intended GPLv3 license, uses automated quality gates and release builds, and is ultimately intended for publication in the Google Play Store.**
+> **CroLingo is an open-source Flutter application for Android and Linux that teaches complete German-speaking beginners Croatian toward approximately CEFR A1 through a predefined path of very small, everyday lessons. The first text-focused milestone reinforces new items through matching, typed translation, fill-in-the-blank, and sentence construction. Every task must eventually be solved correctly, retries are unlimited, and mistakes influence XP, mastery, and spaced review rather than blocking learning. The offline-first application stores validated JSON content and local progress, uses an original crow mascot and bright Croatian-inspired identity, and is developed under GPLv3 with strict local and online quality gates. Listening, native recordings, learner recording, and pronunciation assessment follow in a later milestone.**
