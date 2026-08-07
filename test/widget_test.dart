@@ -29,7 +29,7 @@ void main() {
     await pumpApp(tester);
 
     expect(find.text('Bok! Bereit für Kroatisch?'), findsOneWidget);
-    expect(find.text('Deutsch → Hrvatski'), findsOneWidget);
+    expect(find.text('🇩🇪 Deutsch → 🇭🇷 Hrvatski'), findsOneWidget);
     expect(find.text('Einheit 1 · Erste Worte'), findsOneWidget);
     expect(find.text('Begrüßen'), findsOneWidget);
     expect(find.text('Lektion starten'), findsOneWidget);

@@ -48,8 +48,10 @@ rendering and sequential unlocking now derive from ordered course data across
 unit boundaries. The dashboard starts or resumes the actual first incomplete
 lesson. A second five-lesson unit adds farewells, courtesy, first meetings, and
 origin phrases; its automated content gates pass and human Croatian/German
-review remains required. Expansion toward A1 continues through small
-human-reviewable everyday units.
+review remains required. Language direction is explicitly labeled with written
+names and Croatian/German flag cues on the dashboard, vocabulary, and every
+exercise. Expansion toward A1 continues through small human-reviewable
+everyday units.
 
 ### 1. Foundation and guardrails
 

@@ -232,7 +232,7 @@ class _Header extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
               ),
               Text(
-                'Deutsch → Hrvatski',
+                '🇩🇪 Deutsch → 🇭🇷 Hrvatski',
                 style: TextStyle(color: AppColors.slate),
               ),
             ],

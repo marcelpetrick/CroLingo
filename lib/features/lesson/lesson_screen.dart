@@ -284,6 +284,10 @@ class _ExerciseViewState extends State<_ExerciseView> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
           children: [
+            _LanguageDirectionHeader(
+              dimension: widget.exercise.masteryDimension,
+            ),
+            const SizedBox(height: 14),
             Text(
               _instruction,
               style: Theme.of(context).textTheme.headlineMedium,
@@ -352,9 +356,13 @@ class _ExerciseViewState extends State<_ExerciseView> {
       textCapitalization: TextCapitalization.sentences,
       onChanged: (_) => setState(() {}),
       onSubmitted: _canSubmit && !_hasFeedback ? widget.onSubmit : null,
-      decoration: const InputDecoration(
-        labelText: 'Deine Antwort',
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText:
+            widget.exercise.masteryDimension ==
+                MasteryDimension.croatianToGerman
+            ? 'Deine Antwort auf Deutsch'
+            : 'Deine Antwort auf Kroatisch',
+        border: const OutlineInputBorder(),
       ),
     ),
   };
@@ -460,6 +468,51 @@ class _ExerciseViewState extends State<_ExerciseView> {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _LanguageDirectionHeader extends StatelessWidget {
+  const _LanguageDirectionHeader({required this.dimension});
+
+  final MasteryDimension dimension;
+
+  @override
+  Widget build(BuildContext context) {
+    final (visible, accessible) = switch (dimension) {
+      MasteryDimension.recognition => (
+        '🇭🇷 Hrvatski ↔ 🇩🇪 Deutsch',
+        'Kroatisch und Deutsch zuordnen',
+      ),
+      MasteryDimension.croatianToGerman => (
+        '🇭🇷 Hrvatski → 🇩🇪 Deutsch',
+        'Von Kroatisch nach Deutsch',
+      ),
+      MasteryDimension.germanToCroatian ||
+      MasteryDimension.sentenceProduction ||
+      MasteryDimension.grammarApplication => (
+        '🇩🇪 Deutsch → 🇭🇷 Hrvatski',
+        'Von Deutsch nach Kroatisch',
+      ),
+    };
+    return Semantics(
+      label: accessible,
+      child: ExcludeSemantics(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: AppColors.selectedSurface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Center(
+            child: Text(
+              visible,
+              style: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

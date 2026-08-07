@@ -86,10 +86,15 @@ class _ConceptCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        mastery.concept.croatian,
+                        '🇭🇷 ${mastery.concept.croatian}',
+                        semanticsLabel:
+                            'Kroatisch: ${mastery.concept.croatian}',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      Text(mastery.concept.german),
+                      Text(
+                        '🇩🇪 ${mastery.concept.german}',
+                        semanticsLabel: 'Deutsch: ${mastery.concept.german}',
+                      ),
                     ],
                   ),
                 ),

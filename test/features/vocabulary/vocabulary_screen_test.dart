@@ -29,8 +29,8 @@ void main() {
     course.complete(_course);
     await tester.pumpAndSettle();
 
-    expect(find.text('Bok!'), findsOneWidget);
-    expect(find.text('Hallo!'), findsOneWidget);
+    expect(find.text('🇭🇷 Bok!'), findsOneWidget);
+    expect(find.text('🇩🇪 Hallo!'), findsOneWidget);
     expect(find.text('100 %'), findsOneWidget);
     expect(
       find.text(

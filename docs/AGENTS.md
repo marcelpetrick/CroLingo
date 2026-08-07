@@ -14,6 +14,9 @@
 - Classify every exercise with an explicit mastery dimension; derive mastery from persisted attempt history so content, scheduling, and analytics share stable exercise IDs.
 - Treat generated TTS as optional enhancement: keep the learning flow usable without a voice, use `hr-HR`, expose accessible playback state, and add no microphone or network permission.
 - Keep core screens overflow-free at 320 logical pixels and 200% text scaling; preserve semantic labels and non-color feedback.
+- Keep the active language direction visible with Croatian/German flag cues and
+  written language names; flags are decorative reinforcement, never the only
+  accessible signal.
 - Use minimal permissions, app-private storage, no release networking, no telemetry, and no committed secrets or signing material.
 - Keep the complete Gradle wrapper tracked and executable; update it only with
   Gradle's wrapper task and update the pinned pipeline checksum in the same

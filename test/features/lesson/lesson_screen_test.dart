@@ -24,12 +24,16 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('Was gehört zusammen?'), findsOneWidget);
+    expect(find.text('🇭🇷 Hrvatski ↔ 🇩🇪 Deutsch'), findsOneWidget);
 
     await _choose(tester, 0, 'Hallo!');
     await _choose(tester, 1, 'Guten Tag!');
     await _pressButton(tester, 'Prüfen');
     expect(find.text('Richtig!'), findsOneWidget);
     await _pressButton(tester, 'Weiter');
+
+    expect(find.text('🇩🇪 Deutsch → 🇭🇷 Hrvatski'), findsOneWidget);
+    expect(find.text('Deine Antwort auf Kroatisch'), findsOneWidget);
 
     await tester.enterText(find.byKey(const Key('answerField')), 'Falsch');
     await tester.pump();
@@ -79,6 +83,24 @@ void main() {
       find.text('Die Lektion konnte nicht geladen werden.'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('labels Croatian to German meaning recall explicitly', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'reverse',
+          lesson: Future<Lesson>.value(_reverseLesson),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('🇭🇷 Hrvatski → 🇩🇪 Deutsch'), findsOneWidget);
+    expect(find.text('Deine Antwort auf Deutsch'), findsOneWidget);
+    expect(find.bySemanticsLabel('Von Kroatisch nach Deutsch'), findsOneWidget);
   });
 
   testWidgets('fits a narrow phone with 200 percent text', (tester) async {
@@ -177,6 +199,24 @@ const _narrowLesson = Lesson(
         WordPair(croatian: 'Dobar dan!', german: 'Guten Tag!'),
         WordPair(croatian: 'Bok!', german: 'Hallo!'),
       ],
+      tiles: [],
+    ),
+  ],
+);
+
+const _reverseLesson = Lesson(
+  id: 'reverse',
+  title: 'Bedeutung erinnern',
+  exercises: [
+    Exercise(
+      id: 'reverse-translation',
+      type: ExerciseType.translation,
+      masteryDimension: MasteryDimension.croatianToGerman,
+      prompt: 'Übersetze: Bok!',
+      acceptedAnswers: ['Hallo!'],
+      explanation: 'Bok bedeutet Hallo.',
+      conceptIds: ['bok'],
+      pairs: [],
       tiles: [],
     ),
   ],
