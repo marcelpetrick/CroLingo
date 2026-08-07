@@ -40,6 +40,7 @@ learner recording, and pronunciation comparison remain later work.
 
 - Croatian visual identity with an original crow mascot;
 - shared Android and Linux navigation;
+- a dashboard that starts or resumes the real next ordered lesson;
 - a validated, bundled five-lesson starter course with 35 exercises;
 - both recall directions for every starter concept;
 - accessible Croatian playback using Android system TTS or local Linux speech;

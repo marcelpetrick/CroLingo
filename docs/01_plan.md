@@ -42,8 +42,9 @@ current/longest streaks.
 Phase two is active. Both translation directions are present for every existing
 concept. Accessible Android/Linux playback controls are implemented; path
 rendering and sequential unlocking now derive from ordered course data across
-unit boundaries. Expansion toward A1 through small human-reviewable everyday
-units comes next.
+unit boundaries. The dashboard starts or resumes the actual first incomplete
+lesson. Expansion toward A1 through small human-reviewable everyday units comes
+next.
 
 ### 1. Foundation and guardrails
 

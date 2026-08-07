@@ -1,15 +1,56 @@
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/core/theme/app_colors.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
+import 'package:crolingo/domain/course/course.dart';
+import 'package:crolingo/domain/learning/course_progression.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Learner dashboard and continuation entry point.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   /// Creates the dashboard.
-  const HomeScreen({super.key});
+  const HomeScreen({this.course, super.key});
+
+  /// Optional deterministic course source for tests.
+  final Future<Course>? course;
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late Future<_HomeData> _data;
+
+  @override
+  void initState() {
+    super.initState();
+    _reload();
+  }
+
+  void _reload() {
+    _data = _load();
+  }
+
+  Future<_HomeData> _load() async {
+    final course = await (widget.course ?? ref.read(courseProvider.future));
+    final repository = ref.read(progressRepositoryProvider);
+    final progress = await repository.loadLessonProgress();
+    return _HomeData(
+      position: CourseProgression.next(course, progress),
+      courseTitle: course.title,
+    );
+  }
+
+  Future<void> _open(CoursePosition? position) async {
+    if (position == null) {
+      context.go('/path');
+      return;
+    }
+    await context.push('/lesson/${position.lesson.id}');
+    if (mounted) setState(_reload);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,38 +70,116 @@ class HomeScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 24),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.flag_rounded, color: AppColors.accent),
-                    SizedBox(width: 8),
-                    Text('Einheit 1 · Erste Worte'),
-                  ],
+        FutureBuilder<_HomeData>(
+          future: _data,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Card(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'Dein nächster Schritt konnte nicht geladen werden.',
+                  ),
                 ),
-                const SizedBox(height: 14),
-                Text('Begrüßen', style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 6),
-                const Text('Lerne „bok“ und „dobar dan“ kennen.'),
-                const SizedBox(height: 18),
-                FilledButton.icon(
-                  onPressed: () => context.go('/path'),
-                  icon: const Icon(Icons.play_arrow_rounded),
-                  label: const Text('Lernweg öffnen'),
+              );
+            }
+            final data = snapshot.data;
+            if (data == null) {
+              return const Card(
+                child: Padding(
+                  padding: EdgeInsets.all(28),
+                  child: Center(child: CircularProgressIndicator()),
                 ),
-              ],
-            ),
-          ),
+              );
+            }
+            return _ContinuationCard(
+              data: data,
+              onOpen: () => _open(data.position),
+            );
+          },
         ),
         const SizedBox(height: 16),
         const _Stats(),
       ],
     );
   }
+}
+
+class _ContinuationCard extends StatelessWidget {
+  const _ContinuationCard({required this.data, required this.onOpen});
+
+  final _HomeData data;
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final position = data.position;
+    final complete = position == null;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  complete
+                      ? Icons.workspace_premium_rounded
+                      : Icons.flag_rounded,
+                  color: complete ? AppColors.crown : AppColors.accent,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    complete
+                        ? 'Kurs abgeschlossen'
+                        : 'Einheit ${position.unitNumber} · '
+                              '${position.unit.title}',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Text(
+              complete ? data.courseTitle : position.lesson.title,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              complete
+                  ? 'Du hast alle verfügbaren Lektionen abgeschlossen.'
+                  : position.isResuming
+                  ? 'Setze Lektion ${position.lessonNumber} an deinem '
+                        'gespeicherten Punkt fort.'
+                  : position.unit.description,
+            ),
+            const SizedBox(height: 18),
+            FilledButton.icon(
+              onPressed: onOpen,
+              icon: Icon(
+                complete ? Icons.route_rounded : Icons.play_arrow_rounded,
+              ),
+              label: Text(
+                complete
+                    ? 'Lernweg ansehen'
+                    : position.isResuming
+                    ? 'Weiterlernen'
+                    : 'Lektion starten',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeData {
+  const _HomeData({required this.position, required this.courseTitle});
+
+  final CoursePosition? position;
+  final String courseTitle;
 }
 
 class _Stats extends ConsumerWidget {

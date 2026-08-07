@@ -3,6 +3,7 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/app/router.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
+import 'package:crolingo/features/home/home_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          courseProvider.overrideWith((ref) => _dashboardCourse),
           progressRepositoryProvider.overrideWithValue(_FakeProgress()),
         ],
         child: const CroLingoApp(),
@@ -28,7 +30,42 @@ void main() {
 
     expect(find.text('Bok! Bereit für Kroatisch?'), findsOneWidget);
     expect(find.text('Deutsch → Hrvatski'), findsOneWidget);
+    expect(find.text('Einheit 1 · Erste Worte'), findsOneWidget);
+    expect(find.text('Begrüßen'), findsOneWidget);
+    expect(find.text('Lektion starten'), findsOneWidget);
     expect(find.text('Keine Herzen'), findsNothing);
+  });
+
+  testWidgets('shows the durable lesson checkpoint as next action', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(
+            _FakeProgress(
+              progress: [
+                const LessonProgress(
+                  lessonId: 'lesson-one',
+                  exerciseIndex: 1,
+                  xp: 8,
+                  completedAt: null,
+                ),
+              ],
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          home: HomeScreen(course: Future.value(_pathCourse)),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Einheit 1 · Erste Einheit'), findsOneWidget);
+    expect(find.text('Erste'), findsOneWidget);
+    expect(find.text('Weiterlernen'), findsOneWidget);
+    expect(find.textContaining('gespeicherten Punkt'), findsOneWidget);
   });
 
   testWidgets('unlocks the next unit from ordered course data', (tester) async {
@@ -69,15 +106,13 @@ void main() {
     expect(find.byIcon(Icons.lock_outline_rounded), findsNothing);
   });
 
-  testWidgets('opens the learning path from the dashboard', (tester) async {
+  testWidgets('opens the next lesson from the dashboard', (tester) async {
     await pumpApp(tester);
 
-    await tester.tap(find.text('Lernweg öffnen'));
-    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lektion starten'));
+    await tester.pump();
 
-    expect(find.text('Dein Lernweg'), findsOneWidget);
-    expect(find.text('Lektion 1 · Begrüßen'), findsOneWidget);
-    expect(find.byIcon(Icons.lock_outline_rounded), findsWidgets);
+    expect(appRouter.state.uri.path, '/lesson/begrussen');
   });
 
   testWidgets('navigates to review and more', (tester) async {
@@ -260,6 +295,22 @@ const _pathCourse = Course(
       title: 'Zweite Einheit',
       description: 'Zweites Ziel',
       lessons: [Lesson(id: 'lesson-two', title: 'Zweite', exercises: [])],
+    ),
+  ],
+);
+
+const _dashboardCourse = Course(
+  id: 'dashboard-course',
+  title: 'Kroatisch für den Alltag',
+  concepts: [],
+  units: [
+    CourseUnit(
+      id: 'erste-worte',
+      title: 'Erste Worte',
+      description: 'Begrüße Menschen und stelle dich vor.',
+      lessons: [
+        Lesson(id: 'begrussen', title: 'Begrüßen', exercises: []),
+      ],
     ),
   ],
 );
