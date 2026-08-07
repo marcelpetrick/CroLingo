@@ -125,6 +125,7 @@ check_repository() {
     docs/00_product_spec.md \
     docs/01_plan.md \
     docs/03_questions.md \
+    .github/workflows/release.yml \
     android/gradlew \
     android/gradlew.bat \
     android/gradle/wrapper/gradle-wrapper.jar \

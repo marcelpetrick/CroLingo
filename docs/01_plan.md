@@ -25,7 +25,8 @@ pronunciation grading remain deferred.
 - Linux viewport: centered, fixed, non-resizable 412×915 logical pixels
 - Android layout: responsive phone portrait layout with safe areas and font scaling
 - Version source: only `pubspec.yaml`, starting at `0.0.0+1`, changed in every commit
-- Git: atomic conventional local commits; no tags or unsolicited pushes
+- Git: atomic conventional local commits; no unsolicited pushes. The manual
+  development-release workflow may tag a commit only after its full gate passes.
 
 ## Delivery loops
 
@@ -99,7 +100,9 @@ units comes next.
 - Verify keyboard, screen-reader, contrast, non-color feedback, 200% text scaling, and reduced motion.
 - Test API 24, Android 14, Android 16, the two physical phones, and Linux.
 - Build universal and split APKs, an Android App Bundle, and a Linux release bundle.
-- Use a manual signing workflow with secrets outside Git. Quality workflows never publish or tag.
+- Use a manual signing workflow with secrets outside Git. Quality workflows
+  never publish or tag; the explicitly dispatched development-release workflow
+  publishes clearly marked debug-signed prereleases until signing exists.
 
 ### 8. Phase two: course depth and playback
 
@@ -176,8 +179,9 @@ Every new behavior includes tests. Authored Dart code targets at least 85% line 
 
 Native-speaker audio, listening exercises, microphone access, learner
 recordings, sample comparison, pronunciation grading, backend, accounts,
-synchronization, social features, monetization, web, iOS, Git tags, and GitHub
-Releases are not part of phase two. System-provided TTS playback is included.
+synchronization, social features, monetization, web, iOS, and production-signed
+releases are not part of phase two. System-provided TTS playback and manually
+dispatched development prereleases are included.
 The future recording and course-authoring contract is documented in
 `04_content_and_audio_authoring.md`; raw recordings are not bundled or played
 until its manifest, preparation, validation, and fallback work is implemented.

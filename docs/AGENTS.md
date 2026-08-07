@@ -15,4 +15,7 @@
   atomic commit.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
 - Every commit must be atomic, conventional, locally committed, usable, buildable, and must bump the single `pubspec.yaml` version. Never create tags or push unless explicitly requested.
+- Only the manually dispatched development-release workflow may create a tag,
+  and only after the complete pipeline succeeds; local agents still never tag
+  or push unless separately requested.
 - Update this file only for durable working rules; keep product uncertainties and chosen defaults in `docs/03_questions.md`.

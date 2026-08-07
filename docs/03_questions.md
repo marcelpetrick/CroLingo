@@ -46,7 +46,10 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Should local learning data be encrypted?** App sandboxing and device encryption are sufficient for non-sensitive learning progress; do not add key-management complexity until sensitive data exists.
 - **Can an old phone be made risk-free?** No application can repair an unpatched OS. Minimize CroLingo's permissions, data, dependencies, exports, and network surface.
 - **How are releases signed?** With external local/CI secrets; never with committed keystores or passwords.
-- **What is distributed before signing exists?** Verified debug/development APKs and unsigned workflow artifacts; production publication waits for signing material.
+- **What is distributed before signing exists?** Manually triggered GitHub
+  prereleases may distribute verified development-signed APKs, an AAB, Linux
+  bundle, and checksums. They are explicitly non-production; production
+  publication waits for signing material.
 
 ## Development process
 

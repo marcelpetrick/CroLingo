@@ -1,0 +1,111 @@
+name: Development release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  # Required only because the final step atomically creates the tag and release.
+  contents: write # zizmor: ignore[excessive-permissions]
+
+concurrency:
+  group: development-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Verify, tag, and publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out selected commit
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.44.7
+          channel: stable
+          cache: true
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes clang cmake espeak-ng libgtk-3-dev ninja-build pkg-config
+
+      - name: Bootstrap pinned tools
+        run: |
+          mkdir -p .pipeline-reports
+          ./scripts/bootstrap.sh 2>&1 | tee .pipeline-reports/bootstrap.log
+
+      - name: Run complete pipeline
+        run: ./localPipeline.sh --noRun --report-dir .pipeline-reports
+
+      - name: Upload pipeline reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-pipeline-reports
+          path: .pipeline-reports
+          if-no-files-found: warn
+
+      - name: Read release metadata
+        id: metadata
+        run: |
+          version="$(sed -n 's/^version: \([^+]*\)+[0-9][0-9]*$/\1/p' pubspec.yaml)"
+          if [[ ! "${version}" =~ ^0\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'pubspec.yaml does not contain a valid pre-1.0 version.' >&2
+            exit 1
+          fi
+          tag="v${version}"
+          if git rev-parse --verify --quiet "refs/tags/${tag}" >/dev/null; then
+            echo "Tag ${tag} already exists." >&2
+            exit 1
+          fi
+          echo "version=${version}" >>"${GITHUB_OUTPUT}"
+          echo "tag=${tag}" >>"${GITHUB_OUTPUT}"
+
+      - name: Package verified artifacts
+        run: ./scripts/package_release.sh dist
+
+      - name: Write development release notes
+        env:
+          RELEASE_VERSION: ${{ steps.metadata.outputs.version }}
+        run: |
+          printf 'CroLingo %s development release\n\n' \
+            "${RELEASE_VERSION}" >.release-notes.md
+          cat >>.release-notes.md <<'EOF'
+          This automated prerelease passed CroLingo's complete quality pipeline.
+
+          For the Huawei Mate 20 and current Poco/Xiaomi phones, download the
+          `arm64-v8a-development.apk`. Android may ask you to allow installation
+          from the browser or file manager used to open it.
+
+          The APK is signed with an ephemeral development key. It is installable
+          for testing, but it is not a production-signed Play Store release and
+          later workflow runs may not upgrade it in place. Back up no important
+          data in development builds.
+
+          Verify downloads with `SHA256SUMS.txt` when possible.
+          EOF
+
+      - name: Create tag and GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.metadata.outputs.tag }}
+        run: |
+          gh release create "${RELEASE_TAG}" dist/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --target "${GITHUB_SHA}" \
+            --title "CroLingo ${RELEASE_TAG} development" \
+            --notes-file .release-notes.md \
+            --prerelease
