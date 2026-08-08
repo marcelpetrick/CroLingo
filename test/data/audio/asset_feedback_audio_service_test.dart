@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:crolingo/data/audio/asset_feedback_audio_service.dart';
 import 'package:crolingo/domain/audio/feedback_audio_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,6 +26,35 @@ void main() {
       completes,
     );
   });
+
+  test('bundled cues are distinct and have audible safe peaks', () async {
+    final success = File('assets/audio/success.wav').readAsBytesSync();
+    final failure = File('assets/audio/failure.wav').readAsBytesSync();
+
+    expect(success, isNot(orderedEquals(failure)));
+    expect(_peakPcm16(success), inInclusiveRange(12000, 28000));
+    expect(_peakPcm16(failure), inInclusiveRange(12000, 28000));
+  });
+}
+
+int _peakPcm16(Uint8List wav) {
+  final data = ByteData.sublistView(wav);
+  var offset = 12;
+  while (offset + 8 <= wav.length) {
+    final chunk = String.fromCharCodes(wav.sublist(offset, offset + 4));
+    final size = data.getUint32(offset + 4, Endian.little);
+    final start = offset + 8;
+    if (chunk == 'data') {
+      var peak = 0;
+      for (var sample = start; sample + 1 < start + size; sample += 2) {
+        final magnitude = data.getInt16(sample, Endian.little).abs();
+        if (magnitude > peak) peak = magnitude;
+      }
+      return peak;
+    }
+    offset = start + size + (size.isOdd ? 1 : 0);
+  }
+  throw const FormatException('WAV file has no data chunk');
 }
 
 class _RecordingPlayer implements FeedbackAssetPlayer {

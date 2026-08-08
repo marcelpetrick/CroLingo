@@ -50,10 +50,10 @@ class SettingsScreen extends ConsumerWidget {
               Icons.music_note_rounded,
               color: AppColors.primary,
             ),
-            title: const Text('Antworttöne'),
+            title: const Text('Ergebnistöne'),
             subtitle: const Text(
-              'Spielt einen freundlichen Ton bei richtigen und falschen '
-              'Antworten.',
+              'Spielt einen hellen Ping bei richtigen Antworten und einen '
+              'Fehlerton bei falschen Antworten.',
             ),
           ),
         ),

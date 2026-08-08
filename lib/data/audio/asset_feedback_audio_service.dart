@@ -17,7 +17,7 @@ class AudioplayersFeedbackAssetPlayer implements FeedbackAssetPlayer {
   @override
   Future<void> play(String assetPath) async {
     await _player.stop();
-    await _player.play(AssetSource(assetPath), mode: PlayerMode.lowLatency);
+    await _player.play(AssetSource(assetPath), mode: PlayerMode.mediaPlayer);
   }
 
   @override

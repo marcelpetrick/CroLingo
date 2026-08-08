@@ -31,7 +31,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Antworttöne'), findsOneWidget);
+    expect(find.text('Ergebnistöne'), findsOneWidget);
+    expect(find.textContaining('hellen Ping'), findsOneWidget);
+    expect(find.textContaining('Fehlerton'), findsOneWidget);
     expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
     expect(tester.takeException(), isNull);
 
