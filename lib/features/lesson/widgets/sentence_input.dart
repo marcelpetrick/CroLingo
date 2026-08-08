@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/features/lesson/widgets/exercise_answer.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class _SentenceInputState extends State<SentenceInput> {
           constraints: const BoxConstraints(minHeight: 72),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: context.palette.border),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Wrap(

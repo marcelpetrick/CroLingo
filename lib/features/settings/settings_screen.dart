@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:crolingo/app/providers.dart';
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
+import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +20,11 @@ class SettingsScreen extends ConsumerWidget {
       data: (data) => data.feedbackSoundsEnabled,
       error: (error, stackTrace) => AppSettings.defaults.feedbackSoundsEnabled,
       loading: () => AppSettings.defaults.feedbackSoundsEnabled,
+    );
+    final variant = settings.when(
+      data: (data) => data.themeVariant,
+      error: (error, stackTrace) => AppSettings.defaults.themeVariant,
+      loading: () => AppSettings.defaults.themeVariant,
     );
     return ListView(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
@@ -46,9 +54,9 @@ class SettingsScreen extends ConsumerWidget {
                       .read(settingsRepositoryProvider)
                       .setFeedbackSoundsEnabled(enabled: enabled)
                 : null,
-            secondary: const Icon(
+            secondary: Icon(
               Icons.music_note_rounded,
-              color: AppColors.primary,
+              color: context.palette.primary,
             ),
             title: const Text('Ergebnistöne'),
             subtitle: const Text(
@@ -65,15 +73,70 @@ class SettingsScreen extends ConsumerWidget {
               'Standard bleibt aktiv.',
             ),
           ),
-        const Padding(
-          padding: EdgeInsets.all(16),
+        const SizedBox(height: 16),
+        Text('Darstellung', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Card(
+          child: RadioGroup<AppThemeVariant>(
+            groupValue: variant,
+            // RadioGroup requires a callback, so ignore selections until the
+            // stored settings have loaded and the shown value is real.
+            onChanged: (selected) {
+              if (selected == null || !settings.hasValue) return;
+              unawaited(
+                ref.read(settingsRepositoryProvider).setThemeVariant(selected),
+              );
+            },
+            child: Column(
+              children: [
+                for (final option in AppThemeVariant.values)
+                  RadioListTile<AppThemeVariant>(
+                    value: option,
+                    secondary: Icon(
+                      _themeIcon(option),
+                      color: context.palette.primary,
+                    ),
+                    title: Text(_themeName(option)),
+                    subtitle: Text(_themeDescription(option)),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
           child: Text(
-            'Die Einstellung bleibt lokal auf diesem Gerät gespeichert und '
-            'wird bei App-Updates übernommen.',
-            style: TextStyle(color: AppColors.slate),
+            'Die Einstellungen bleiben lokal auf diesem Gerät gespeichert '
+            'und werden bei App-Updates übernommen.',
+            style: TextStyle(color: context.palette.slate),
           ),
         ),
       ],
     );
   }
 }
+
+String _themeName(AppThemeVariant variant) => switch (variant) {
+  AppThemeVariant.adriatic => 'Adria-Blau',
+  AppThemeVariant.neonViolet => 'Neon-Violett',
+  AppThemeVariant.midnight => 'Mitternacht',
+  AppThemeVariant.mint => 'Minze',
+  AppThemeVariant.highContrast => 'Hoher Kontrast',
+};
+
+String _themeDescription(AppThemeVariant variant) => switch (variant) {
+  AppThemeVariant.adriatic => 'Das helle Standardaussehen von CroLingo.',
+  AppThemeVariant.neonViolet => 'Dunkel mit leuchtenden violetten Akzenten.',
+  AppThemeVariant.midnight => 'Tiefes Schwarz, schont den Akku auf OLED.',
+  AppThemeVariant.mint => 'Helle, ruhige Grüntöne.',
+  AppThemeVariant.highContrast =>
+    'Maximaler Kontrast für Menschen mit Sehbeeinträchtigung.',
+};
+
+IconData _themeIcon(AppThemeVariant variant) => switch (variant) {
+  AppThemeVariant.adriatic => Icons.water_rounded,
+  AppThemeVariant.neonViolet => Icons.auto_awesome_rounded,
+  AppThemeVariant.midnight => Icons.dark_mode_rounded,
+  AppThemeVariant.mint => Icons.eco_rounded,
+  AppThemeVariant.highContrast => Icons.contrast_rounded,
+};

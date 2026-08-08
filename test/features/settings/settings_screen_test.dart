@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
+import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:crolingo/features/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,6 +67,36 @@ void main() {
     expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
     expect(tester.widget<Switch>(find.byType(Switch)).onChanged, isNull);
   });
+
+  testWidgets('persists a chosen appearance', (tester) async {
+    tester.view
+      ..physicalSize = const Size(1236, 3600)
+      ..devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    final repository = _MemorySettingsRepository();
+    addTearDown(repository.close);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+        child: const MaterialApp(home: SettingsScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Darstellung'), findsOneWidget);
+    expect(find.text('Hoher Kontrast'), findsOneWidget);
+    expect(
+      find.textContaining('Sehbeeinträchtigung'),
+      findsOneWidget,
+      reason: 'the accessibility option must say what it is for',
+    );
+
+    await tester.tap(find.text('Mitternacht'));
+    await tester.pumpAndSettle();
+
+    expect(repository.current.themeVariant, AppThemeVariant.midnight);
+    expect(repository.current.feedbackSoundsEnabled, isTrue);
+  });
 }
 
 class _MemorySettingsRepository implements SettingsRepository {
@@ -83,7 +114,19 @@ class _MemorySettingsRepository implements SettingsRepository {
 
   @override
   Future<void> setFeedbackSoundsEnabled({required bool enabled}) async {
-    current = AppSettings(feedbackSoundsEnabled: enabled);
+    current = AppSettings(
+      feedbackSoundsEnabled: enabled,
+      themeVariant: current.themeVariant,
+    );
+    _changes.add(current);
+  }
+
+  @override
+  Future<void> setThemeVariant(AppThemeVariant variant) async {
+    current = AppSettings(
+      feedbackSoundsEnabled: current.feedbackSoundsEnabled,
+      themeVariant: variant,
+    );
     _changes.add(current);
   }
 

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:crolingo/data/progress/app_database.dart';
 import 'package:crolingo/data/settings/drift_settings_repository.dart';
+import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -72,5 +73,39 @@ void main() {
     final settings = await DriftSettingsRepository(database).load();
 
     expect(settings.feedbackSoundsEnabled, isTrue);
+  });
+
+  test('stores and restores the chosen appearance', () async {
+    final database = AppDatabase(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftSettingsRepository(database);
+
+    expect((await repository.load()).themeVariant, AppThemeVariant.adriatic);
+
+    await repository.setThemeVariant(AppThemeVariant.midnight);
+    expect((await repository.load()).themeVariant, AppThemeVariant.midnight);
+
+    // Changing one preference must not reset the other.
+    await repository.setFeedbackSoundsEnabled(enabled: false);
+    final settings = await repository.load();
+    expect(settings.themeVariant, AppThemeVariant.midnight);
+    expect(settings.feedbackSoundsEnabled, isFalse);
+  });
+
+  test('ignores an appearance this build does not know', () async {
+    final database = AppDatabase(NativeDatabase.memory());
+    addTearDown(database.close);
+    await database
+        .into(database.appSettingEntries)
+        .insert(
+          AppSettingEntriesCompanion.insert(
+            key: 'theme_variant',
+            value: 'sepia-from-a-later-release',
+          ),
+        );
+
+    final settings = await DriftSettingsRepository(database).load();
+
+    expect(settings.themeVariant, AppThemeVariant.adriatic);
   });
 }

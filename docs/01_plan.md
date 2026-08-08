@@ -160,12 +160,14 @@ everyday units.
 | Background | `#F5F8FC` |
 | Surface | `#FFFFFF` |
 | Selected surface | `#E8F1FC` |
-| Correct | `#2DAA63` |
+| Correct | `#187A43` |
 | Incorrect | `#C92A35` |
 | Crown | `#F4B942` |
 | Primary text/crow | `#26343D` |
 | Secondary text | `#536475` |
 | Border | `#D9E2EC` |
+
+The table lists the default Adria-Blau appearance. Four further appearances are selectable in settings, and each supplies the same token set through `AppPalette`. The correct-answer green was darkened from `#2DAA63` because the original failed the 3:1 contrast floor against its own feedback surface.
 
 Correctness always combines color with icon, label, and shape. Touch targets are at least 48 logical pixels and body text is at least 16 logical pixels.
 

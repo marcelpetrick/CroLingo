@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:flutter/material.dart';
 
@@ -37,9 +37,9 @@ class LanguageDirectionHeader extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            color: AppColors.selectedSurface,
+            color: context.palette.selectedSurface,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: context.palette.border),
           ),
           child: Center(
             child: Text(

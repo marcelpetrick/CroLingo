@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -34,7 +34,7 @@ class LessonHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        const Icon(Icons.bolt_rounded, color: AppColors.crown),
+        Icon(Icons.bolt_rounded, color: context.palette.crown),
         Text('$xp XP', style: const TextStyle(fontWeight: FontWeight.w800)),
       ],
     ),

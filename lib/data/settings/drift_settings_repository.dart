@@ -1,5 +1,6 @@
 import 'package:crolingo/data/progress/app_database.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
+import 'package:crolingo/domain/settings/app_theme_variant.dart';
 
 /// Drift-backed, app-private preference storage.
 class DriftSettingsRepository implements SettingsRepository {
@@ -11,6 +12,7 @@ class DriftSettingsRepository implements SettingsRepository {
 
   static const _formatVersionKey = 'settings_format_version';
   static const _feedbackSoundsKey = 'feedback_sounds_enabled';
+  static const _themeVariantKey = 'theme_variant';
 
   /// Shared database.
   final AppDatabase database;
@@ -26,17 +28,21 @@ class DriftSettingsRepository implements SettingsRepository {
       database.select(database.appSettingEntries).watch().map(_decode);
 
   @override
-  Future<void> setFeedbackSoundsEnabled({required bool enabled}) async {
+  Future<void> setFeedbackSoundsEnabled({required bool enabled}) =>
+      _write(_feedbackSoundsKey, '$enabled');
+
+  @override
+  Future<void> setThemeVariant(AppThemeVariant variant) =>
+      _write(_themeVariantKey, variant.name);
+
+  Future<void> _write(String key, String value) async {
     await database.batch((batch) {
       batch.insertAllOnConflictUpdate(database.appSettingEntries, [
         AppSettingEntriesCompanion.insert(
           key: _formatVersionKey,
           value: '$storageFormatVersion',
         ),
-        AppSettingEntriesCompanion.insert(
-          key: _feedbackSoundsKey,
-          value: '$enabled',
-        ),
+        AppSettingEntriesCompanion.insert(key: key, value: value),
       ]);
     });
   }
@@ -49,6 +55,7 @@ class DriftSettingsRepository implements SettingsRepository {
         'true' || null => true,
         _ => AppSettings.defaults.feedbackSoundsEnabled,
       },
+      themeVariant: AppThemeVariant.fromStorage(values[_themeVariantKey]),
     );
   }
 }

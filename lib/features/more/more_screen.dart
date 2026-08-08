@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,10 +38,10 @@ class MoreScreen extends StatelessWidget {
           onTap: () => context.push('/more/settings'),
         ),
         const SizedBox(height: 24),
-        const Center(
+        Center(
           child: Text(
             'Offline · Keine Werbung · Keine Herzen',
-            style: TextStyle(color: AppColors.slate),
+            style: TextStyle(color: context.palette.slate),
           ),
         ),
       ],
@@ -69,7 +69,7 @@ class _MoreTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        leading: Icon(icon, color: AppColors.primary),
+        leading: Icon(icon, color: context.palette.primary),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle),
         trailing: onTap == null

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/audio/feedback_audio_service.dart';
@@ -364,10 +364,10 @@ class _Completion extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.workspace_premium_rounded,
             size: 84,
-            color: AppColors.crown,
+            color: context.palette.crown,
           ),
           const SizedBox(height: 16),
           Text(

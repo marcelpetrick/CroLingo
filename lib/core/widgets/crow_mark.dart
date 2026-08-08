@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Small original geometric crow mark used in the application shell.
@@ -14,18 +14,38 @@ class CrowMark extends StatelessWidget {
     return Semantics(
       label: 'Freundliche CroLingo-Krähe',
       image: true,
-      child: CustomPaint(size: Size.square(size), painter: _CrowPainter()),
+      child: CustomPaint(
+        size: Size.square(size),
+        painter: _CrowPainter(
+          bodyColor: context.palette.charcoal,
+          wingColor: context.palette.primaryPressed,
+          accentColor: context.palette.accent,
+          eyeColor: context.palette.mascotEye,
+        ),
+      ),
     );
   }
 }
 
 class _CrowPainter extends CustomPainter {
+  const _CrowPainter({
+    required this.bodyColor,
+    required this.wingColor,
+    required this.accentColor,
+    required this.eyeColor,
+  });
+
+  final Color bodyColor;
+  final Color wingColor;
+  final Color accentColor;
+  final Color eyeColor;
+
   @override
   void paint(Canvas canvas, Size size) {
-    final body = Paint()..color = AppColors.charcoal;
-    final wing = Paint()..color = AppColors.primaryPressed;
-    final white = Paint()..color = Colors.white;
-    final accent = Paint()..color = AppColors.accent;
+    final body = Paint()..color = bodyColor;
+    final wing = Paint()..color = wingColor;
+    final white = Paint()..color = eyeColor;
+    final accent = Paint()..color = accentColor;
     canvas
       ..drawOval(
         Rect.fromLTWH(
@@ -77,5 +97,9 @@ class _CrowPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _CrowPainter oldDelegate) =>
+      oldDelegate.bodyColor != bodyColor ||
+      oldDelegate.wingColor != wingColor ||
+      oldDelegate.accentColor != accentColor ||
+      oldDelegate.eyeColor != eyeColor;
 }

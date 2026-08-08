@@ -1,5 +1,5 @@
 import 'package:crolingo/app/providers.dart';
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
@@ -123,7 +123,7 @@ class _UnitBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedBox(
     decoration: BoxDecoration(
-      color: AppColors.primary,
+      color: context.palette.primary,
       borderRadius: BorderRadius.circular(20),
     ),
     child: Padding(
@@ -134,7 +134,9 @@ class _UnitBanner extends StatelessWidget {
             completed
                 ? Icons.workspace_premium_rounded
                 : Icons.waving_hand_rounded,
-            color: completed ? AppColors.crown : Colors.white,
+            color: completed
+                ? context.palette.crown
+                : context.palette.onPrimary,
             size: 34,
           ),
           const SizedBox(width: 14),
@@ -143,8 +145,8 @@ class _UnitBanner extends StatelessWidget {
               completed
                   ? 'Goldkrone verdient! Einheit abgeschlossen.'
                   : description,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: context.palette.onPrimary,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
@@ -191,12 +193,14 @@ class _LessonNode extends StatelessWidget {
             height: 68,
             decoration: BoxDecoration(
               color: completed
-                  ? AppColors.success
+                  ? context.palette.success
                   : unlocked
-                  ? AppColors.primary
-                  : AppColors.selectedSurface,
+                  ? context.palette.primary
+                  : context.palette.selectedSurface,
               border: Border.all(
-                color: unlocked ? AppColors.primaryPressed : AppColors.border,
+                color: unlocked
+                    ? context.palette.primaryPressed
+                    : context.palette.border,
                 width: 2,
               ),
               shape: BoxShape.circle,
@@ -208,7 +212,9 @@ class _LessonNode extends StatelessWidget {
                   : unlocked
                   ? Icons.play_arrow_rounded
                   : Icons.lock_outline_rounded,
-              color: unlocked ? Colors.white : AppColors.slate,
+              color: unlocked
+                  ? context.palette.onPrimary
+                  : context.palette.slate,
               size: 32,
             ),
           ),

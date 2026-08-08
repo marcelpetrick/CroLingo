@@ -1,5 +1,5 @@
 import 'package:crolingo/app/providers.dart';
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +44,9 @@ class ReviewScreen extends ConsumerWidget {
                   for (final item in due)
                     Card(
                       child: ListTile(
-                        leading: const Icon(
+                        leading: Icon(
                           Icons.schedule_rounded,
-                          color: AppColors.primary,
+                          color: context.palette.primary,
                         ),
                         title: Text(_readableId(item.exerciseId)),
                         subtitle: const Text('Jetzt wiederholen'),
@@ -65,9 +65,9 @@ class ReviewScreen extends ConsumerWidget {
                   for (final mistake in mistakes)
                     Card(
                       child: ListTile(
-                        leading: const Icon(
+                        leading: Icon(
                           Icons.refresh_rounded,
-                          color: AppColors.primary,
+                          color: context.palette.primary,
                         ),
                         title: Text(_readableId(mistake.exerciseId)),
                         subtitle: Text(
@@ -89,9 +89,9 @@ class ReviewScreen extends ConsumerWidget {
                   for (final lesson in recent)
                     Card(
                       child: ListTile(
-                        leading: const Icon(
+                        leading: Icon(
                           Icons.auto_awesome_outlined,
-                          color: AppColors.primary,
+                          color: context.palette.primary,
                         ),
                         title: Text(_readableId(lesson.lessonId)),
                         subtitle: const Text('Abgeschlossene Lektion üben'),
@@ -218,7 +218,7 @@ class _ReviewOption extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
     enabled: enabled,
     onTap: onTap,
-    leading: Icon(icon, color: AppColors.primary),
+    leading: Icon(icon, color: context.palette.primary),
     title: Text(title),
     subtitle: Text(subtitle),
     trailing: Icon(enabled ? Icons.chevron_right_rounded : Icons.lock_outline),

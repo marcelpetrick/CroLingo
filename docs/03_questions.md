@@ -62,7 +62,7 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **How should CroLingo relate to other learning products?** Use only general
   learning-UX principles. Keep original colors, type, crow, path, components,
   wording, rewards, sounds, and illustrations.
-- **Dark mode?** Token-ready but deferred until the light theme is complete and accessible.
+- **Dark mode?** Superseded. The learner picks one of five appearances in settings: Adria-Blau (default), Neon-Violett, Mitternacht, Minze, and Hoher Kontrast. Colours live in an `AppPalette` theme extension, never as literals in a widget, and every reader-facing pair is asserted against WCAG contrast floors by a test. The high-contrast appearance is held to AAA because it exists for low vision.
 - **Orientation?** Portrait-first on Android; Linux fixed portrait. Landscape is not an MVP acceptance requirement.
 
 ## Security and delivery

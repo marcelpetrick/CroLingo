@@ -1,5 +1,5 @@
 import 'package:crolingo/app/providers.dart';
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/concept_mastery.dart';
@@ -132,7 +132,7 @@ class _Stat extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primary, size: 30),
+          Icon(icon, color: context.palette.primary, size: 30),
           const SizedBox(width: 14),
           Expanded(
             child: Text(label, style: Theme.of(context).textTheme.bodyLarge),

@@ -1,5 +1,5 @@
 import 'package:crolingo/app/providers.dart';
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/concept_mastery.dart';
@@ -102,8 +102,8 @@ class _ConceptCard extends StatelessWidget {
                 Text(
                   '$percent %',
                   semanticsLabel: '$percent Prozent gelernt',
-                  style: const TextStyle(
-                    color: AppColors.primary,
+                  style: TextStyle(
+                    color: context.palette.primary,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -114,7 +114,7 @@ class _ConceptCard extends StatelessWidget {
               value: mastery.overall,
               minHeight: 8,
               borderRadius: BorderRadius.circular(8),
-              backgroundColor: AppColors.selectedSurface,
+              backgroundColor: context.palette.selectedSurface,
             ),
             const SizedBox(height: 10),
             Text(

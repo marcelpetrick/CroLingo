@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,7 +31,7 @@ class CroLingoShell extends StatelessWidget {
       body: SafeArea(child: child),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index < 0 ? 0 : index,
-        indicatorColor: AppColors.selectedSurface,
+        indicatorColor: context.palette.selectedSurface,
         onDestinationSelected: (value) => context.go(_locations[value]),
         destinations: const [
           NavigationDestination(

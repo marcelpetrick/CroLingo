@@ -1,5 +1,5 @@
 import 'package:crolingo/app/providers.dart';
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/learning/course_progression.dart';
@@ -127,7 +127,9 @@ class _ContinuationCard extends StatelessWidget {
                   complete
                       ? Icons.workspace_premium_rounded
                       : Icons.flag_rounded,
-                  color: complete ? AppColors.crown : AppColors.accent,
+                  color: complete
+                      ? context.palette.crown
+                      : context.palette.accent,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -238,9 +240,9 @@ class _Header extends ConsumerWidget {
                 'CroLingo',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
               ),
-              const Text(
+              Text(
                 '🇩🇪 Deutsch → 🇭🇷 Hrvatski',
-                style: TextStyle(color: AppColors.slate),
+                style: TextStyle(color: context.palette.slate),
               ),
               if (version != null)
                 Semantics(
@@ -248,8 +250,8 @@ class _Header extends ConsumerWidget {
                   child: ExcludeSemantics(
                     child: Text(
                       'Version $version',
-                      style: const TextStyle(
-                        color: AppColors.slate,
+                      style: TextStyle(
+                        color: context.palette.slate,
                         fontSize: 13,
                       ),
                     ),
@@ -281,7 +283,7 @@ class _StatCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primary),
+            Icon(icon, color: context.palette.primary),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

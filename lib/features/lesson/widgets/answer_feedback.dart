@@ -1,4 +1,4 @@
-import 'package:crolingo/core/theme/app_colors.dart';
+import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +37,9 @@ class AnswerFeedback extends StatelessWidget {
     liveRegion: true,
     child: Container(
       width: double.infinity,
-      color: correct ? const Color(0xFFE6F6ED) : const Color(0xFFFCEAEC),
+      color: correct
+          ? context.palette.successSurface
+          : context.palette.errorSurface,
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +48,9 @@ class AnswerFeedback extends StatelessWidget {
             children: [
               Icon(
                 correct ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                color: correct ? AppColors.success : AppColors.error,
+                color: correct
+                    ? context.palette.success
+                    : context.palette.error,
               ),
               const SizedBox(width: 8),
               Text(
