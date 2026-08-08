@@ -1321,7 +1321,10 @@ Exercise interactions should remain understandable without relying exclusively o
 
 # 49. Open-Source Repository
 
-CroLingo will initially be developed in a **public GitHub repository**.
+CroLingo is developed in a **public GitHub repository**.
+
+> **Implemented.** The repository is public and licensed under GNU GPLv3;
+> see `LICENSE`.
 
 People should be able to:
 
@@ -1335,7 +1338,7 @@ The currently intended license is:
 
 **GNU GPLv3**
 
-The license decision should be finalized and reviewed before the first public release.
+The license decision is settled: GNU GPLv3, recorded in `LICENSE`.
 
 ---
 
@@ -1370,7 +1373,13 @@ Code that fails required quality gates should not be considered release-ready.
 
 # 51. Release Automation
 
-A separate GitHub Actions release workflow should eventually:
+> **Implemented.** `.github/workflows/release.yml` ("Release", manually
+> dispatched) performs every step below, signs with the stable external
+> Android identity, verifies the committed certificate fingerprint, and
+> publishes a full GitHub release with APK, AAB, Linux bundle, and
+> checksums.
+
+The release workflow:
 
 1. Run mandatory quality gates.
 2. Build the release application.

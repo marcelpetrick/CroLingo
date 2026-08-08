@@ -64,6 +64,7 @@ flowchart TB
 
     CourseAsset[/"assets/content/course_de_hr.json<br/>validated course snapshot"/]
     ToneAssets[/"assets/audio/*.wav<br/>original feedback tones"/]
+    Manifest[/"pubspec.yaml<br/>bundled so the app can read its own version"/]
     Database[("SQLite via Drift<br/>app-private crolingo database")]
   end
 
@@ -76,6 +77,7 @@ flowchart TB
   Dart -->|"Process.run spd-say or espeak-ng"| OsTts
   Dart -->|"reads once at startup"| CourseAsset
   Dart -->|"plays"| ToneAssets
+  Dart -->|"reads its version"| Manifest
   Dart -->|"reads and writes"| Database
 ```
 
@@ -100,9 +102,10 @@ flowchart TB
   end
 
   subgraph Features["lib/features — presentation"]
+    LessonWidgets["lesson/widgets/<br/>matching, sentence, text answer,<br/>feedback, headers"]
     Home["home_screen"]
     Path["learning_path_screen"]
-    Lesson["lesson_screen"]
+    Lesson["lesson_screen<br/>session orchestration"]
     Review["review_screen"]
     Vocabulary["vocabulary_screen"]
     Profile["profile_screen"]
@@ -138,9 +141,11 @@ flowchart TB
   subgraph Core["lib/core — shared UI"]
     Theme["theme/app_theme, app_colors"]
     Widgets["widgets/crow_mark, speech_button"]
+    Version["version/app_version<br/>reads the bundled pubspec"]
   end
 
   Main --> Router --> Shell --> Features
+  Lesson --> LessonWidgets
   Providers --> Data
   Features --> Providers
   Features --> Domain
@@ -173,6 +178,7 @@ parameter, which is what makes the domain testable without a device:
 | `appSettingsProvider` | reactive `AppSettings` stream | derived |
 | `feedbackAudioServiceProvider` | answer tones | `AssetFeedbackAudioService` |
 | `speechServiceProvider` | Croatian pronunciation | `PlatformSpeechService` |
+| `appVersionProvider` | running version for the dashboard | `AppVersion` |
 
 ### Domain rules worth knowing
 
@@ -344,11 +350,12 @@ separate, external checkpoint.
 
 ## Known architectural debt
 
-- `lesson_screen.dart` is by far the largest presentation file and mixes four
-  exercise-family widgets with session orchestration. It is the natural
-  candidate for extraction into per-family widgets.
-- `learning_path_screen.dart` currently has no dedicated widget test, which is
-  a gap in an otherwise behaviour-tested tree.
+- `lesson_screen.dart` remains the largest presentation file. The exercise
+  families were extracted into `lib/features/lesson/widgets/`, so it now only
+  orchestrates the session, but it still owns routing between the families and
+  the feedback lifecycle.
+- Coverage sits a little above the 95% floor rather than comfortably clear of
+  it, so a single untested branch can turn the pipeline red.
 - Native-speaker audio, listening exercises, and pronunciation assessment are
   deliberately absent. The contract they must satisfy is specified in
   [the content and audio authoring guide](04_content_and_audio_authoring.md).

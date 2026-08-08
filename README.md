@@ -74,7 +74,8 @@ external checkpoints live in [the development roadmap](docs/02_roadmap.md).
 ## Bootstrap a fresh clone
 
 Linux development requires Git, `curl`, `unzip`, `xz`, CMake, Ninja, Clang,
-GTK 3 and GStreamer development headers, Java 21, and an Android SDK. Croatian
+GTK 3 and GStreamer development headers, Java 21, Node.js with npm, and an
+Android SDK. Croatian
 speech on Linux additionally uses `espeak-ng` or Speech Dispatcher. On Manjaro
 install the media dependencies with
 `sudo pacman -S espeak-ng gstreamer gst-plugins-base`; on Ubuntu use
@@ -254,6 +255,7 @@ designIdeas/      original visual concepts, excluded from runtime bundles
 docs/             specification, implementation plan, and open decisions
 lib/app/          routing, shell, and app composition
 lib/data/         asset and persistence adapters
+lib/core/         shared theme, version reader, and widgets
 lib/domain/       course and learning rules
 lib/features/     screens and exercise presentation
 scripts/          reproducible bootstrap and Flutter wrapper

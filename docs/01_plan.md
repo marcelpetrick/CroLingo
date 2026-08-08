@@ -1,7 +1,8 @@
 # CroLingo implementation plan
 
 Execution status and the prioritized next steps are maintained in
-`02_roadmap.md`.
+`02_roadmap.md`. The implemented structure is described in
+`05_architecture.md`.
 
 ## Outcome
 
@@ -180,7 +181,8 @@ Correctness always combines color with icon, label, and shape. Touch targets are
 
 ## Quality definition
 
-A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, custom/framework linting, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, and artifact/manifest inspection.
+A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, custom/framework linting, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, artifact/manifest inspection, and
+a closing review of expected upstream warnings.
 
 Every new behavior includes tests. Authored Dart code and all critical learning,
 persistence, scheduling, and validation logic require at least 95% line
@@ -200,7 +202,7 @@ Native-speaker audio, listening exercises, microphone access, learner
 recordings, sample comparison, pronunciation grading, backend, accounts,
 synchronization, social features, monetization, web, iOS, and production-signed
 releases are not part of phase two. System-provided TTS playback and manually
-dispatched development-signed releases are included.
+dispatched, stable-signed full GitHub releases are included.
 The future recording and course-authoring contract is documented in
 `04_content_and_audio_authoring.md`; raw recordings are not bundled or played
 until its manifest, preparation, validation, and fallback work is implemented.

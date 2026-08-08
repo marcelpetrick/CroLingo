@@ -13,29 +13,24 @@ Linux builds, and mandatory local/online quality gates. Phase two is active.
 System-provided Croatian playback and cross-unit progression are implemented;
 native recordings and pronunciation assessment remain deferred.
 
-Session checkpoint on 2026-08-07:
+Session checkpoint on 2026-08-09:
 
-- Remote Quality run
-  [31199047430](https://github.com/marcelpetrick/CroLingo/actions/runs/31199047430)
-  passed for pushed commit `619afd5` (`0.0.32+33`), including verified build
-  uploads.
-- Development release run
-  [31200380595](https://github.com/marcelpetrick/CroLingo/actions/runs/31200380595)
-  passed for the same commit. It created prerelease
-  [v0.0.32](https://github.com/marcelpetrick/CroLingo/releases/tag/v0.0.32)
-  and published checksummed ARM64, ARM32, x86_64, universal APK, AAB, and Linux
-  x64 artifacts. The remote tag resolves to `619afd5`.
-- Local commit `65ebe76` documents GitHub Actions billing and advances the
-  version to `0.0.33+34`. It passed the complete local pipeline and remains for
-  the owner to push.
+- Every earlier checkpoint recorded here has been superseded. The `v0.0.32`
+  entries described a prerelease published before the release workflow began
+  publishing normal latest releases, and before the stable Android signing
+  identity existed.
+- Releases now publish as full GitHub releases, signed with the stable
+  external identity and verified against the committed certificate
+  fingerprint.
+- Record a new checkpoint only with the run identifier, the tag, and the
+  version it published, so a stale entry stays obvious.
 
 ## Ordered work
 
-1. **Restore verified development delivery.** Complete. Quality is proven on the hosted
+1. **Restore verified delivery.** Complete. Quality is proven on the hosted
    runner with hidden report uploads, low-disk build sequencing, guarded SDK
-   cleanup, and verified build artifact upload. Development release run
-   `31200380595` passed and published all expected artifacts as prerelease
-   `v0.0.32`.
+   cleanup, and verified build artifact upload. The release workflow publishes
+   a normal latest GitHub release rather than a prerelease.
 2. **Make Home resume real course progress.** Complete. Home derives its
    primary action from ordered course data and durable checkpoints, including
    continuation across unit boundaries.
@@ -48,9 +43,10 @@ Session checkpoint on 2026-08-07:
 5. **Expand the A1 path.** Add small reviewed units for family and people,
    numbers and age, food and drinks, home, everyday actions, shopping, and
    travel/directions. Reuse known material in most exercises.
-6. **Complete learner controls.** Add concise grammar references and local
-   settings for supported accessibility and playback preferences without
-   weakening the offline or minimal-permission baseline.
+6. **Complete learner controls.** Started. A settings screen persists the
+   answer-feedback sound preference. Concise grammar references and the
+   remaining accessibility and playback preferences are still open, and must
+   not weaken the offline or minimal-permission baseline.
 7. **Harden content authoring.** Version the course schema, produce
    deterministic validated content packs, and support an optional separate
    authoring repository that exports reviewed snapshots. Implement the staged
@@ -71,13 +67,12 @@ Session checkpoint on 2026-08-07:
 
 ## Immediate release checkpoint
 
-Download the ARM64 APK from prerelease `v0.0.32`, verify it against
+Download the ARM64 APK from the latest published release, verify it against
 `SHA256SUMS.txt`, install it on both reference phones, and record the results of
 the physical-device checklist in the release notes or an issue.
 
-The owner can push the local documentation commits when work resumes. A later
-release run should only be dispatched when that newer version is intended for
-device testing.
+Push before dispatching a release, and dispatch one only when that version is
+actually going onto a device for testing.
 
 The remote workflow, physical devices, human language review, and future
 production signing material are external checkpoints. They must never be
