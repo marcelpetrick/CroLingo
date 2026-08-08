@@ -260,6 +260,7 @@ Start with these documents before changing product behavior:
 - [Prioritized development roadmap](docs/02_roadmap.md)
 - [Questions and adopted defaults](docs/03_questions.md)
 - [Course content and audio authoring](docs/04_content_and_audio_authoring.md)
+- [Architecture overview](docs/05_architecture.md)
 - [AI agent working agreement](docs/AGENTS.md)
 
 ## Privacy and security
