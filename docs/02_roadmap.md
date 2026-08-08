@@ -53,8 +53,8 @@ Session checkpoint on 2026-08-07:
    weakening the offline or minimal-permission baseline.
 7. **Harden content authoring.** Version the course schema, produce
    deterministic validated content packs, and support an optional separate
-   authoring repository that exports reviewed snapshots. Do not add runtime
-   downloads yet.
+   authoring repository that exports reviewed snapshots. Implement the staged
+   [Content Studio design](editor.md); do not add runtime downloads yet.
 8. **Finish device and accessibility qualification.** Verify TalkBack,
    keyboard traversal, contrast, reduced motion, 200% text, interruption
    recovery, upgrades, and airplane-mode operation on Linux and both reference

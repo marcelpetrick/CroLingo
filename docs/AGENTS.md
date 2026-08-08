@@ -7,6 +7,10 @@
 - System-provided Croatian TTS playback is in scope behind a replaceable Android/Linux adapter. Native recordings, listening exercises, learner recording, and pronunciation assessment remain deferred.
 - Keep presentation, application/domain logic, persistence, content, and platform adapters separated. Dependencies must support Android and Linux.
 - Treat bundled course JSON as authored product data: validate it in the pipeline, use stable IDs, and test every parser and grading rule.
+- Keep the Content Studio authoring database, runtime content store, and learner
+  progress database as separate lifecycles. Exchange only deterministic,
+  schema-versioned approved packs linked by permanent IDs; never edit shipped
+  IDs or put raw recordings and author drafts in the learner database.
 - Require explicit German-to-Croatian and Croatian-to-German recall for every
   concept. Reverse recall measures meaning retrieval and remains distinct from
   Croatian spelling practice.
