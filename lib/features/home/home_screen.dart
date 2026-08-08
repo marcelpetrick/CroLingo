@@ -214,27 +214,47 @@ class _Stats extends ConsumerWidget {
       );
 }
 
-class _Header extends StatelessWidget {
+class _Header extends ConsumerWidget {
   const _Header();
 
   @override
-  Widget build(BuildContext context) {
-    return const Row(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final version = ref
+        .watch(appVersionProvider)
+        .when(
+          data: (value) => value,
+          error: (error, stackTrace) => null,
+          loading: () => null,
+        );
+    return Row(
       children: [
-        CrowMark(size: 58),
-        SizedBox(width: 12),
+        const CrowMark(size: 58),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'CroLingo',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
               ),
-              Text(
+              const Text(
                 '🇩🇪 Deutsch → 🇭🇷 Hrvatski',
                 style: TextStyle(color: AppColors.slate),
               ),
+              if (version != null)
+                Semantics(
+                  label: 'Installierte Version $version',
+                  child: ExcludeSemantics(
+                    child: Text(
+                      'Version $version',
+                      style: const TextStyle(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

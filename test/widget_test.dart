@@ -40,6 +40,46 @@ void main() {
     expect(find.text('Keine Herzen'), findsNothing);
   });
 
+  testWidgets('shows the running version on the dashboard', (tester) async {
+    appRouter.go('/');
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
+          courseProvider.overrideWith((ref) => _dashboardCourse),
+          progressRepositoryProvider.overrideWithValue(_FakeProgress()),
+          appVersionProvider.overrideWith((ref) async => '1.2.3+45'),
+        ],
+        child: const CroLingoApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Version 1.2.3+45'), findsOneWidget);
+  });
+
+  testWidgets('hides the version when it cannot be read', (tester) async {
+    appRouter.go('/');
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
+          courseProvider.overrideWith((ref) => _dashboardCourse),
+          progressRepositoryProvider.overrideWithValue(_FakeProgress()),
+          appVersionProvider.overrideWith((ref) async => null),
+        ],
+        child: const CroLingoApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Version '), findsNothing);
+  });
+
   testWidgets('shows the durable lesson checkpoint as next action', (
     tester,
   ) async {

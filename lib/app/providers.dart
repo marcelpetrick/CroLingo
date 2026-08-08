@@ -1,3 +1,4 @@
+import 'package:crolingo/core/version/app_version.dart';
 import 'package:crolingo/data/audio/asset_feedback_audio_service.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/data/progress/app_database.dart';
@@ -44,6 +45,11 @@ final feedbackAudioServiceProvider = Provider<FeedbackAudioService>((ref) {
   ref.onDispose(service.dispose);
   return service;
 });
+
+/// Running application version, read from the bundled pubspec.
+final appVersionProvider = FutureProvider<String?>(
+  (ref) => AppVersion().load(),
+);
 
 /// Optional device-local Croatian pronunciation service.
 final speechServiceProvider = Provider<SpeechService>(
