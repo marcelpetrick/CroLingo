@@ -40,6 +40,13 @@
   index or worktree changes, and wait for overlapping work to commit before
   advancing the shared version from the new `HEAD`. Never create tags or push
   unless explicitly requested.
+- Write a conventional subject of at most 72 characters, then a blank line,
+  then a body. The subject says what changed; the body says why it changed and
+  what a reader must know. Cover the motivation, the approach taken, any
+  behaviour or data change, and anything deliberately left out. Wrap the body
+  at 72 characters. Prefer prose over a file list, because the diff already
+  lists the files. A commit whose reason is not obvious from its subject alone
+  is not finished.
 - Only the manually dispatched release workflow may create a tag, and only
   after the complete pipeline and stable signing verification succeed; it
   publishes a normal latest release rather than a prerelease. Local agents
