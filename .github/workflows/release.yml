@@ -40,6 +40,25 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Configure stable Android signing
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.CROLINGO_RELEASE_KEYSTORE }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.CROLINGO_RELEASE_KEY_PASSWORD }}
+        run: |
+          if [[ -z "${RELEASE_KEYSTORE}" || -z "${RELEASE_KEY_PASSWORD}" ]]; then
+            echo 'Stable Android signing secrets are required.' >&2
+            exit 1
+          fi
+          keystore="${RUNNER_TEMP}/crolingo-release.p12"
+          printf '%s' "${RELEASE_KEYSTORE}" | base64 --decode >"${keystore}"
+          chmod 0600 "${keystore}"
+          {
+            printf 'storeFile=%s\n' "${keystore}"
+            printf 'storePassword=%s\n' "${RELEASE_KEY_PASSWORD}"
+            printf 'keyAlias=crolingo\n'
+            printf 'keyPassword=%s\n' "${RELEASE_KEY_PASSWORD}"
+          } >android/key.properties
+
       - name: Install Linux build dependencies
         run: |
           sudo apt-get update
@@ -79,6 +98,12 @@ jobs:
           echo "version=${version}" >>"${GITHUB_OUTPUT}"
           echo "tag=${tag}" >>"${GITHUB_OUTPUT}"
 
+      - name: Verify stable Android signing identity
+        run: |
+          ./scripts/verify_android_signing.sh \
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
+            android/release-signing-certificate.sha256
+
       - name: Package verified artifacts
         run: ./scripts/package_release.sh dist
 
@@ -92,13 +117,13 @@ jobs:
           This automated release passed CroLingo's complete quality pipeline.
 
           For the Huawei Mate 20 and current Poco/Xiaomi phones, download the
-          `arm64-v8a-development.apk`. Android may ask you to allow installation
+          `arm64-v8a.apk`. Android may ask you to allow installation
           from the browser or file manager used to open it.
 
-          The APK is signed with an ephemeral development key. It is installable
-          for testing, but it is not a production-signed Play Store release and
-          later workflow runs may not upgrade it in place. Back up no important
-          data in development builds.
+          APK releases use CroLingo's stable external signing identity. Starting
+          with this release, later APKs can upgrade in place and retain local
+          learning progress. Builds older than this signing transition must be
+          uninstalled once before installing this release.
 
           Verify downloads with `SHA256SUMS.txt` when possible.
           EOF

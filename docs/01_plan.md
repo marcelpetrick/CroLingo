@@ -116,10 +116,10 @@ everyday units.
 - Verify keyboard, screen-reader, contrast, non-color feedback, 200% text scaling, and reduced motion.
 - Test API 24, Android 14, Android 16, the two physical phones, and Linux.
 - Build universal and split APKs, an Android App Bundle, and a Linux release bundle.
-- Use a manual signing workflow with secrets outside Git. Quality workflows
-  never publish or tag; the explicitly dispatched release workflow publishes a
-  normal latest GitHub release whose notes clearly mark the artifacts as
-  development-signed until production signing exists.
+- Use one stable Android signing identity with the private key in external
+  local storage and protected GitHub Actions secrets. Verify its committed
+  public certificate fingerprint before publication. Quality workflows never
+  publish or tag; only the explicitly dispatched release workflow does.
 
 ### 8. Phase two: course depth and playback
 

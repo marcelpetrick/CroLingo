@@ -20,7 +20,10 @@
 - Treat `designIdeas/` as reviewed concept material, not runtime assets. Keep
   visual work original, record its generation brief, and add selected assets to
   application bundles only through a separately tested product decision.
-- Use minimal permissions, app-private storage, no release networking, no telemetry, and no committed secrets or signing material.
+- Use minimal permissions, app-private storage, no release networking, no
+  telemetry, and no committed secrets or private signing material. Never rotate
+  the stable Android signing identity without an explicit migration plan;
+  verify its committed public certificate fingerprint on every release.
 - Keep the complete Gradle wrapper tracked and executable; update it only with
   Gradle's wrapper task and update the pinned pipeline checksum in the same
   atomic commit.
@@ -29,8 +32,7 @@
   do not exclude authored files or lower the threshold to accommodate a change.
 - Every commit must be atomic, conventional, locally committed, usable, buildable, and must bump the single `pubspec.yaml` version. Never create tags or push unless explicitly requested.
 - Only the manually dispatched release workflow may create a tag, and only
-  after the complete pipeline succeeds; it publishes a normal latest release
-  rather than a prerelease, while the artifacts stay honestly marked as
-  development-signed. Local agents still never tag or push unless separately
-  requested.
+  after the complete pipeline and stable signing verification succeed; it
+  publishes a normal latest release rather than a prerelease. Local agents
+  still never tag or push unless separately requested.
 - Update this file only for durable working rules; keep product uncertainties and chosen defaults in `docs/03_questions.md`.

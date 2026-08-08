@@ -59,10 +59,10 @@ Session checkpoint on 2026-08-07:
    keyboard traversal, contrast, reduced motion, 200% text, interruption
    recovery, upgrades, and airplane-mode operation on Linux and both reference
    phones.
-9. **Add production delivery.** Configure an external Android signing key and
-   protected CI secrets, then publish production-signed artifacts. The release
-   workflow already publishes normal latest releases; their notes keep stating
-   that the artifacts are development-signed until this is complete.
+9. **Add stable signed delivery.** Complete. The external Android key is backed
+   up outside Git and installed as protected CI secrets. Releases verify the
+   committed public certificate fingerprint before publication, enabling
+   in-place upgrades that retain app-private progress.
 10. **Integrate recorded media later.** When native-speaker recordings arrive,
    implement the manifest, preparation, validation, licensing, and fallback
    contract from [the authoring guide](04_content_and_audio_authoring.md).

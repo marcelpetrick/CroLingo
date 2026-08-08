@@ -47,12 +47,14 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Does the text MVP need permissions?** No sensitive permissions and no release network permission.
 - **Should local learning data be encrypted?** App sandboxing and device encryption are sufficient for non-sensitive learning progress; do not add key-management complexity until sensitive data exists.
 - **Can an old phone be made risk-free?** No application can repair an unpatched OS. Minimize CroLingo's permissions, data, dependencies, exports, and network surface.
-- **How are releases signed?** With external local/CI secrets; never with committed keystores or passwords.
-- **What is distributed before signing exists?** Manually triggered GitHub
-  releases may distribute verified development-signed APKs, an AAB, Linux
-  bundle, and checksums. They are published as normal latest releases so they
-  stay discoverable, and their notes state explicitly that the artifacts are
-  non-production; production publication waits for signing material.
+- **How are releases signed?** Since `0.0.43`, with one stable external Android
+  key held in protected local storage and GitHub Actions secrets; keystores and
+  passwords are never committed. The workflow verifies the public certificate
+  fingerprint before publishing.
+- **What about APKs from before stable signing?** Their ephemeral CI keys cannot
+  be recovered, so users must uninstall one final time before installing the
+  first stable-signed APK. Every later stable-signed upgrade retains Android's
+  app-private progress database.
 
 ## Development process
 

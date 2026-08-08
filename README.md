@@ -186,21 +186,22 @@ Android App Bundle:
 ./scripts/flutterw build appbundle --release
 ```
 
-Outputs are written below `build/` and intentionally ignored by Git. Flutter's
-development release APK uses a development signing setup; public distribution
-must use a private release key stored outside this repository. Never commit a
-keystore, password, service-account file, or generated artifact.
+Outputs are written below `build/` and intentionally ignored by Git. Local
+release builds fall back to Flutter's development key unless the ignored
+`android/key.properties` points to CroLingo's external release key. Published
+GitHub releases always require that stable key. Never commit a keystore,
+password, service-account file, or generated artifact.
 
-For either reference phone, install the smaller ARM64 development release APK:
+For either reference phone, install the smaller ARM64 release APK:
 
 ```bash
 adb install -r build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 ```
 
 Alternatively, copy that APK to the phone and open it there. Android may ask
-you to allow installation from the file-manager application. This locally
-built APK is signed with Flutter's development key and is suitable for testing,
-not public distribution. Rebuild it at any time with:
+you to allow installation from the file-manager application. A local fallback
+build has a different signing identity and cannot update the published app;
+use it only for development. Rebuild it at any time with:
 
 ```bash
 ./scripts/flutterw build apk --release --split-per-abi
@@ -235,9 +236,15 @@ gh run watch
 ```
 
 Open the repository's **Releases** page on either phone and download the file
-ending in `arm64-v8a-development.apk`. These artifacts use a development key:
-they are installable test packages, not production-signed Play Store releases,
-and a later release may require uninstalling the previous build.
+ending in `arm64-v8a.apk`. Releases from `0.0.43` onward use one stable external
+signing identity, so Android can install later versions in place while keeping
+the app-private progress database. Earlier releases used ephemeral CI keys and
+must be uninstalled once before installing the first stable-signed release.
+
+The public signing certificate SHA-256 fingerprint is stored in
+`android/release-signing-certificate.sha256` and verified before publication.
+The private key and passwords exist only in protected local storage and GitHub
+Actions secrets.
 
 ## Project map
 

@@ -11,11 +11,11 @@ if [[ ! "${VERSION}" =~ ^0\.[0-9]+\.[0-9]+$ ]]; then
 fi
 
 declare -A ARTIFACTS=(
-  ["build/app/outputs/flutter-apk/app-release.apk"]="CroLingo-${VERSION}-universal-development.apk"
-  ["build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"]="CroLingo-${VERSION}-arm64-v8a-development.apk"
-  ["build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"]="CroLingo-${VERSION}-armeabi-v7a-development.apk"
-  ["build/app/outputs/flutter-apk/app-x86_64-release.apk"]="CroLingo-${VERSION}-x86_64-development.apk"
-  ["build/app/outputs/bundle/release/app-release.aab"]="CroLingo-${VERSION}-development.aab"
+  ["build/app/outputs/flutter-apk/app-release.apk"]="CroLingo-${VERSION}-universal.apk"
+  ["build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"]="CroLingo-${VERSION}-arm64-v8a.apk"
+  ["build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"]="CroLingo-${VERSION}-armeabi-v7a.apk"
+  ["build/app/outputs/flutter-apk/app-x86_64-release.apk"]="CroLingo-${VERSION}-x86_64.apk"
+  ["build/app/outputs/bundle/release/app-release.aab"]="CroLingo-${VERSION}.aab"
 )
 
 mkdir -p "${OUTPUT_DIR}"
