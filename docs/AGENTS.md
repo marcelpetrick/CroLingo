@@ -34,7 +34,12 @@
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
 - Keep authored Dart line coverage at or above 95% with behavior-focused tests;
   do not exclude authored files or lower the threshold to accommodate a change.
-- Every commit must be atomic, conventional, locally committed, usable, buildable, and must bump the single `pubspec.yaml` version. Never create tags or push unless explicitly requested.
+- Every commit must be atomic, conventional, locally committed, usable,
+  buildable, and must bump the single `pubspec.yaml` version. In a shared
+  worktree, stage only explicitly owned files, never commit another agent's
+  index or worktree changes, and wait for overlapping work to commit before
+  advancing the shared version from the new `HEAD`. Never create tags or push
+  unless explicitly requested.
 - Only the manually dispatched release workflow may create a tag, and only
   after the complete pipeline and stable signing verification succeed; it
   publishes a normal latest release rather than a prerelease. Local agents

@@ -8,16 +8,19 @@ content for the learner application.
 
 ## Recommendation
 
-Build a separate Flutter desktop application for Windows and Linux. Flutter is
-already CroLingo's UI technology and officially supports native applications
-and plugins on both desktop platforms. Windows builds must run on Windows and
-Linux builds on Linux, so CI needs one runner for each platform. See Flutter's
+Build a separate Flutter desktop application for Windows and Linux inside this
+repository at `tools/content_studio/`. Flutter is already CroLingo's UI
+technology and officially supports native applications and plugins on both
+desktop platforms. Windows builds must run on Windows and Linux builds on
+Linux, so CI needs one runner for each platform. See Flutter's
 [desktop documentation](https://docs.flutter.dev/platform-integration/desktop)
 and [supported-platform matrix](https://docs.flutter.dev/reference/supported-platforms).
 
-Keep the editor in a separate repository and give it its own semantic version.
+Keep it as an auxiliary application package, not a feature compiled into the
+learner executable. The monorepo retains one SemVer source in the root
+`pubspec.yaml`; editor builds receive that version from repository tooling.
 This avoids shipping authoring dependencies, microphone access, and private raw
-recordings in the learner app. Shared Dart packages may later contain content
+recordings in the learner app while allowing shared Dart packages for content
 models, migrations, validation, and deterministic export code.
 
 The first useful release should import and export CroLingo's current JSON. It
@@ -74,7 +77,8 @@ attempts do not acquire a different meaning.
 
 Use four independent versions:
 
-1. Content Studio application SemVer.
+1. Repository SemVer shared by CroLingo and Content Studio, defined only in the
+   root `pubspec.yaml`.
 2. Authoring database integer schema version.
 3. Exported content format integer `schemaVersion`.
 4. Approved course release SemVer and monotonically increasing
@@ -187,25 +191,34 @@ be reused by concepts, prompts, answers, explanations, and future listening
 exercises. A recording is one speaker's take of one utterance; it never owns
 the text.
 
-The recorder captures lossless mono WAV masters at 48 kHz and 24-bit when the
-device supports it. It should flag clipping, excessive silence, wrong channel
-count, unexpected sample rate, duration outliers, and text changed after
-recording. The editor keeps raw approved masters and consent records. A
-reproducible export step strips metadata, trims only approved boundary silence,
-and creates compact app assets. Destructive noise reduction or speech editing
-must never happen silently.
+Version one records the Croatian vocabulary utterances with one native speaker
+using an ordinary headset microphone. This is accepted as an iterative starting
+point, not treated as studio-quality input. The recorder captures lossless mono
+WAV masters at 48 kHz and 24-bit when the device supports it and flags clipping,
+low level, excessive noise or silence, wrong channel count, unexpected sample
+rate, duration outliers, and text changed after recording. Every take remains
+replaceable without changing its utterance ID.
 
-The future learner setting should be separate for Croatian and German:
+The editor keeps raw approved masters and consent records. A reproducible
+export step strips metadata, trims only approved boundary silence, normalizes
+to the agreed safe target, and creates compact app assets. Noise reduction must
+be optional, previewable, explicitly approved, and never overwrite the raw
+take. Quality can therefore improve later without changing course references.
+
+The learner setting is separate for Croatian and German:
 
 - **Automatic** (recommended): approved native recording, otherwise local TTS;
 - **Native recording:** play a recording and report clearly if unavailable;
 - **Device voice:** always use installed `hr-HR` or `de-DE` TTS;
 - **Off:** hide or disable automatic speech while retaining manual text use.
 
-The content manifest maps each utterance to available recordings and TTS
-fallback text. It does not select a learner preference. Native audio and TTS
-must share one playback boundary so lessons remain usable when either source
-is unavailable.
+Version one exposes one approved native Croatian speaker. The schema supports
+multiple recordings, speakers, and styles later, similar to dictionary sites,
+without making them visible before real variants exist. German uses device TTS
+until approved German recordings are added. The content manifest maps each
+utterance to available recordings and TTS fallback text; learner settings make
+the final selection. Native audio and TTS share one playback boundary so
+lessons remain usable when either source is unavailable.
 
 ## Export and integration
 
@@ -243,22 +256,34 @@ review.
   original; never perform an irreversible in-place migration without backup.
 - Keep speaker identities pseudonymous in content. Protect consent documents
   separately and define retention/deletion rules.
-- Start with one active writer. Use Git-reviewed deterministic exports for
-  collaboration; do not pretend a shared SQLite file is multi-user storage.
-- Record who approved text/audio and why, but avoid collecting unnecessary
-  personal information.
+- Start with one active writer. Simultaneous editing, accounts, roles, and a
+  synchronization server are out of scope.
+- The same trusted native speaker may author, record, review, approve, and
+  export in version one. Preserve an audit record even though this is not a
+  separation-of-duties workflow.
+- Keep the working authoring database, raw recordings, and private consent
+  documents in an ignored local workspace. Commit editor source and approved
+  deterministic exports only.
 
 ## Quality gates and distribution
 
-Content Studio needs its own bootstrap script, local pipeline, conventional
-atomic commits, SemVer, Linux and Windows CI builds, formatting, Dart analysis,
-Flutter/custom lint, unit/widget/integration tests, shell and workflow lint,
-dependency and secret scans, coverage threshold, clean builds, and artifact
-inspection. Test database migration fixtures from every supported schema and
-golden deterministic exports.
+Content Studio follows the same engineering floor as CroLingo: bootstrapping,
+conventional atomic commits, the single repository SemVer, formatting, Dart
+analysis, Flutter/custom lint, unit/widget/integration tests, shell and workflow
+lint, dependency and secret scans, at least 95% authored Dart line coverage,
+clean builds, and artifact inspection. Test database migration fixtures from
+every supported schema and golden deterministic exports.
 
-Distribute a signed Windows installer and a signed or checksummed Linux bundle.
-The editor should show its app version, authoring schema, content schema, and
+The root `localPipeline.sh` remains the mandatory final integration gate and
+must validate the editor, exported content, bundled audio, and learner app. A
+separate path-filtered `editor-quality.yml` workflow runs on pushes and pull
+requests that touch `tools/content_studio/`, shared content packages, editor
+fixtures, or content assets. It has a Linux quality/build job and a Windows
+quality/build job, and uploads a portable Windows ZIP plus a checksummed Linux
+bundle for testing. It does not tag or publish a public release.
+
+Version one distributes a portable Windows ZIP; no installer is required. The
+editor shows the repository version, authoring schema, content schema, and
 project backup location in an About/Diagnostics screen.
 
 ## Implementation sequence
@@ -267,9 +292,10 @@ project backup location in an About/Diagnostics screen.
    manifest, stable-ID rules, and wireframes.
 2. **Shared core:** extract typed models, validator, migrations, and canonical
    serializer into platform-independent Dart packages with fixtures.
-3. **Editor foundation:** create the separate Flutter Windows/Linux repository,
-   versioned Drift authoring database, project backups, import current JSON,
-   course tree, forms, search, undo/redo, and live preview.
+3. **Editor foundation:** create `tools/content_studio/` as a Flutter
+   Windows/Linux application, with a versioned Drift authoring database,
+   project backups, current-JSON import, course tree, forms, search, undo/redo,
+   and live preview.
 4. **Review and export:** add workflow states, audit records, complete
    validation, deterministic exports, diffs, and app-repository snapshot import.
 5. **Recording desk:** add cross-platform capture, meters, take management,
@@ -278,8 +304,9 @@ project backup location in an About/Diagnostics screen.
    preferences for German and Croatian, fallback behavior, and tests.
 7. **Runtime content store:** when justified by scale, add the separate
    transactional content database and rollback; keep learner progress isolated.
-8. **Distribution:** signed Windows and Linux artifacts, update documentation,
-   migration fixtures, usability testing with the real editor and speakers.
+8. **Distribution:** portable Windows ZIP and checksummed Linux artifact,
+   documentation, migration fixtures, and usability testing with the real
+   editor and native speaker.
 
 ## Definition of the first usable editor
 
@@ -290,26 +317,20 @@ and export byte-identical valid JSON without using a terminal. A native speaker
 can open an approved script queue, record/replay/retake WAV takes, and hand an
 audio batch to review without naming files manually.
 
-## Ten decisions for the product owner
+## Adopted version-one decisions
 
-1. Who are the first editor users, and should author, language reviewer, audio
-   reviewer, and release approver be separate roles or one trusted person?
-2. Is a separate private content/editor repository acceptable, with only
-   approved deterministic exports entering the public CroLingo repository?
-3. Must version one support simultaneous collaboration, or is one active writer
-   with file/project hand-off and Git review sufficient?
-4. Which Windows versions and distribution form are required first: portable
-   ZIP, installer, or both?
-5. Which strings require recordings initially: vocabulary only, all Croatian
-   phrases, both Croatian and German, or every speakable UI/exercise string?
-6. Should learners choose `Automatic`, `Native recording`, `Device voice`, and
-   `Off` independently for Croatian and German as recommended?
-7. Will there be one canonical speaker per language at first, or must the model
-   expose multiple speakers, dialects, genders, and speaking speeds immediately?
-8. What recording equipment and room will be used, and may the editor perform
-   only trimming/normalization or also reviewed noise reduction?
-9. Who has final authority to approve Croatian wording, German wording,
-   recordings, consent/license status, and a content release?
-10. For the first delivery model, should content remain bundled with each app
-    release as recommended, or is independently downloadable content already a
-    hard requirement?
+1. One trusted person initially performs authoring, recording, review, approval,
+   and export.
+2. Content Studio stays in this repository under `tools/content_studio/`.
+3. One active user is sufficient; simultaneous collaboration is out of scope.
+4. Windows distribution is a portable ZIP.
+5. Native recording initially covers Croatian vocabulary utterances.
+6. Croatian and German each receive `Automatic`, `Native recording`,
+   `Device voice`, and `Off` settings in CroLingo.
+7. One canonical native speaker is exposed initially; the model remains capable
+   of multiple recordings and styles later.
+8. An ordinary headset microphone is acceptable initially, with measurable
+   warnings, preserved raw takes, and replaceable improved recordings.
+9. The native speaker is the final version-one approver.
+10. Approved content and audio remain bundled with app releases and are checked
+    by the mandatory root pipeline; runtime downloads remain deferred.

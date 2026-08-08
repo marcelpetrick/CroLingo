@@ -24,15 +24,38 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Persistence?** Drift/SQLite in app-private storage, repositories at the boundary, and forward-only tested migrations.
 - **Course representation?** Bundled JSON validated structurally and semantically, then parsed into typed immutable models.
 - **Can curriculum authoring be separated from application development?** Yes.
-  JSON remains the canonical app format; a separate repository or editor may
-  export deterministic validated snapshots. Do not add XML or unreviewed
-  runtime downloads.
+  JSON remains the canonical app format; the auxiliary Flutter Content Studio
+  lives at `tools/content_studio/` in this monorepo and exports deterministic
+  validated snapshots. Do not add XML or unreviewed runtime downloads.
 - **Spaced repetition?** FSRS behind a replaceable interface using default parameters and 90% desired retention until enough learner history exists for justified tuning.
 - **Time handling?** Persist UTC; calculate learning days in Europe/Berlin.
 - **How is pronunciation played before recordings exist?** Use replaceable,
   device-local system TTS with Croatian locale `hr-HR`; fail accessibly when a
   Croatian voice or Linux speech service is unavailable, and never add network
   or microphone permissions.
+
+## Content Studio
+
+- **Who uses and approves it initially?** One trusted native speaker may author,
+  record, review, approve, and export; keep an audit record without implementing
+  accounts or multi-user roles.
+- **Where does it live?** As a separate Flutter desktop application under
+  `tools/content_studio/`, sharing this repository's single SemVer source and
+  quality rules without being compiled into the learner app.
+- **How is it distributed?** As a portable Windows ZIP and checksummed Linux
+  bundle. A path-filtered editor workflow checks both platforms on relevant
+  pushes, while the root pipeline remains the mandatory integration gate.
+- **What audio is recorded first?** Croatian vocabulary with one canonical
+  speaker and an ordinary headset microphone. Preserve raw WAV takes, report
+  measurable quality problems, and allow improved replacements under the same
+  utterance IDs.
+- **What can learners select?** Independently for Croatian and German:
+  Automatic, native recording, device voice, or off. German uses device TTS
+  until approved German recordings exist; the schema supports more speakers and
+  styles later.
+- **How is content delivered?** Approved content and converted audio are bundled
+  with the app and validated by the root pipeline. Runtime downloads remain
+  deferred.
 
 ## Design
 
