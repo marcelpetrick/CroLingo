@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
+import 'package:crolingo/domain/settings/app_settings.dart';
+import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +21,9 @@ void main() {
       ProviderScope(
         overrides: [
           progressRepositoryProvider.overrideWithValue(const _PathProgress([])),
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
         ],
         child: MaterialApp(
           home: Scaffold(body: LearningPathScreen(course: course.future)),
@@ -127,6 +132,9 @@ void main() {
       ProviderScope(
         overrides: [
           progressRepositoryProvider.overrideWithValue(const _PathProgress([])),
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),
@@ -151,6 +159,9 @@ void main() {
       ProviderScope(
         overrides: [
           progressRepositoryProvider.overrideWithValue(const _PathProgress([])),
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(AppSettings.defaults),
+          ),
         ],
         child: MaterialApp(
           home: Scaffold(body: LearningPathScreen(course: course.future)),
@@ -161,6 +172,38 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Lernweg konnte nicht geladen werden.'), findsOneWidget);
+  });
+
+  testWidgets('opens every lesson when the developer unlock is on', (
+    tester,
+  ) async {
+    _useTallViewport(tester);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(const _PathProgress([])),
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(
+              const AppSettings(
+                feedbackSoundsEnabled: true,
+                themeVariant: AppThemeVariant.adriatic,
+                developerUnlockAllLessons: true,
+              ),
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: LearningPathScreen(course: Future<Course>.value(_course)),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Sequential progression is bypassed, so nothing stays locked.
+    expect(find.byIcon(Icons.lock_outline_rounded), findsNothing);
+    expect(find.byIcon(Icons.play_arrow_rounded), findsNWidgets(4));
   });
 }
 
@@ -180,6 +223,9 @@ Future<void> _pumpPath(
     ProviderScope(
       overrides: [
         progressRepositoryProvider.overrideWithValue(_PathProgress(progress)),
+        appSettingsProvider.overrideWith(
+          (ref) => Stream.value(AppSettings.defaults),
+        ),
       ],
       child: MaterialApp(
         home: Scaffold(

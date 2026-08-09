@@ -37,7 +37,11 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
     await ref.read(progressRepositoryProvider).loadLessonProgress(),
   );
 
-  List<Widget> _sections(Course course, Set<String> completed) {
+  List<Widget> _sections(
+    Course course,
+    Set<String> completed, {
+    required bool unlockAll,
+  }) {
     final children = <Widget>[];
     String? previousLessonId;
     for (var unitIndex = 0; unitIndex < course.units.length; unitIndex++) {
@@ -63,7 +67,9 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
       ) {
         final lesson = unit.lessons[lessonIndex];
         final unlocked =
-            previousLessonId == null || completed.contains(previousLessonId);
+            unlockAll ||
+            previousLessonId == null ||
+            completed.contains(previousLessonId);
         children.add(
           _LessonNode(
             number: lessonIndex + 1,
@@ -99,6 +105,13 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
           .where((item) => item.completedAt != null)
           .map((item) => item.lessonId)
           .toSet();
+      final unlockAll = ref
+          .watch(appSettingsProvider)
+          .when(
+            data: (settings) => settings.developerUnlockAllLessons,
+            error: (error, stackTrace) => false,
+            loading: () => false,
+          );
       return ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
         children: [
@@ -107,7 +120,7 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 6),
-          ..._sections(data.course, completed),
+          ..._sections(data.course, completed, unlockAll: unlockAll),
         ],
       );
     },

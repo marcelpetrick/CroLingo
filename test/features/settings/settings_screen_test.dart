@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// The answer-tone switch, which is the first of the two on the screen.
+final Finder soundSwitch = find.byType(Switch).first;
+
 void main() {
   testWidgets('persists the answer-tone switch and fits narrow text', (
     tester,
@@ -35,16 +38,16 @@ void main() {
     expect(find.text('Ergebnistöne'), findsOneWidget);
     expect(find.textContaining('hellen Ping'), findsOneWidget);
     expect(find.textContaining('Fehlerton'), findsOneWidget);
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+    expect(tester.widget<Switch>(soundSwitch).value, isTrue);
     expect(tester.takeException(), isNull);
 
-    await tester.ensureVisible(find.byType(Switch));
+    await tester.ensureVisible(soundSwitch);
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(Switch));
+    await tester.tap(soundSwitch);
     await tester.pumpAndSettle();
 
     expect(repository.current.feedbackSoundsEnabled, isFalse);
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    expect(tester.widget<Switch>(soundSwitch).value, isFalse);
     expect(tester.takeException(), isNull);
   });
 
@@ -64,8 +67,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('sichere Standard'), findsOneWidget);
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
-    expect(tester.widget<Switch>(find.byType(Switch)).onChanged, isNull);
+    expect(tester.widget<Switch>(soundSwitch).value, isTrue);
+    expect(tester.widget<Switch>(soundSwitch).onChanged, isNull);
   });
 
   testWidgets('persists a chosen appearance', (tester) async {
@@ -117,7 +120,7 @@ void main() {
     );
     await tester.pump();
 
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+    expect(tester.widget<Switch>(soundSwitch).value, isTrue);
     expect(find.text('Adria-Blau'), findsOneWidget);
   });
 }
@@ -140,6 +143,17 @@ class _MemorySettingsRepository implements SettingsRepository {
     current = AppSettings(
       feedbackSoundsEnabled: enabled,
       themeVariant: current.themeVariant,
+      developerUnlockAllLessons: current.developerUnlockAllLessons,
+    );
+    _changes.add(current);
+  }
+
+  @override
+  Future<void> setDeveloperUnlockAllLessons({required bool enabled}) async {
+    current = AppSettings(
+      feedbackSoundsEnabled: current.feedbackSoundsEnabled,
+      themeVariant: current.themeVariant,
+      developerUnlockAllLessons: enabled,
     );
     _changes.add(current);
   }
@@ -149,6 +163,7 @@ class _MemorySettingsRepository implements SettingsRepository {
     current = AppSettings(
       feedbackSoundsEnabled: current.feedbackSoundsEnabled,
       themeVariant: variant,
+      developerUnlockAllLessons: current.developerUnlockAllLessons,
     );
     _changes.add(current);
   }

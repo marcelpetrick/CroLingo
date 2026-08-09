@@ -13,6 +13,7 @@ class DriftSettingsRepository implements SettingsRepository {
   static const _formatVersionKey = 'settings_format_version';
   static const _feedbackSoundsKey = 'feedback_sounds_enabled';
   static const _themeVariantKey = 'theme_variant';
+  static const _developerUnlockKey = 'developer_unlock_all_lessons';
 
   /// Shared database.
   final AppDatabase database;
@@ -35,6 +36,10 @@ class DriftSettingsRepository implements SettingsRepository {
   Future<void> setThemeVariant(AppThemeVariant variant) =>
       _write(_themeVariantKey, variant.name);
 
+  @override
+  Future<void> setDeveloperUnlockAllLessons({required bool enabled}) =>
+      _write(_developerUnlockKey, '$enabled');
+
   Future<void> _write(String key, String value) async {
     await database.batch((batch) {
       batch.insertAllOnConflictUpdate(database.appSettingEntries, [
@@ -56,6 +61,11 @@ class DriftSettingsRepository implements SettingsRepository {
         _ => AppSettings.defaults.feedbackSoundsEnabled,
       },
       themeVariant: AppThemeVariant.fromStorage(values[_themeVariantKey]),
+      developerUnlockAllLessons: switch (values[_developerUnlockKey]) {
+        'true' => true,
+        'false' || null => false,
+        _ => AppSettings.defaults.developerUnlockAllLessons,
+      },
     );
   }
 }

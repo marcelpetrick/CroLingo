@@ -98,6 +98,7 @@ class _StubSettings implements SettingsRepository {
   static const _stored = AppSettings(
     feedbackSoundsEnabled: false,
     themeVariant: AppThemeVariant.mint,
+    developerUnlockAllLessons: false,
   );
 
   @override
@@ -111,4 +112,7 @@ class _StubSettings implements SettingsRepository {
 
   @override
   Future<void> setThemeVariant(AppThemeVariant variant) async {}
+
+  @override
+  Future<void> setDeveloperUnlockAllLessons({required bool enabled}) async {}
 }

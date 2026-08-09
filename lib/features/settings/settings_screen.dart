@@ -21,6 +21,12 @@ class SettingsScreen extends ConsumerWidget {
       error: (error, stackTrace) => AppSettings.defaults.feedbackSoundsEnabled,
       loading: () => AppSettings.defaults.feedbackSoundsEnabled,
     );
+    final unlockAll = settings.when(
+      data: (data) => data.developerUnlockAllLessons,
+      error: (error, stackTrace) =>
+          AppSettings.defaults.developerUnlockAllLessons,
+      loading: () => AppSettings.defaults.developerUnlockAllLessons,
+    );
     final variant = settings.when(
       data: (data) => data.themeVariant,
       error: (error, stackTrace) => AppSettings.defaults.themeVariant,
@@ -100,6 +106,32 @@ class SettingsScreen extends ConsumerWidget {
                     subtitle: Text(_themeDescription(option)),
                   ),
               ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Entwicklungseinstellungen',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: SwitchListTile.adaptive(
+            value: unlockAll,
+            onChanged: settings.hasValue
+                ? (enabled) => ref
+                      .read(settingsRepositoryProvider)
+                      .setDeveloperUnlockAllLessons(enabled: enabled)
+                : null,
+            secondary: Icon(
+              Icons.lock_open_rounded,
+              color: context.palette.accent,
+            ),
+            title: const Text('Gesperrte Lektionen öffnen'),
+            subtitle: const Text(
+              'Nur zum Testen: erlaubt das Starten noch nicht '
+              'freigeschalteter Lektionen und umgeht damit die Reihenfolge '
+              'des Lernwegs. Standardmäßig aus.',
             ),
           ),
         ),

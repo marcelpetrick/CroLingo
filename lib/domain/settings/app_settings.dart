@@ -6,12 +6,14 @@ class AppSettings {
   const AppSettings({
     required this.feedbackSoundsEnabled,
     required this.themeVariant,
+    required this.developerUnlockAllLessons,
   });
 
   /// Safe defaults used before a stored preference exists.
   static const defaults = AppSettings(
     feedbackSoundsEnabled: true,
     themeVariant: AppThemeVariant.adriatic,
+    developerUnlockAllLessons: false,
   );
 
   /// Plays distinct tones after correct and incorrect answers.
@@ -19,6 +21,12 @@ class AppSettings {
 
   /// Selected application appearance.
   final AppThemeVariant themeVariant;
+
+  /// Opens every lesson, including ones the learner has not unlocked.
+  ///
+  /// This is a debugging aid for reaching later content directly. It bypasses
+  /// sequential progression, so it stays off unless explicitly enabled.
+  final bool developerUnlockAllLessons;
 }
 
 /// Persistent boundary for application preferences.
@@ -34,4 +42,7 @@ abstract interface class SettingsRepository {
 
   /// Persists the selected appearance.
   Future<void> setThemeVariant(AppThemeVariant variant);
+
+  /// Persists whether locked lessons may be opened.
+  Future<void> setDeveloperUnlockAllLessons({required bool enabled});
 }

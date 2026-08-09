@@ -108,4 +108,18 @@ void main() {
 
     expect(settings.themeVariant, AppThemeVariant.adriatic);
   });
+
+  test('keeps the developer unlock off unless it is switched on', () async {
+    final database = AppDatabase(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftSettingsRepository(database);
+
+    expect((await repository.load()).developerUnlockAllLessons, isFalse);
+
+    await repository.setDeveloperUnlockAllLessons(enabled: true);
+    expect((await repository.load()).developerUnlockAllLessons, isTrue);
+
+    await repository.setDeveloperUnlockAllLessons(enabled: false);
+    expect((await repository.load()).developerUnlockAllLessons, isFalse);
+  });
 }
