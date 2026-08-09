@@ -27,6 +27,10 @@ learner recording, and pronunciation comparison remain later work.
 ## Current state
 
 <p align="center">
+  <img src="media/app_icon.png" width="96" alt="CroLingo launcher icon">
+</p>
+
+<p align="center">
   <img src="media/screen0.jpg" width="30%" alt="CroLingo home screen">
   <img src="media/screen01.jpg" width="30%" alt="CroLingo learning path">
   <img src="media/screen02.jpg" width="30%" alt="CroLingo profile statistics">
@@ -169,6 +173,19 @@ vulnerabilities, clean builds, and final APK permissions.
 Every commit must be conventional and atomic, bump the single version in
 `pubspec.yaml`, and leave both platforms buildable. The project does not use
 Git tags for versioning.
+
+## Regenerate the launcher icon
+
+The launcher icon is composed from the same `CrowMark` widget the dashboard
+draws, over the Croatian chequy, so the two cannot drift apart:
+
+```bash
+./scripts/generate_launcher_icons.sh
+```
+
+It rewrites every Android density plus the adaptive layers and
+`media/app_icon.png`. Review the diff and commit the result; the generator is
+not part of the pipeline.
 
 ## Run the integration suite
 
