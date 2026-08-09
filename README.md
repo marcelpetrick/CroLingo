@@ -174,6 +174,20 @@ Every commit must be conventional and atomic, bump the single version in
 `pubspec.yaml`, and leave both platforms buildable. The project does not use
 Git tags for versioning.
 
+## Watch the upstream blocker
+
+A real Riverpod lint gate and the `sqlite3` 3.x migration both wait on Flutter
+relaxing the `test_api` and `matcher` pins in `flutter_test`. Rather than
+remembering to look:
+
+```bash
+./scripts/check_analyzer_unblock.sh
+```
+
+It exits 0 while still blocked, 1 once the pins move, and 2 if the check itself
+could not run. The **Upstream watch** workflow runs it weekly, so a red run
+there means work became possible.
+
 ## Regenerate the launcher icon
 
 The launcher icon is composed from the same `CrowMark` widget the dashboard
