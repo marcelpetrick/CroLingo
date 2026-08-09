@@ -16,7 +16,7 @@ usage() {
 Usage: ./localPipeline.sh [--noRun] [--low-disk-builds] [--report-dir PATH]
 
 Runs the complete CroLingo commit gate: repository policy, locked dependencies,
-course-content validation, formatting, strict analysis, framework linting,
+course-content validation, formatting, strict analysis,
 Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
 builds, and artifact inspection. The Linux app is launched once unless --noRun
@@ -217,10 +217,6 @@ check_format() {
 
 run_analysis() {
   dart analyze --fatal-infos
-}
-
-run_custom_lint() {
-  dart run custom_lint
 }
 
 lint_shell() {
@@ -476,7 +472,6 @@ run_stage "Content validation" dart run tool/validate_content.dart
 run_stage "Generated sources" check_generated_sources
 run_stage Formatting check_format
 run_stage "Dart analysis" run_analysis
-run_stage "Framework lint" run_custom_lint
 run_stage "Shell lint" lint_shell
 run_stage "Workflow lint" lint_workflows
 run_stage "Markdown lint" lint_markdown

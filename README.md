@@ -162,7 +162,7 @@ judge; the stage reports and never fails the pipeline.
 Omit `--noRun` to launch the finished Linux bundle after all checks. The
 pipeline validates repository policy, version progression, dependencies,
 course content, Gradle-wrapper integrity, formatting, static analysis,
-Flutter-specific linting, shell
+shell
 and workflow files, Markdown, tests, coverage, Android lint, secrets,
 vulnerabilities, clean builds, and final APK permissions.
 

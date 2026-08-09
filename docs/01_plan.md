@@ -183,7 +183,7 @@ Correctness always combines color with icon, label, and shape. Touch targets are
 
 ## Quality definition
 
-A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, custom/framework linting, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, artifact/manifest inspection, and
+A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, artifact/manifest inspection, and
 a closing review of expected upstream warnings.
 
 Every new behavior includes tests. Authored Dart code and all critical learning,
