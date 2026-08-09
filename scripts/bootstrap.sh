@@ -5,9 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TOOLING_DIR="${ROOT_DIR}/.tooling"
 BIN_DIR="${TOOLING_DIR}/bin"
 CACHE_DIR="${TOOLING_DIR}/cache"
-FLUTTER_VERSION="3.44.7"
+FLUTTER_VERSION="3.44.9"
 FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
-FLUTTER_SHA256="a0edd646c159c0e816788c0e46a4f071199c1320495898f5a679599b583a05a4"
+FLUTTER_SHA256="a9120fa4a01048bdef438ddc3a2d4b7389662ea98a95db86eeaf10382bc4efcb"
 
 mkdir -p "${BIN_DIR}" "${CACHE_DIR}"
 
@@ -65,13 +65,13 @@ install_raw_binary() {
 install_flutter() {
   if command -v flutter >/dev/null 2>&1 \
     && flutter --version --machine 2>/dev/null \
-      | grep -q '"frameworkVersion":"3.44.7"'; then
+      | grep -q "\"frameworkVersion\":\"${FLUTTER_VERSION}\""; then
     printf '[bootstrap] Reusing Flutter %s from PATH.\n' "${FLUTTER_VERSION}"
     return
   fi
   if [[ -x "${TOOLING_DIR}/flutter/bin/flutter" ]] \
     && "${TOOLING_DIR}/flutter/bin/flutter" --version --machine \
-      | grep -q '"frameworkVersion":"3.44.7"'; then
+      | grep -q "\"frameworkVersion\":\"${FLUTTER_VERSION}\""; then
     printf '[bootstrap] Reusing repository-local Flutter %s.\n' "${FLUTTER_VERSION}"
     return
   fi

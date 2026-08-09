@@ -56,7 +56,7 @@ everyday units.
 
 ### 1. Foundation and guardrails
 
-- Install and pin Flutter 3.44.7 with Java 21 and Android API 36.
+- Install and pin Flutter 3.44.9 with Java 21 and Android API 36.
 - Bootstrap only Android and Linux.
 - Add self-bootstrap scripts that reuse compatible system SDKs or install pinned tooling into ignored `.tooling/`.
 - Add a complete local pipeline, tracked Git hooks, strict analyzer configuration, framework-specific linting, coverage gates, content validation, security scans, Android lint, and clean Android/Linux builds.

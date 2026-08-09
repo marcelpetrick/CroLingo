@@ -342,7 +342,7 @@ accepted_warning_reason() {
       printf 'Gradle embeds its own Kotlin and differs from the pinned plugin'
       ;;
     *'flutter_tools/gradle/src/main/kotlin'*)
-      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.44.7"
+      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.44.9"
       ;;
     *"'android.builtInKotlin=false' is deprecated"* | \
       *"'android.newDsl=false' is deprecated"*)

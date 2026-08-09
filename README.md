@@ -3,7 +3,7 @@
 [![Quality](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml)
 [![Release](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml)
 ![Coverage gate](https://img.shields.io/badge/coverage-%E2%89%A598%25-brightgreen)
-![Flutter](https://img.shields.io/badge/Flutter-3.44.7-02569B?logo=flutter)
+![Flutter](https://img.shields.io/badge/Flutter-3.44.9-02569B?logo=flutter)
 ![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20Linux-1769D2)
 [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
