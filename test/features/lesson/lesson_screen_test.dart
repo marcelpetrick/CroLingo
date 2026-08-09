@@ -155,6 +155,70 @@ void main() {
 
     expect(audio.sounds, isEmpty);
   });
+
+  testWidgets('resumes an interrupted lesson at its saved exercise', (
+    tester,
+  ) async {
+    tester.view
+      ..physicalSize = const Size(412, 915)
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final progress = _RecordingProgress()
+      ..progress.add(
+        const LessonProgress(
+          lessonId: 'begrussen',
+          exerciseIndex: 1,
+          xp: 8,
+          completedAt: null,
+        ),
+      );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'begrussen',
+          lesson: Future<Lesson>.value(_completeLesson),
+          repository: progress,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // The first exercise is matching; resuming skips it and restores the XP.
+    expect(find.text('Was gehört zusammen?'), findsNothing);
+    expect(find.text('Schreibe die Übersetzung'), findsOneWidget);
+    expect(find.text('8 XP'), findsOneWidget);
+  });
+
+  testWidgets('replays a finished lesson from the beginning', (tester) async {
+    tester.view
+      ..physicalSize = const Size(412, 915)
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final progress = _RecordingProgress()
+      ..progress.add(
+        LessonProgress(
+          lessonId: 'begrussen',
+          exerciseIndex: 3,
+          xp: 40,
+          completedAt: DateTime.utc(2026, 8, 9),
+        ),
+      );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'begrussen',
+          lesson: Future<Lesson>.value(_completeLesson),
+          repository: progress,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Was gehört zusammen?'), findsOneWidget);
+    expect(find.text('0 XP'), findsOneWidget);
+  });
 }
 
 const _completeLesson = Lesson(

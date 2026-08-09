@@ -285,12 +285,16 @@ class _StatCard extends StatelessWidget {
           children: [
             Icon(icon, color: context.palette.primary),
             const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(value, style: Theme.of(context).textTheme.titleLarge),
-                Text(label, style: Theme.of(context).textTheme.bodyMedium),
-              ],
+            // Two stat cards share a phone width, so the label has to be
+            // allowed to wrap instead of overflowing its card.
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(value, style: Theme.of(context).textTheme.titleLarge),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium),
+                ],
+              ),
             ),
           ],
         ),

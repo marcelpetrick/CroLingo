@@ -97,6 +97,29 @@ void main() {
     expect(repository.current.themeVariant, AppThemeVariant.midnight);
     expect(repository.current.feedbackSoundsEnabled, isTrue);
   });
+
+  testWidgets('shows safe defaults while settings are still loading', (
+    tester,
+  ) async {
+    tester.view
+      ..physicalSize = const Size(1236, 3600)
+      ..devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => const Stream<AppSettings>.empty(),
+          ),
+        ],
+        child: const MaterialApp(home: SettingsScreen()),
+      ),
+    );
+    await tester.pump();
+
+    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+    expect(find.text('Adria-Blau'), findsOneWidget);
+  });
 }
 
 class _MemorySettingsRepository implements SettingsRepository {

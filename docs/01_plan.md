@@ -187,7 +187,7 @@ A change is committable only when `./localPipeline.sh --noRun` succeeds: environ
 a closing review of expected upstream warnings.
 
 Every new behavior includes tests. Authored Dart code and all critical learning,
-persistence, scheduling, and validation logic require at least 95% line
+persistence, scheduling, and validation logic require at least 98% line
 coverage. Threshold reductions require explicit approval.
 
 ## MVP acceptance

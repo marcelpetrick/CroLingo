@@ -79,4 +79,27 @@ void main() {
     expect(mastery.scores, isEmpty);
     expect(mastery.overall, 0);
   });
+
+  test('averages repeated attempts in the same dimension', () {
+    // Two attempts on the same exercise must average rather than replace, so
+    // a later mistake pulls a previously perfect score down.
+    final mastery = ConceptMasteryCalculator.calculate(course, [
+      ExerciseAttempt(
+        exerciseId: 'recognize-bok',
+        correct: true,
+        incorrectBefore: 0,
+        occurredAt: DateTime.utc(2026, 8, 7),
+      ),
+      ExerciseAttempt(
+        exerciseId: 'recognize-bok',
+        correct: true,
+        incorrectBefore: 2,
+        occurredAt: DateTime.utc(2026, 8, 8),
+      ),
+    ]).single;
+
+    final score = mastery.scores[MasteryDimension.recognition]!;
+    expect(score, lessThan(1));
+    expect(score, greaterThan(0));
+  });
 }

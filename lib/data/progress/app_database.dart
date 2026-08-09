@@ -3,6 +3,12 @@ import 'package:drift_flutter/drift_flutter.dart';
 
 part 'app_database.g.dart';
 
+// Drift reads these table classes at build time and emits the runtime schema
+// into app_database.g.dart. The column getters below are never invoked while
+// the app runs, so they are declarations rather than untested logic. Their
+// behaviour is covered through the generated tables in
+// test/data/progress/app_database_test.dart.
+// coverage:ignore-start
 /// Every submitted answer, including retries.
 class AttemptEntries extends Table {
   /// Local monotonically increasing key.
@@ -68,6 +74,8 @@ class AppSettingEntries extends Table {
   @override
   Set<Column<Object>> get primaryKey => {key};
 }
+
+// coverage:ignore-end
 
 /// App-private SQLite database shared by Android and Linux.
 @DriftDatabase(
