@@ -170,6 +170,21 @@ Every commit must be conventional and atomic, bump the single version in
 `pubspec.yaml`, and leave both platforms buildable. The project does not use
 Git tags for versioning.
 
+## Run the integration suite
+
+Some boundaries cannot be reached from `flutter test`: the audio plugin, the
+system speech facility, and an on-disk database opened through
+`path_provider`. Those run against a real target instead:
+
+```bash
+./scripts/run_integration_tests.sh            # Linux desktop
+./scripts/run_integration_tests.sh <serial>   # a connected phone
+```
+
+They are deliberately outside `localPipeline.sh`, because a hosted runner has
+neither a display nor an audio device. Run them before a release and when
+touching anything behind a platform channel.
+
 ## Build distributable artifacts
 
 Build the native Linux bundle:
@@ -260,6 +275,7 @@ lib/domain/       course and learning rules
 lib/features/     screens and exercise presentation
 scripts/          reproducible bootstrap and Flutter wrapper
 test/             domain and end-to-end widget tests
+integration_test/ platform-boundary tests needing a real device
 ```
 
 Start with these documents before changing product behavior:

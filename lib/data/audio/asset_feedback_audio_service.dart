@@ -13,15 +13,24 @@ abstract interface class FeedbackAssetPlayer {
 /// Android/Linux player backed by the endorsed audioplayers implementations.
 class AudioplayersFeedbackAssetPlayer implements FeedbackAssetPlayer {
   final AudioPlayer _player = AudioPlayer(playerId: 'answer-feedback');
+  bool _disposed = false;
 
   @override
   Future<void> play(String assetPath) async {
+    if (_disposed) return;
     await _player.stop();
     await _player.play(AssetSource(assetPath), mode: PlayerMode.mediaPlayer);
   }
 
   @override
-  Future<void> dispose() => _player.dispose();
+  Future<void> dispose() async {
+    // The platform player raises if it is released twice, and a second
+    // release is easy to reach through a hot restart or a rebuilt provider
+    // scope. Releasing once is the contract, so make it idempotent here.
+    if (_disposed) return;
+    _disposed = true;
+    await _player.dispose();
+  }
 }
 
 /// Plays original, bundled success and retry tones fully offline.
@@ -49,5 +58,12 @@ class AssetFeedbackAudioService implements FeedbackAudioService {
   }
 
   @override
-  Future<void> dispose() => _player.dispose();
+  Future<void> dispose() async {
+    try {
+      await _player.dispose();
+    } on Exception {
+      // Releasing the tone player must not break teardown, for the same
+      // reason a failed tone must not break a lesson.
+    }
+  }
 }

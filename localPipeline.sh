@@ -212,7 +212,7 @@ check_generated_sources() {
 }
 
 check_format() {
-  dart format --output=none --set-exit-if-changed lib test tool
+  dart format --output=none --set-exit-if-changed integration_test lib test tool
 }
 
 run_analysis() {

@@ -35,6 +35,14 @@ void main() {
     expect(_peakPcm16(success), inInclusiveRange(12000, 28000));
     expect(_peakPcm16(failure), inInclusiveRange(12000, 28000));
   });
+
+  test('a failing release never escapes teardown', () async {
+    // Found by the integration suite: the real plugin raises when released a
+    // second time, and that must not surface where the service is disposed.
+    final service = AssetFeedbackAudioService(player: _ThrowingOnDispose());
+
+    await expectLater(service.dispose(), completes);
+  });
 }
 
 int _peakPcm16(Uint8List wav) {
@@ -74,4 +82,12 @@ class _FailingPlayer implements FeedbackAssetPlayer {
 
   @override
   Future<void> dispose() async {}
+}
+
+class _ThrowingOnDispose implements FeedbackAssetPlayer {
+  @override
+  Future<void> play(String assetPath) async {}
+
+  @override
+  Future<void> dispose() async => throw Exception('already disposed');
 }
