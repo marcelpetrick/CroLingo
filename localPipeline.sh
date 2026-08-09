@@ -62,6 +62,17 @@ done
 
 cd "${ROOT_DIR}"
 
+# Two pipelines in one worktree corrupt each other: they share build/,
+# .dart_tool/ and the Gradle daemon. Hold an exclusive lock rather than
+# scanning for processes, which cannot distinguish another run from the check
+# that is looking for it.
+exec 9>"${ROOT_DIR}/.pipeline.lock"
+if ! flock -n 9; then
+  printf '%s\n' 'Another pipeline already holds .pipeline.lock in this worktree.' >&2
+  printf '%s\n' 'Wait for it to finish, or run from a separate git worktree.' >&2
+  exit 1
+fi
+
 if [[ -z "${REPORT_DIR}" ]]; then
   REPORT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/crolingo-pipeline.XXXXXX")"
   TEMP_REPORTS=true

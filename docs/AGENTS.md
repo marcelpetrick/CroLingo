@@ -32,6 +32,11 @@
   Gradle's wrapper task and update the pinned pipeline checksum in the same
   atomic commit.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
+- Decide from exit codes, never from the shape of output. A grep count, a
+  matched pattern, or a command piped into `tail` can all report success while
+  the underlying tool failed; `set -o pipefail` or `${PIPESTATUS[0]}` is
+  required when a checked command is piped. Put non-trivial shell in
+  `scripts/` where shellcheck sees it instead of typing it inline.
 - Keep authored Dart line coverage at or above 98% with behavior-focused tests;
   do not exclude authored files or lower the threshold to accommodate a change.
   Declaration-only code that no runtime path can reach, such as the Drift table
