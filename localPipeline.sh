@@ -25,6 +25,9 @@ automatically before the first gate. A closing warning review names the
 expected upstream warnings and lists anything unreviewed. Reports are temporary
 unless --report-dir is supplied, and are kept on failure so a failing run stays
 diagnosable.
+Only one run may hold a worktree at a time; a second refuses immediately
+rather than corrupting the shared build directory. Platform-boundary tests are
+not part of this gate: run scripts/run_integration_tests.sh on a real target.
 Use --low-disk-builds on constrained CI runners to discard generated Android
 intermediates before the AAB build while preserving every verified artifact.
 EOF

@@ -139,7 +139,7 @@ flowchart TB
   end
 
   subgraph Core["lib/core — shared UI"]
-    Theme["theme/app_theme, app_colors"]
+    Theme["theme/app_theme, app_palette<br/>five appearances"]
     Widgets["widgets/crow_mark, speech_button"]
     Version["version/app_version<br/>reads the bundled pubspec"]
   end
@@ -270,6 +270,33 @@ flowchart TB
   Command --> Outcome
   Outcome --> Button
 ```
+
+## How the app is verified
+
+Three layers, deliberately separated by what each can actually reach.
+
+```mermaid
+flowchart LR
+  Unit["test/<br/>domain, widgets, repositories"] --> Gate["localPipeline.sh<br/>21 stages, 98% coverage floor"]
+  Gate --> Commit["every commit"]
+  Boundary["integration_test/<br/>audio plugin, system speech,<br/>on-disk database"] --> Target["a real phone or desktop"]
+  Target --> Release["before a release"]
+  Manual["physical-device checklist<br/>TalkBack, upgrades, airplane mode"] --> Person["a person"]
+```
+
+`test/` runs headless on every commit and carries the coverage floor. It cannot
+reach a platform channel, so anything behind one lives in `integration_test/`
+and runs through `scripts/run_integration_tests.sh` against a device or the
+Linux desktop. That suite is not part of the gate: a hosted runner has neither
+a display nor an audio device, and a stage that is silently skipped is worse
+than no stage.
+
+What neither can do stays with a person. The roadmap lists that explicitly and
+forbids inferring it from a green pipeline.
+
+The launcher icon is generated rather than drawn: `tool/icon/` renders the real
+`CrowMark` widget over the Croatian chequy, so the icon on the home screen and
+the mascot on the dashboard cannot diverge.
 
 ## Persistence model
 

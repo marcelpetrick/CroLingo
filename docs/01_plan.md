@@ -186,6 +186,13 @@ Correctness always combines color with icon, label, and shape. Touch targets are
 A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, artifact/manifest inspection, and
 a closing review of expected upstream warnings.
 
+The gate is deliberately not the whole of verification. The audio plugin,
+system speech and an on-disk database need a real target, so they live in
+`integration_test/` and run through `scripts/run_integration_tests.sh` before a
+release and whenever a platform channel changes. A hosted runner has neither a
+display nor an audio device, so gating on them would either redden every run or
+be skipped silently.
+
 Every new behavior includes tests. Authored Dart code and all critical learning,
 persistence, scheduling, and validation logic require at least 98% line
 coverage. Threshold reductions require explicit approval.

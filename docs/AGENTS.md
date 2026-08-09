@@ -21,6 +21,12 @@
 - Keep the active language direction visible with Croatian/German flag cues and
   written language names; flags are decorative reinforcement, never the only
   accessible signal.
+- Generate the launcher icon from the in-app mascot with
+  `scripts/generate_launcher_icons.sh`; never hand-edit the mipmap PNGs, or the
+  icon and the mascot will drift.
+- Cover platform channels with `integration_test/` and run it on a real target
+  before a release. It is outside the pipeline on purpose, because a hosted
+  runner has no display or audio device.
 - Treat `designIdeas/` as reviewed concept material, not runtime assets. Keep
   visual work original, record its generation brief, and add selected assets to
   application bundles only through a separately tested product decision.

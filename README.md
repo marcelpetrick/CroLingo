@@ -290,7 +290,8 @@ lib/data/         asset and persistence adapters
 lib/core/         shared theme, version reader, and widgets
 lib/domain/       course and learning rules
 lib/features/     screens and exercise presentation
-scripts/          reproducible bootstrap and Flutter wrapper
+scripts/          reproducible bootstrap, Flutter wrapper, and generators
+tool/             content, version and coverage checks, launcher-icon art
 test/             domain and end-to-end widget tests
 integration_test/ platform-boundary tests needing a real device
 ```

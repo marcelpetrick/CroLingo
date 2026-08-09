@@ -43,10 +43,11 @@ Session checkpoint on 2026-08-09:
 5. **Expand the A1 path.** Add small reviewed units for family and people,
    numbers and age, food and drinks, home, everyday actions, shopping, and
    travel/directions. Reuse known material in most exercises.
-6. **Complete learner controls.** Started. A settings screen persists the
-   answer-feedback sound preference. Concise grammar references and the
-   remaining accessibility and playback preferences are still open, and must
-   not weaken the offline or minimal-permission baseline.
+6. **Complete learner controls.** Largely done. Settings persist the
+   answer-feedback sound preference, one of five appearances including a
+   high-contrast option held to WCAG AAA, and a developer switch that opens
+   locked lessons. Concise grammar references remain open, and must not weaken
+   the offline or minimal-permission baseline.
 7. **Harden content authoring.** Version the course schema, produce
    deterministic validated content packs, and support an optional separate
    authoring repository that exports reviewed snapshots. Implement the staged
@@ -54,7 +55,10 @@ Session checkpoint on 2026-08-09:
 8. **Finish device and accessibility qualification.** Verify TalkBack,
    keyboard traversal, contrast, reduced motion, 200% text, interruption
    recovery, upgrades, and airplane-mode operation on Linux and both reference
-   phones.
+   phones. `integration_test/` is the harness for the automatable part; run it
+   with `scripts/run_integration_tests.sh <serial>` on each phone. Contrast is
+   already asserted per appearance by an automated test. The rest still needs a
+   person and must not be inferred from a green pipeline.
 9. **Add stable signed delivery.** Complete. The external Android key is backed
    up outside Git and installed as protected CI secrets. Releases verify the
    committed public certificate fingerprint before publication, enabling
