@@ -55,12 +55,13 @@ cat >&2 <<EOF
 
 The pins moved from test_api ${BLOCKING_TEST_API} and matcher ${BLOCKING_MATCHER}.
 
-Try the work these were blocking:
-  1. riverpod_lint ^3.1.8 with 'plugins: riverpod_lint:' in analysis_options.yaml,
-     replacing the lint gate that was removed for doing nothing.
-  2. drift_flutter ^0.3.1, which moves to package:sqlite3 3.x and retires the
-     end-of-life sqlite3_flutter_libs.
+Try the work this was blocking:
+  riverpod_lint ^3.1.8 with 'plugins: riverpod_lint:' in analysis_options.yaml,
+  replacing the lint gate that was removed for doing nothing.
 
-Both are described in docs/review20260809.md. A failing run here is good news.
+The sqlite3 3.x migration this also blocked is already done; drift_dev 2.34.1+
+is the only other package waiting, and that one is cosmetic.
+
+See docs/review20260809.md. A failing run here is good news.
 EOF
 exit 1
