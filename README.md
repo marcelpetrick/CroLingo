@@ -192,6 +192,15 @@ mismatches, and operational scanner failures. Online/offline cache preparation,
 report interpretation, and the limits of a clean scan are documented in the
 [CVE-check guide](docs/cveCheck.md).
 
+The check also creates a self-contained visual dashboard at
+`build/security/cve/dashboard.html`. Open it locally without a server:
+
+```bash
+xdg-open build/security/cve/dashboard.html
+```
+
+The same dashboard is included in the pipeline-report artifact on GitHub.
+
 Every commit must be conventional and atomic, bump the single version in
 `pubspec.yaml`, and leave both platforms buildable. The project does not use
 Git tags for versioning.

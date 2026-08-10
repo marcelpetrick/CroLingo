@@ -139,6 +139,11 @@ grow with the project are dated rather than presented as permanent claims.
   each format, and any OSV advisory blocks the build. Online batched queries
   and repository-local offline databases cover the same documents, reducing
   dependence on one vulnerability feed.
+- **A self-contained HTML security dashboard summarizes the evidence.** It
+  presents package coverage, scanner results, severity counts, format
+  agreement, and escaped findings without JavaScript or external resources.
+  Raw JSON and scanner exit codes remain authoritative, while GitHub's report
+  artifact makes the human-readable result easy to inspect.
 - **Release APK permissions are inspected after compilation.** The pipeline
   rejects Internet, microphone, camera, location, contacts, and broad external
   storage permissions. Verifying the final binary catches permissions added by

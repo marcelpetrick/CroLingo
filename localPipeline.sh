@@ -183,9 +183,12 @@ check_repository() {
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
     scripts/generate_sbom.sh \
+    scripts/generate_cve_report.sh \
+    scripts/test_cve_report.sh \
     scripts/test_sbom_validation.sh \
     scripts/validate_sbom.sh \
     checkSBOMCVEs.sh \
+    generateCVEReport.sh \
     generateSBOM.sh \
     tool/sbom/cyclonedx.init.gradle \
     tool/sbom/requirements.in \
@@ -282,6 +285,7 @@ scan_sbom_vulnerabilities() {
   ./checkSBOMCVEs.sh \
     --existing \
     --report-dir "${REPORT_DIR}/cve"
+  ./scripts/test_cve_report.sh "${REPORT_DIR}/cve"
 }
 
 clean_builds() {

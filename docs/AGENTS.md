@@ -44,6 +44,10 @@
   Fail on scanner/database or extraction-count errors, Trivy HIGH/CRITICAL
   matches, and every OSV advisory; never describe clean database results as
   proof that an app is safe.
+- Finish each SBOM CVE evaluation with the offline, self-contained HTML
+  dashboard, but keep scanner JSON and exit codes authoritative. Escape all
+  scanner-controlled display values and never add dashboard scripts, telemetry,
+  external assets, or network requests.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
 - Decide from exit codes, never from the shape of output. A grep count, a
   matched pattern, or a command piped into `tail` can all report success while

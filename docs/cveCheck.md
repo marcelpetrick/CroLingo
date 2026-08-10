@@ -1,8 +1,8 @@
 # Local SBOM vulnerability checks
 
 Implementation status: complete. The root commands, pinned scanners,
-online/offline operation, reports, and mandatory pipeline gate described below
-are implemented and verified.
+online/offline operation, machine-readable evidence, visual dashboard, and
+mandatory pipeline gate described below are implemented and verified.
 
 CroLingo scans both published software bills of materials with
 [Trivy](https://trivy.dev/docs/latest/guide/target/sbom/) and the open-source
@@ -37,7 +37,10 @@ configuration, or unpatched operating-system problem.
 6. Run the same check as a mandatory local/GitHub pipeline stage after SBOM
    generation. A database, parsing, or scanner failure is a pipeline failure,
    not a clean security result.
-7. ShellCheck every script, exercise online and offline database paths, inspect
+7. Render the validated scanner results into one responsive, self-contained
+   HTML dashboard. Keep it presentation-only: a dashboard must never replace
+   scanner validation, scanner exit codes, or the raw JSON evidence.
+8. ShellCheck every script, exercise online and offline database paths, inspect
    the reports, run the complete pipeline, review the diff, and commit only the
    verified result.
 
@@ -61,6 +64,18 @@ Reuse already generated SBOMs:
 ./checkSBOMCVEs.sh --existing
 ```
 
+Open the visual result after either scan:
+
+```bash
+xdg-open build/security/cve/dashboard.html
+```
+
+Regenerate only the dashboard from existing reports:
+
+```bash
+./generateCVEReport.sh --report-dir build/security/cve
+```
+
 Scan more than the blocking severities:
 
 ```bash
@@ -70,9 +85,18 @@ Scan more than the blocking severities:
 Reports are ignored build outputs below `build/security/cve/`. Each scanner and
 format gets a readable `.txt` report and a machine-readable `.json` report. An
 OSV input inventory for each format is retained beside the reports for audit.
+`evaluation-metadata.json` binds the dashboard to the evaluated application
+version, full commit, UTC evaluation time, online/offline mode, and Trivy
+policy. It also records whether the scan used a clean commit or local working
+tree changes and the OSV-Scanner version, so regenerating a dashboard cannot
+silently relabel older evidence.
+`dashboard.html` provides the overall status, package coverage, four scan
+results, severity totals, format agreement, and an escaped findings table. It
+uses no JavaScript, external assets, telemetry, or network requests and is
+usable from the filesystem, a GitHub pipeline artifact, a phone, or print.
 An empty vulnerability list is a successful result; missing reports, malformed
-SBOMs, extraction-count mismatches, scanner errors, or policy-matching
-vulnerabilities produce a nonzero exit.
+SBOMs, extraction-count mismatches, scanner errors, dashboard-generation
+errors, or policy-matching vulnerabilities produce a nonzero exit.
 
 ## Online and offline databases
 
@@ -107,8 +131,9 @@ flowchart LR
   SPDX --> OSV
   TrivyCache --> Trivy
   OSVCache --> OSV
-  Trivy --> Reports["table + JSON reports"]
+  Trivy --> Reports["table + JSON evidence"]
   OSV --> Reports
+  Reports --> Dashboard["offline HTML dashboard"]
 ```
 
 For a genuinely air-gapped machine, populate the same cache using a trusted
@@ -171,6 +196,12 @@ script and policies as a Manjaro workstation. Trivy blocks HIGH/CRITICAL
 matches; OSV blocks any advisory because incomplete severity metadata must not
 be interpreted as harmless. Release stops before tagging or publication on a
 matching vulnerability or operational scanner failure.
+
+The dashboard is generated at the end of that CVE stage, including when valid
+scanner reports contain findings. GitHub uploads it inside the pipeline-report
+artifact. The raw JSON remains authoritative and the CVE script's exit code
+still controls the gate; the report generator deliberately does not decide
+whether a release may proceed.
 
 ```mermaid
 sequenceDiagram

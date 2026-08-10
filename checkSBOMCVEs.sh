@@ -139,6 +139,8 @@ printf 'PURLs: CycloneDX pub=%d maven=%d; SPDX pub=%d maven=%d\n' \
 
 mkdir -p "${REPORT_DIR}"
 REPORT_DIR="$(realpath "${REPORT_DIR}")"
+rm -f "${REPORT_DIR}/dashboard.html" \
+  "${REPORT_DIR}/evaluation-metadata.json"
 OSV_CYCLONEDX_INPUT="${REPORT_DIR}/osv-input-cyclonedx.json"
 OSV_SPDX_INPUT="${REPORT_DIR}/osv-input-spdx.json"
 
@@ -498,6 +500,45 @@ if [[ -s "${REPORT_DIR}/osv-cyclonedx.json" ]] \
   else
     printf '%s\n' 'CycloneDX and SPDX OSV inventories and findings agree.'
   fi
+fi
+
+scan_mode="online"
+if [[ "${OFFLINE}" == true ]]; then
+  scan_mode="offline"
+fi
+full_version="$(sed -n 's/^version: \([^[:space:]]*\)$/\1/p' \
+  "${ROOT_DIR}/pubspec.yaml")"
+source_state="clean"
+if [[ -n "$(git -C "${ROOT_DIR}" status --porcelain=v1)" ]]; then
+  source_state="working-tree-changes"
+fi
+metadata_temporary="$(mktemp \
+  "${REPORT_DIR}/.evaluation-metadata.XXXXXX")"
+jq -n \
+  --arg app_version "${full_version}" \
+  --arg commit "$(git -C "${ROOT_DIR}" rev-parse HEAD)" \
+  --arg evaluated_at "$(date --utc +'%Y-%m-%dT%H:%M:%SZ')" \
+  --arg source_state "${source_state}" \
+  --arg scan_mode "${scan_mode}" \
+  --arg trivy_severities "${SEVERITIES}" \
+  --arg osv_scanner_version "$(osv-scanner --version | sed -n 's/^osv-scanner version: //p')" \
+  '{
+    schemaVersion: 1,
+    appVersion: $app_version,
+    commit: $commit,
+    evaluatedAt: $evaluated_at,
+    sourceState: $source_state,
+    scanMode: $scan_mode,
+    trivySeverities: $trivy_severities,
+    osvScannerVersion: $osv_scanner_version
+  }' >"${metadata_temporary}"
+chmod 0644 "${metadata_temporary}"
+mv -f "${metadata_temporary}" \
+  "${REPORT_DIR}/evaluation-metadata.json"
+if ! "${ROOT_DIR}/scripts/generate_cve_report.sh" \
+  --report-dir "${REPORT_DIR}"; then
+  printf '%s\n' 'Could not generate the human-readable CVE dashboard.' >&2
+  FAILURES=$((FAILURES + 1))
 fi
 
 if ((FAILURES != 0)); then
