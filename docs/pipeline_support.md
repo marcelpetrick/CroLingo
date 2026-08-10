@@ -134,6 +134,11 @@ grow with the project are dated rather than presented as permanent claims.
   checksum-pinned, requires Pub and Maven PURLs, and fails on scanner errors or
   known High/Critical matches. Comparing normalized findings helps catch a
   format-parser regression before it can create false confidence.
+- **OSV-Scanner 2.5.0 independently scans both SBOMs.** Generated adapter
+  inventories must preserve the exact Pub and qualified Maven identities from
+  each format, and any OSV advisory blocks the build. Online batched queries
+  and repository-local offline databases cover the same documents, reducing
+  dependence on one vulnerability feed.
 - **Release APK permissions are inspected after compilation.** The pipeline
   rejects Internet, microphone, camera, location, contacts, and broad external
   storage permissions. Verifying the final binary catches permissions added by

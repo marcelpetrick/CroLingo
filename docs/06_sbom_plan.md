@@ -93,7 +93,7 @@ only then replaces `build/sbom/`. A failed run must leave no apparently
 successful new public files. `build/` remains ignored.
 
 `localPipeline.sh` runs SBOM generation and validation after the clean builds,
-then scans both representations for known vulnerabilities. The project has no
+then scans both representations with Trivy and OSV-Scanner. The project has no
 optional-stage mechanism and the SBOM is a release requirement, so there is no
 opt-out that could accidentally produce a release without it.
 

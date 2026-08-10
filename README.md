@@ -181,15 +181,15 @@ discovers locked Pub packages plus the resolved Android release classpath;
 developers do not maintain a component list. Details and honest ecosystem
 limits are recorded in [the SBOM plan](docs/06_sbom_plan.md).
 
-Scan both generated formats against Trivy's current vulnerability database:
+Scan both generated formats with Trivy and OSV-Scanner:
 
 ```bash
 ./checkSBOMCVEs.sh
 ```
 
-The default security gate blocks known High or Critical matches and operational
-scanner failures. Online/offline cache preparation, report interpretation, and
-the limits of a clean scan are documented in the
+The gate blocks Trivy High/Critical matches, any OSV advisory, extraction
+mismatches, and operational scanner failures. Online/offline cache preparation,
+report interpretation, and the limits of a clean scan are documented in the
 [CVE-check guide](docs/cveCheck.md).
 
 Every commit must be conventional and atomic, bump the single version in

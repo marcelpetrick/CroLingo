@@ -3,7 +3,8 @@ set -Eeuo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CACHE_DIR="${ROOT_DIR}/.tooling/trivy-cache"
-REPORT_DIR="${ROOT_DIR}/build/security/trivy"
+OSV_CACHE_DIR="${ROOT_DIR}/.tooling/osv-db"
+REPORT_DIR="${ROOT_DIR}/build/security/cve"
 SEVERITIES="HIGH,CRITICAL"
 GENERATE=true
 OFFLINE=false
@@ -14,14 +15,15 @@ usage() {
 Usage: ./checkSBOMCVEs.sh [OPTIONS]
 
 Generates, validates, and scans CroLingo's CycloneDX and SPDX SBOMs with the
-pinned Trivy binary. The default policy fails on HIGH or CRITICAL findings.
+pinned Trivy and OSV-Scanner binaries. Trivy fails on HIGH or CRITICAL
+findings; OSV-Scanner fails on any known advisory.
 
 Options:
   --existing          Scan existing build/sbom files without regenerating them.
   --offline           Use the existing local DB and make no dependency API calls.
-  --download-db-only  Download/update the Trivy vulnerability DB, then exit.
-  --severity LIST     Comma-separated severities (default: HIGH,CRITICAL).
-  --report-dir PATH   Report destination (default: build/security/trivy).
+  --download-db-only  Download/update the Trivy and OSV databases, then exit.
+  --severity LIST     Trivy severities (default: HIGH,CRITICAL).
+  --report-dir PATH   Report destination (default: build/security/cve).
   -h, --help          Show this help.
 EOF
 }
@@ -68,6 +70,11 @@ while (($# > 0)); do
   esac
 done
 
+if [[ "${DOWNLOAD_ONLY}" == true && "${OFFLINE}" == true ]]; then
+  printf '%s\n' '--download-db-only and --offline are mutually exclusive.' >&2
+  exit 2
+fi
+
 IFS=',' read -r -a severity_values <<<"${SEVERITIES}"
 if ((${#severity_values[@]} == 0)); then
   printf '%s\n' 'At least one severity is required.' >&2
@@ -84,30 +91,30 @@ for severity in "${severity_values[@]}"; do
 done
 
 export PATH="${ROOT_DIR}/.tooling/bin:${PATH}"
-if ! command -v trivy >/dev/null 2>&1; then
-  "${ROOT_DIR}/scripts/bootstrap.sh"
-  hash -r
-fi
-if ! command -v trivy >/dev/null 2>&1; then
-  printf '%s\n' 'Trivy is unavailable after bootstrap.' >&2
+for tool in osv-scanner trivy; do
+  if ! command -v "${tool}" >/dev/null 2>&1; then
+    "${ROOT_DIR}/scripts/bootstrap.sh"
+    hash -r
+    break
+  fi
+done
+for tool in osv-scanner trivy; do
+  if ! command -v "${tool}" >/dev/null 2>&1; then
+    printf '%s is unavailable after bootstrap.\n' "${tool}" >&2
+    exit 1
+  fi
+done
+if ! osv-scanner --version | grep -Fqx 'osv-scanner version: 2.5.0'; then
+  printf '%s\n' 'Expected the repository-pinned OSV-Scanner 2.5.0.' >&2
   exit 1
 fi
 
-mkdir -p "${CACHE_DIR}"
-if [[ "${DOWNLOAD_ONLY}" == true ]]; then
-  if [[ "${OFFLINE}" == true ]]; then
-    printf '%s\n' '--download-db-only and --offline are mutually exclusive.' >&2
-    exit 2
-  fi
-  trivy sbom \
-    --cache-dir "${CACHE_DIR}" \
-    --disable-telemetry \
-    --download-db-only \
-    --no-progress \
-    --skip-version-check
-  printf 'Trivy vulnerability database is ready in %s\n' "${CACHE_DIR}"
-  exit 0
-fi
+# OSV-Scanner 2.5.0 still reads the OSV-Scalibr variable, while current
+# upstream documentation names OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY. Export
+# both to keep this pin and its eventual successor on one ignored local cache.
+export OSV_SCALIBR_LOCAL_DB_CACHE_DIRECTORY="${OSV_CACHE_DIR}"
+export OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY="${OSV_CACHE_DIR}"
+mkdir -p "${CACHE_DIR}" "${OSV_CACHE_DIR}"
 
 if [[ "${GENERATE}" == true ]]; then
   "${ROOT_DIR}/generateSBOM.sh"
@@ -132,6 +139,137 @@ printf 'PURLs: CycloneDX pub=%d maven=%d; SPDX pub=%d maven=%d\n' \
 
 mkdir -p "${REPORT_DIR}"
 REPORT_DIR="$(realpath "${REPORT_DIR}")"
+OSV_CYCLONEDX_INPUT="${REPORT_DIR}/osv-input-cyclonedx.json"
+OSV_SPDX_INPUT="${REPORT_DIR}/osv-input-spdx.json"
+
+# OSV-Scanner 2.5.0's direct SBOM extractor drops Maven namespaces. Generate
+# its documented intermediate inventory dynamically from each authoritative
+# SBOM so `group:artifact` survives both online batch and offline matching.
+jq --arg source "${CYCLONEDX_FILE}" '{
+  results: [{
+    source: {path: $source, type: "sbom"},
+    packages: [
+      .components[]
+      | select((.purl // "")
+          | startswith("pkg:pub/") or startswith("pkg:maven/"))
+      | if (.purl | startswith("pkg:pub/")) then
+          {package: {name: .name, version: .version, ecosystem: "Pub"}}
+        else
+          {package: {
+            name: ((.group // "") + ":" + .name),
+            version: .version,
+            ecosystem: "Maven"
+          }}
+        end
+    ]
+  }]
+}' "${CYCLONEDX_FILE}" >"${OSV_CYCLONEDX_INPUT}"
+
+jq --arg source "${SPDX_FILE}" '{
+  results: [{
+    source: {path: $source, type: "sbom"},
+    packages: [
+      .packages[] as $package
+      | $package.externalRefs[]?
+      | select(.referenceType == "purl")
+      | .referenceLocator as $purl
+      | if ($purl | startswith("pkg:pub/")) then
+          {package: {
+            name: $package.name,
+            version: $package.versionInfo,
+            ecosystem: "Pub"
+          }}
+        elif ($purl | startswith("pkg:maven/")) then
+          ($purl | capture(
+            "^pkg:maven/(?<namespace>[^/]+)/(?<artifact>[^@]+)@"
+          )) as $maven
+          | {package: {
+              name: ($maven.namespace + ":" + $maven.artifact),
+              version: $package.versionInfo,
+              ecosystem: "Maven"
+            }}
+        else empty
+        end
+    ]
+  }]
+}' "${SPDX_FILE}" >"${OSV_SPDX_INPUT}"
+
+validate_osv_input() {
+  local input="$1"
+  local expected_pub="$2"
+  local expected_maven="$3"
+  jq -e \
+    --argjson expected_pub "${expected_pub}" \
+    --argjson expected_maven "${expected_maven}" '
+      (.results | type == "array")
+      and (.results | length == 1)
+      and ([.results[0].packages[]
+            | select(.package.ecosystem == "Pub")] | length == $expected_pub)
+      and ([.results[0].packages[]
+            | select(.package.ecosystem == "Maven")]
+           | length == $expected_maven)
+      and all(.results[0].packages[];
+        (.package.name | type == "string" and length > 0)
+        and (.package.version | type == "string" and length > 0))
+    ' "${input}" >/dev/null
+}
+
+if ! validate_osv_input \
+  "${OSV_CYCLONEDX_INPUT}" "${cdx_pub}" "${cdx_maven}" \
+  || ! validate_osv_input \
+    "${OSV_SPDX_INPUT}" "${spdx_pub}" "${spdx_maven}"; then
+  printf '%s\n' 'Could not create complete OSV inventories from both SBOMs.' >&2
+  exit 1
+fi
+
+validate_osv_report() {
+  local report="$1"
+  local expected_pub="$2"
+  local expected_maven="$3"
+  jq -e \
+    --argjson expected_pub "${expected_pub}" \
+    --argjson expected_maven "${expected_maven}" '
+      (.results | type == "array")
+      and ([.results[]? | select(.source.type == "lockfile")] | length == 1)
+      and ([.results[]?.packages[]?
+            | select(.package.ecosystem == "Pub")] | length == $expected_pub)
+      and ([.results[]?.packages[]?
+            | select(.package.ecosystem == "Maven")] | length == $expected_maven)
+    ' "${report}" >/dev/null
+}
+
+if [[ "${DOWNLOAD_ONLY}" == true ]]; then
+  trivy sbom \
+    --cache-dir "${CACHE_DIR}" \
+    --disable-telemetry \
+    --download-db-only \
+    --no-progress \
+    --skip-version-check
+
+  osv_download_report="$(mktemp \
+    "${TMPDIR:-/tmp}/crolingo-osv-download.XXXXXX.json")"
+  trap 'rm -f "${osv_download_report}"' EXIT
+  set +e
+  osv-scanner scan source \
+    --all-packages \
+    --download-offline-databases \
+    --format json \
+    --offline-vulnerabilities \
+    --verbosity error \
+    --lockfile "osv-scanner:${OSV_CYCLONEDX_INPUT}" \
+    >"${osv_download_report}"
+  osv_download_status=$?
+  set -e
+  if ((osv_download_status > 1)) \
+    || ! validate_osv_report \
+      "${osv_download_report}" "${cdx_pub}" "${cdx_maven}"; then
+    printf '%s\n' 'OSV-Scanner could not prepare and verify its local databases.' >&2
+    exit 1
+  fi
+  printf 'Trivy database: %s\nOSV databases: %s\n' \
+    "${CACHE_DIR}" "${OSV_CACHE_DIR}"
+  exit 0
+fi
 
 print_database_metadata() {
   local metadata="${CACHE_DIR}/db/metadata.json"
@@ -235,10 +373,11 @@ normalize_findings() {
   ] | sort_by(.id, .purl, .package, .installed, .severity, .status)' "$1"
 }
 
+comparison_dir="$(mktemp -d \
+  "${TMPDIR:-/tmp}/crolingo-cve-compare.XXXXXX")"
+trap 'rm -rf "${comparison_dir}"' EXIT
 if [[ -s "${REPORT_DIR}/cyclonedx.json" ]] \
   && [[ -s "${REPORT_DIR}/spdx.json" ]]; then
-  comparison_dir="$(mktemp -d "${TMPDIR:-/tmp}/crolingo-trivy-compare.XXXXXX")"
-  trap 'rm -rf "${comparison_dir}"' EXIT
   normalize_findings "${REPORT_DIR}/cyclonedx.json" \
     >"${comparison_dir}/cyclonedx.json"
   normalize_findings "${REPORT_DIR}/spdx.json" \
@@ -255,9 +394,115 @@ if [[ -s "${REPORT_DIR}/cyclonedx.json" ]] \
   fi
 fi
 
+declare -a osv_args=(
+  scan source
+  --all-packages
+  --verbosity error
+)
+if [[ "${OFFLINE}" == true ]]; then
+  osv_args+=(--offline)
+fi
+
+scan_osv_sbom() {
+  local label="$1"
+  local source="$2"
+  local slug="$3"
+  local expected_pub="$4"
+  local expected_maven="$5"
+  local table_report="${REPORT_DIR}/osv-${slug}.txt"
+  local json_report="${REPORT_DIR}/osv-${slug}.json"
+  local table_status
+  local json_status
+  local findings
+
+  rm -f "${table_report}" "${json_report}"
+  printf '\n[OSV] %s\n' "${label}"
+  set +e
+  osv-scanner "${osv_args[@]}" \
+    --format table \
+    --lockfile "osv-scanner:${source}" \
+    2>&1 | tee "${table_report}"
+  table_status=${PIPESTATUS[0]}
+  osv-scanner "${osv_args[@]}" \
+    --format json \
+    --lockfile "osv-scanner:${source}" \
+    >"${json_report}"
+  json_status=$?
+  set -e
+
+  if [[ ! -s "${table_report}" ]] || [[ ! -s "${json_report}" ]] \
+    || ! validate_osv_report \
+      "${json_report}" "${expected_pub}" "${expected_maven}"; then
+    printf 'OSV-Scanner could not produce valid %s reports.\n' \
+      "${label}" >&2
+    FAILURES=$((FAILURES + 1))
+    return
+  fi
+
+  findings="$(jq \
+    '[.results[]?.packages[]?.vulnerabilities[]?] | length' \
+    "${json_report}")"
+  if ((findings > 0)); then
+    if ((table_status != 1 || json_status != 1)); then
+      printf 'OSV-Scanner returned inconsistent finding statuses for %s.\n' \
+        "${label}" >&2
+    else
+      printf '%s has %d OSV vulnerability record(s).\n' \
+        "${label}" "${findings}" >&2
+    fi
+    FAILURES=$((FAILURES + 1))
+  elif ((table_status != 0 || json_status != 0)); then
+    printf 'OSV-Scanner failed operationally while scanning %s.\n' \
+      "${label}" >&2
+    FAILURES=$((FAILURES + 1))
+  else
+    printf '%s has no known OSV vulnerability.\n' "${label}"
+  fi
+}
+
+scan_osv_sbom \
+  "CycloneDX 1.7" "${OSV_CYCLONEDX_INPUT}" "cyclonedx" \
+  "${cdx_pub}" "${cdx_maven}"
+scan_osv_sbom \
+  "SPDX 2.3" "${OSV_SPDX_INPUT}" "spdx" \
+  "${spdx_pub}" "${spdx_maven}"
+
+normalize_osv_result() {
+  jq --sort-keys '[
+    .results[]?.packages[]?
+    | select(.package.ecosystem == "Pub" or .package.ecosystem == "Maven")
+    | {
+        ecosystem: .package.ecosystem,
+        name: .package.name,
+        version: .package.version,
+        vulnerabilities: ([.vulnerabilities[]?.id] | sort)
+      }
+  ] | sort_by(.ecosystem, .name, .version)' "$1"
+}
+
+if [[ -s "${REPORT_DIR}/osv-cyclonedx.json" ]] \
+  && [[ -s "${REPORT_DIR}/osv-spdx.json" ]]; then
+  normalize_osv_result "${REPORT_DIR}/osv-cyclonedx.json" \
+    >"${comparison_dir}/osv-cyclonedx.json"
+  normalize_osv_result "${REPORT_DIR}/osv-spdx.json" \
+    >"${comparison_dir}/osv-spdx.json"
+  if ! cmp --silent \
+    "${comparison_dir}/osv-cyclonedx.json" \
+    "${comparison_dir}/osv-spdx.json"; then
+    printf '%s\n' \
+      'CycloneDX and SPDX produced different OSV inventories or findings.' >&2
+    diff --unified \
+      "${comparison_dir}/osv-cyclonedx.json" \
+      "${comparison_dir}/osv-spdx.json" || true
+    FAILURES=$((FAILURES + 1))
+  else
+    printf '%s\n' 'CycloneDX and SPDX OSV inventories and findings agree.'
+  fi
+fi
+
 if ((FAILURES != 0)); then
   printf 'SBOM CVE check failed with %d problem(s). Reports: %s\n' \
     "${FAILURES}" "${REPORT_DIR}" >&2
   exit 1
 fi
-printf 'SBOM CVE check passed. Reports: %s\n' "${REPORT_DIR}"
+printf 'Trivy and OSV SBOM checks passed. Reports: %s\n' "${REPORT_DIR}"

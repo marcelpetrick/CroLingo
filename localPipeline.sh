@@ -281,7 +281,7 @@ generate_and_test_sbom() {
 scan_sbom_vulnerabilities() {
   ./checkSBOMCVEs.sh \
     --existing \
-    --report-dir "${REPORT_DIR}/trivy"
+    --report-dir "${REPORT_DIR}/cve"
 }
 
 clean_builds() {
