@@ -10,6 +10,11 @@ if [[ ! "${VERSION}" =~ ^0\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
+"${ROOT_DIR}/scripts/validate_sbom.sh" \
+  "${ROOT_DIR}/build/sbom/CroLingo.cdx.json" \
+  "${ROOT_DIR}/build/sbom/CroLingo.spdx.json" \
+  "${VERSION}"
+
 declare -A ARTIFACTS=(
   ["build/app/outputs/flutter-apk/app-release.apk"]="CroLingo-${VERSION}-universal.apk"
   ["build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"]="CroLingo-${VERSION}-arm64-v8a.apk"
@@ -27,6 +32,20 @@ for source in "${!ARTIFACTS[@]}"; do
   install -m 0644 \
     "${ROOT_DIR}/${source}" \
     "${OUTPUT_DIR}/${ARTIFACTS[${source}]}"
+done
+
+declare -A SBOMS=(
+  ["build/sbom/CroLingo.cdx.json"]="CroLingo-${VERSION}.cdx.json"
+  ["build/sbom/CroLingo.spdx.json"]="CroLingo-${VERSION}.spdx.json"
+)
+for source in "${!SBOMS[@]}"; do
+  if [[ ! -s "${ROOT_DIR}/${source}" ]]; then
+    printf 'Missing validated SBOM: %s\n' "${source}" >&2
+    exit 1
+  fi
+  install -m 0644 \
+    "${ROOT_DIR}/${source}" \
+    "${OUTPUT_DIR}/${SBOMS[${source}]}"
 done
 
 LINUX_BUNDLE="${ROOT_DIR}/build/linux/x64/release/bundle"

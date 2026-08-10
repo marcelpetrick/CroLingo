@@ -5,12 +5,16 @@ both CycloneDX and SPDX representations. It was written before implementation;
 the implementation must be reviewed against it and the coverage limits below
 must remain visible.
 
+Implementation status: complete. `scripts/generate_sbom.sh` is the shared
+local, Quality, and Release entry point described below.
+
 ## Decisions and rationale
 
 - Pin [Syft 1.50.0](https://github.com/anchore/syft/releases/tag/v1.50.0)
   by release checksum. Syft has maintained catalogers for Dart
   `pubspec.lock` files and can emit a resolved inventory without a hand-written
-  package list.
+  package list. It also converts the final merged inventory to SPDX while
+  retaining its packages and relationships.
 - Pin the official [CycloneDX Gradle Plugin
   3.3.0](https://plugins.gradle.org/plugin/org.cyclonedx.bom/3.3.0). It resolves
   the Android Gradle configurations, including transitive Maven artifacts that
@@ -20,8 +24,7 @@ must remain visible.
 - Pin the official [CycloneDX CLI
   0.33.1](https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v0.33.1)
   by release checksum. It will merge the Dart and Android inventories,
-  normalize them to CycloneDX 1.7 JSON, convert that same authoritative
-  inventory to SPDX JSON, and validate the CycloneDX document.
+  normalize them to CycloneDX 1.7 JSON, and validate the CycloneDX document.
 - Validate SPDX with the official SPDX tools-python 0.8.5 semantic validator.
   Its installation must be isolated below ignored `.tooling/`, fully pinned,
   and reproducible from a checked-in requirements lock rather than modifying
@@ -40,6 +43,12 @@ and Android while an unrelated SPDX scan silently describes a different set.
 Intermediate source inventories are diagnostic only and are not release
 assets.
 
+The implementation deliberately does not use CycloneDX CLI for the SPDX
+conversion: version 0.33.1 drops merged packages and relationships and its
+result is rejected by the official SPDX validator. Syft's conversion preserves
+them and passes that validator. A later tool upgrade must re-prove this choice
+rather than assuming the limitation still exists.
+
 ## Dependency coverage
 
 The Dart inventory will scan the resolved `pubspec.lock`, not merely declared
@@ -56,10 +65,18 @@ are not shipped application components and will be excluded. Native libraries
 bundled by dependencies are represented through their owning resolved package
 where tooling provides no trustworthy standalone package identity.
 
-No dependency component will be maintained manually. The only project metadata
+No dependency component is maintained manually. The only project metadata
 supplied by CroLingo will be the application name, version read from
 `pubspec.yaml`, package identity, and GPL-3.0-only application license. These
-describe CroLingo itself rather than inventing facts about dependencies.
+describe CroLingo itself rather than inventing facts about dependencies. The
+small `jq` enrichments in `scripts/generate_sbom.sh` also make CroLingo the SPDX
+document's described application and connect it to every dynamically
+discovered package; they contain no package names or versions.
+
+Syft also derives heuristic CPE candidates from package names. Those are not
+authoritative identifiers, so the generator deliberately removes them and
+keeps the reliable Pub/Maven package URLs. Validation asserts that a guessed
+CPE cannot leak into either public format.
 
 ## Outputs and local behavior
 

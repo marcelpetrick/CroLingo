@@ -128,6 +128,14 @@ install_quality_tools() {
     shellcheck \
     'https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz' \
     '8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198'
+  install_tar_binary \
+    syft \
+    'https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_amd64.tar.gz' \
+    'bf7b29ff57f06da30918266a0e1c2885a8f99784798d1bdb1628886aa015d788'
+  install_raw_binary \
+    cyclonedx \
+    'https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.33.1/cyclonedx-linux-x64' \
+    'bfc8b2538da86fe239bc53658bbb63c1c8c510a293c1e6891aa5bea5d3c58746'
 
   if ! command -v npm >/dev/null 2>&1; then
     printf '[bootstrap] npm is required for markdownlint-cli2.\n' >&2
@@ -139,6 +147,35 @@ install_quality_tools() {
     --no-fund \
     --save-exact \
     markdownlint-cli2@0.22.0
+}
+
+install_spdx_validator() {
+  local requirements="${ROOT_DIR}/tool/sbom/requirements.txt"
+  local environment="${TOOLING_DIR}/spdx-tools"
+  local marker="${environment}/.requirements.sha256"
+  local expected
+  expected="$(sha256sum "${requirements}" | cut -d ' ' -f 1)"
+
+  if [[ -x "${environment}/bin/pyspdxtools" ]] \
+    && [[ -f "${marker}" ]] \
+    && [[ "$(<"${marker}")" == "${expected}" ]]; then
+    ln -sfn ../spdx-tools/bin/pyspdxtools "${BIN_DIR}/pyspdxtools"
+    return
+  fi
+  if ! command -v python3 >/dev/null 2>&1; then
+    printf '[bootstrap] Python 3 with venv support is required for SPDX validation.\n' >&2
+    return 1
+  fi
+
+  rm -rf "${environment}"
+  python3 -m venv "${environment}"
+  PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    "${environment}/bin/pip" install \
+      --no-deps \
+      --require-hashes \
+      --requirement "${requirements}"
+  printf '%s\n' "${expected}" >"${marker}"
+  ln -sfn ../spdx-tools/bin/pyspdxtools "${BIN_DIR}/pyspdxtools"
 }
 
 check_linux_speech() {
@@ -165,6 +202,7 @@ check_linux_audio() {
 install_flutter
 install_android_packages
 install_quality_tools
+install_spdx_validator
 check_linux_speech
 check_linux_audio
 

@@ -19,7 +19,7 @@ Runs the complete CroLingo commit gate: repository policy, locked dependencies,
 course-content validation, formatting, strict analysis,
 Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
-builds, and artifact inspection. The Linux app is launched once unless --noRun
+builds, dual-format SBOM generation, and artifact inspection. The Linux app is launched once unless --noRun
 is supplied. Missing pinned tools are restored by running scripts/bootstrap.sh
 automatically before the first gate. A closing warning review names the
 expected upstream warnings and lists anything unreviewed. Reports are temporary
@@ -130,7 +130,9 @@ run_stage() {
 report_missing_tools() {
   local missing=0
   local tool
-  for tool in actionlint gitleaks osv-scanner shellcheck zizmor markdownlint-cli2; do
+  for tool in \
+    actionlint cyclonedx gitleaks jq markdownlint-cli2 osv-scanner \
+    pyspdxtools shellcheck syft zizmor; do
     if ! command -v "${tool}" >/dev/null 2>&1; then
       if [[ "$1" == report ]]; then
         printf 'Missing required tool: %s\n' "${tool}" >&2
@@ -172,11 +174,18 @@ check_repository() {
     docs/01_plan.md \
     docs/02_roadmap.md \
     docs/03_questions.md \
+    docs/06_sbom_plan.md \
     .github/workflows/release.yml \
     android/gradlew \
     android/gradlew.bat \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
+    scripts/generate_sbom.sh \
+    scripts/test_sbom_validation.sh \
+    scripts/validate_sbom.sh \
+    tool/sbom/cyclonedx.init.gradle \
+    tool/sbom/requirements.in \
+    tool/sbom/requirements.txt \
     pubspec.lock; do
     if [[ ! -f "${required}" ]]; then
       printf 'Required file is missing: %s\n' "${required}" >&2
@@ -255,6 +264,14 @@ run_secret_scan() {
 
 run_vulnerability_scan() {
   osv-scanner scan source -r .
+}
+
+generate_and_test_sbom() {
+  ./scripts/generate_sbom.sh
+  ./scripts/test_sbom_validation.sh
+  mkdir -p "${REPORT_DIR}/sbom"
+  cp build/sbom/CroLingo.cdx.json build/sbom/CroLingo.spdx.json \
+    "${REPORT_DIR}/sbom/"
 }
 
 clean_builds() {
@@ -365,6 +382,9 @@ accepted_warning_reason() {
     *'packages have newer versions incompatible with dependency constraints'*)
       printf 'Pins held by the Flutter SDK; upgrading is a separate decision'
       ;;
+    *'Unknown keyword meta:enum'* | *'Unknown keyword deprecated'*)
+      printf 'CycloneDX Gradle plugin schema-library diagnostic'
+      ;;
     *'is newer than'*'language version'*)
       printf 'Analyzer version pinned by the Flutter SDK'
       ;;
@@ -377,7 +397,7 @@ accepted_warning_reason() {
 # Reports only. A new warning must be judged by a person, and failing here on
 # an upstream rewording would teach people to ignore this gate.
 review_warnings() {
-  local -a scanned=(dependencies generated-sources android-lint clean-builds)
+  local -a scanned=(dependencies generated-sources android-lint clean-builds sbom)
   local -A expected=()
   local -a unreviewed=()
   local name path line reason
@@ -393,7 +413,7 @@ review_warnings() {
       fi
     done < <(
       sed 's/\x1b\[[0-9;]*m//g' "${path}" \
-        | grep -E '^(w: |W |WARNING: |Warning: |warning: )|Deprecated Gradle features were used|Setting the namespace via the package attribute|Recommendation: remove package=|found in source AndroidManifest.xml|packages have newer versions incompatible' \
+        | grep -E '^(w: |W |WARNING: |Warning: |warning: |Unknown keyword )|Deprecated Gradle features were used|Setting the namespace via the package attribute|Recommendation: remove package=|found in source AndroidManifest.xml|packages have newer versions incompatible' \
         || true
     )
   done
@@ -437,6 +457,8 @@ write_environment() {
     report_version gitleaks gitleaks version
     report_version osv-scanner osv-scanner --version
     report_version shellcheck shellcheck --version
+    report_version syft syft version
+    report_version cyclonedx cyclonedx --version
     report_version zizmor zizmor --version
   } >"${REPORT_DIR}/environment.txt" 2>&1
 }
@@ -485,9 +507,11 @@ run_stage "Vulnerability scan" run_vulnerability_scan
 
 if ((FAILURES == 0)); then
   run_stage "Clean builds" clean_builds
+  run_stage "SBOM" generate_and_test_sbom
   run_stage "Artifact inspection" inspect_artifacts
 else
   record "Clean builds" SKIP "quality gate failed"
+  record "SBOM" SKIP "quality gate failed"
   record "Artifact inspection" SKIP "builds skipped"
 fi
 

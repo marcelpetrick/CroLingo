@@ -165,10 +165,21 @@ judge; the stage reports and never fails the pipeline.
 
 Omit `--noRun` to launch the finished Linux bundle after all checks. The
 pipeline validates repository policy, version progression, dependencies,
-course content, Gradle-wrapper integrity, formatting, static analysis,
-shell
+course content, Gradle-wrapper integrity, formatting, static analysis, shell
 and workflow files, Markdown, tests, coverage, Android lint, secrets,
-vulnerabilities, clean builds, and final APK permissions.
+vulnerabilities, clean builds, CycloneDX/SPDX SBOMs, and final APK permissions.
+
+Generate and validate only the two software bills of materials with:
+
+```bash
+./scripts/generate_sbom.sh
+```
+
+This creates ignored build outputs at `build/sbom/CroLingo.cdx.json`
+(CycloneDX 1.7) and `build/sbom/CroLingo.spdx.json` (SPDX 2.3). The command
+discovers locked Pub packages plus the resolved Android release classpath;
+developers do not maintain a component list. Details and honest ecosystem
+limits are recorded in [the SBOM plan](docs/06_sbom_plan.md).
 
 Every commit must be conventional and atomic, bump the single version in
 `pubspec.yaml`, and leave both platforms buildable. The project does not use
@@ -270,7 +281,7 @@ Both reference phones are ARM64. The pipeline also produces `armeabi-v7a` and
 The manually triggered **Release** GitHub Action first runs the complete
 quality pipeline. Only after every check and build passes does it create a
 `vX.Y.Z` tag and a published GitHub release containing APKs, the AAB, the
-Linux bundle, and SHA-256 checksums. The release is marked as the latest one,
+Linux bundle, CycloneDX and SPDX SBOMs, and SHA-256 checksums. The release is marked as the latest one,
 so it appears on the repository landing page and resolves under
 `/releases/latest`. No tag or release is created on failure.
 

@@ -1,6 +1,6 @@
 # CroLingo pipeline facts for a LinkedIn post
 
-Snapshot taken on 9 August 2026 at CroLingo `0.0.65+66`. Counts that naturally
+Snapshot updated on 10 August 2026 at CroLingo `0.0.69+70`. Counts that naturally
 grow with the project are dated rather than presented as permanent claims.
 
 ## Project snapshot
@@ -18,7 +18,7 @@ grow with the project are dated rather than presented as permanent claims.
   Linux desktop or connected Android device because hosted runners do not have
   representative displays and audio hardware. Automation is explicit about
   what it can and cannot verify.
-- **20 named pipeline stages form one commit gate.** A concise final table says
+- **21 named pipeline stages form one commit gate.** A concise final table says
   which stage passed, failed, or was deliberately skipped. Failed-run logs are
   retained, so a red result is diagnostic rather than merely negative.
 - **Two deployment targets are built from one Flutter codebase:** Android and
@@ -88,7 +88,9 @@ grow with the project are dated rather than presented as permanent claims.
   supposedly identical build.
 - **Downloaded tooling is versioned and SHA-256 verified.** Current pins include
   Actionlint 1.7.12, Gitleaks 8.30.1, OSV-Scanner 2.5.0, Zizmor 1.29.0,
-  ShellCheck 0.11.0, and markdownlint-cli2 0.22.0. Reproducibility includes the
+  ShellCheck 0.11.0, markdownlint-cli2 0.22.0, Syft 1.50.0, CycloneDX CLI
+  0.33.1, CycloneDX Gradle Plugin 3.3.0, and SPDX tools-python 0.8.5.
+  Reproducibility includes the
   tools that judge the code, not only the application dependencies.
 - **The Gradle wrapper JAR and distribution URL are verified.** The wrapper JAR
   has a pinned SHA-256 digest and must still point to Gradle 9.1.0. This detects
@@ -123,6 +125,11 @@ grow with the project are dated rather than presented as permanent claims.
 - **OSV-Scanner checks the resolved dependency tree for known
   vulnerabilities.** This complements static analysis: correct application
   code can still inherit a vulnerable component.
+- **Two validated SBOM formats are generated on every complete run.** One
+  resolved inventory combines locked Dart/Pub packages with the Android
+  release classpath, then produces CycloneDX 1.7 and SPDX 2.3 JSON. Official
+  validators fail the gate on malformed documents, and deliberately corrupted
+  fixtures prove the rejection path.
 - **Release APK permissions are inspected after compilation.** The pipeline
   rejects Internet, microphone, camera, location, contacts, and broad external
   storage permissions. Verifying the final binary catches permissions added by
@@ -163,9 +170,9 @@ grow with the project are dated rather than presented as permanent claims.
 - **The release workflow validates the version and rejects an existing tag.**
   A successful run creates exactly `vX.Y.Z` from the single `pubspec.yaml`
   version and targets the selected, verified commit.
-- **Six downloadable deliverables are published:** universal APK, ARM64 APK,
+- **Six installable/build deliverables and two SBOMs are published:** universal APK, ARM64 APK,
   ARM32 APK, x86-64 APK, Android App Bundle, and deterministic Linux x64
-  archive. `SHA256SUMS.txt` covers every package.
+  archive, plus CycloneDX and SPDX JSON. `SHA256SUMS.txt` covers every asset.
 - **The Linux archive is reproducible at the packaging layer.** File order,
   timestamp, owner, group, and gzip timestamp are normalized using the commit
   time, reducing meaningless binary differences.

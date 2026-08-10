@@ -37,6 +37,9 @@
 - Keep the complete Gradle wrapper tracked and executable; update it only with
   Gradle's wrapper task and update the pinned pipeline checksum in the same
   atomic commit.
+- Generate both CycloneDX and SPDX from the resolved Pub lockfile and Android
+  release classpath. Never hand-maintain dependency components, publish stale
+  SBOMs, or release when either official validator fails.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
 - Decide from exit codes, never from the shape of output. A grep count, a
   matched pattern, or a command piped into `tail` can all report success while

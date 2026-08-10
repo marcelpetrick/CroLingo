@@ -126,6 +126,8 @@ jobs:
           uninstalled once before installing this release.
 
           Verify downloads with `SHA256SUMS.txt` when possible.
+          CycloneDX 1.7 and SPDX 2.3 JSON SBOMs are attached for automated
+          dependency, security, and compliance ingestion.
           EOF
 
       - name: Create tag and published GitHub release

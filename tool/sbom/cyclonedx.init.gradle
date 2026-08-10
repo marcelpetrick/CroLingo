@@ -1,0 +1,37 @@
+// Applied only by scripts/generate_sbom.sh. This keeps supply-chain tooling
+// independent from the application plugins while still resolving the exact
+// Android release classpath through Gradle.
+initscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin:3.3.0'
+    }
+}
+
+gradle.beforeProject { project ->
+    if (project.path == ':app') {
+        project.plugins.apply(org.cyclonedx.gradle.CyclonedxPlugin)
+    }
+}
+
+gradle.afterProject { project ->
+    if (project.path == ':app') {
+        project.tasks.named('cyclonedxDirectBom').configure {
+            includeConfigs = ['releaseRuntimeClasspath']
+            projectType = 'application'
+            // Plugin 3.3.0 defaults to its newest supported schema, 1.6. The
+            // merged public document is normalized to 1.7 by CycloneDX CLI.
+            includeBomSerialNumber = false
+            includeLicenseText = false
+            includeMetadataResolution = true
+            includeBuildEnvironment = false
+            includeBuildSystem = false
+            componentName = 'CroLingo-Android'
+            componentVersion = System.getenv('CROLINGO_SBOM_VERSION')
+            jsonOutput = project.file("${project.layout.buildDirectory.get()}/reports/cyclonedx-direct/bom.json")
+            xmlOutput.unsetConvention()
+        }
+    }
+}

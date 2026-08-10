@@ -1,0 +1,3 @@
+# Official SPDX 2.x parser and semantic validator. Runtime dependencies are
+# resolved and hash-locked in requirements.txt.
+spdx-tools==0.8.5
