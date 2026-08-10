@@ -6,7 +6,8 @@ the implementation must be reviewed against it and the coverage limits below
 must remain visible.
 
 Implementation status: complete. `scripts/generate_sbom.sh` is the shared
-local, Quality, and Release entry point described below.
+implementation behind the root `generateSBOM.sh`, Quality, and Release entry
+points described below.
 
 ## Decisions and rationale
 
@@ -85,17 +86,16 @@ One repository script will generate and validate:
 - `build/sbom/CroLingo.cdx.json` — CycloneDX 1.7 JSON;
 - `build/sbom/CroLingo.spdx.json` — SPDX 2.3 JSON.
 
-The local command will be `./scripts/generate_sbom.sh`. It will resolve fresh
-source inventories into a temporary directory, merge them, validate both final
-documents, verify CroLingo metadata and representative Pub and Android
-components, and only then replace `build/sbom/`. A failed run must leave no
-apparently successful new public files. `build/` remains ignored.
+The local command is `./generateSBOM.sh`. It resolves fresh source inventories
+into a temporary directory, merges them, validates both final documents,
+verifies CroLingo metadata and representative Pub and Android components, and
+only then replaces `build/sbom/`. A failed run must leave no apparently
+successful new public files. `build/` remains ignored.
 
-`localPipeline.sh` will run SBOM generation and validation by default as a
-mandatory stage after dependency resolution and before security scanning. The
-project has no optional-stage mechanism and the SBOM is a release requirement,
-so this plan deliberately adds no opt-out that could accidentally produce a
-release without it.
+`localPipeline.sh` runs SBOM generation and validation after the clean builds,
+then scans both representations for known vulnerabilities. The project has no
+optional-stage mechanism and the SBOM is a release requirement, so there is no
+opt-out that could accidentally produce a release without it.
 
 ## GitHub Actions and releases
 

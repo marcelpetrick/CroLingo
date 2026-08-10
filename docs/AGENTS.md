@@ -40,6 +40,9 @@
 - Generate both CycloneDX and SPDX from the resolved Pub lockfile and Android
   release classpath. Never hand-maintain dependency components, publish stale
   SBOMs, or release when either official validator fails.
+- Scan both validated SBOM formats with the checksum-pinned Trivy version.
+  Fail on scanner/database errors and known HIGH or CRITICAL matches; never
+  describe a clean vulnerability-database result as proof that an app is safe.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
 - Decide from exit codes, never from the shape of output. A grep count, a
   matched pattern, or a command piped into `tail` can all report success while

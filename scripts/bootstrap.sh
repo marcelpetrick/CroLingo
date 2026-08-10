@@ -132,6 +132,10 @@ install_quality_tools() {
     syft \
     'https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_amd64.tar.gz' \
     'bf7b29ff57f06da30918266a0e1c2885a8f99784798d1bdb1628886aa015d788'
+  install_tar_binary \
+    trivy \
+    'https://github.com/aquasecurity/trivy/releases/download/v0.73.0/trivy_0.73.0_Linux-64bit.tar.gz' \
+    '2edd39da482bb4e9831962487b68f68e3928ec3137794757f54d00383d79547b'
   install_raw_binary \
     cyclonedx \
     'https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.33.1/cyclonedx-linux-x64' \

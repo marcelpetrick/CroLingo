@@ -18,7 +18,7 @@ grow with the project are dated rather than presented as permanent claims.
   Linux desktop or connected Android device because hosted runners do not have
   representative displays and audio hardware. Automation is explicit about
   what it can and cannot verify.
-- **21 named pipeline stages form one commit gate.** A concise final table says
+- **22 named pipeline stages form one commit gate.** A concise final table says
   which stage passed, failed, or was deliberately skipped. Failed-run logs are
   retained, so a red result is diagnostic rather than merely negative.
 - **Two deployment targets are built from one Flutter codebase:** Android and
@@ -130,6 +130,10 @@ grow with the project are dated rather than presented as permanent claims.
   release classpath, then produces CycloneDX 1.7 and SPDX 2.3 JSON. Official
   validators fail the gate on malformed documents, and deliberately corrupted
   fixtures prove the rejection path.
+- **Trivy 0.73.0 scans both SBOM representations.** The official binary is
+  checksum-pinned, requires Pub and Maven PURLs, and fails on scanner errors or
+  known High/Critical matches. Comparing normalized findings helps catch a
+  format-parser regression before it can create false confidence.
 - **Release APK permissions are inspected after compilation.** The pipeline
   rejects Internet, microphone, camera, location, contacts, and broad external
   storage permissions. Verifying the final binary catches permissions added by

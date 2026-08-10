@@ -277,7 +277,7 @@ Three layers, deliberately separated by what each can actually reach.
 
 ```mermaid
 flowchart LR
-  Unit["test/<br/>domain, widgets, repositories"] --> Gate["localPipeline.sh<br/>21 stages, 98% coverage floor"]
+  Unit["test/<br/>domain, widgets, repositories"] --> Gate["localPipeline.sh<br/>22 stages, 98% coverage floor"]
   Gate --> Commit["every commit"]
   Boundary["integration_test/<br/>audio plugin, system speech,<br/>on-disk database"] --> Target["a real phone or desktop"]
   Target --> Release["before a release"]

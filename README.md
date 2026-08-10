@@ -172,7 +172,7 @@ vulnerabilities, clean builds, CycloneDX/SPDX SBOMs, and final APK permissions.
 Generate and validate only the two software bills of materials with:
 
 ```bash
-./scripts/generate_sbom.sh
+./generateSBOM.sh
 ```
 
 This creates ignored build outputs at `build/sbom/CroLingo.cdx.json`
@@ -180,6 +180,17 @@ This creates ignored build outputs at `build/sbom/CroLingo.cdx.json`
 discovers locked Pub packages plus the resolved Android release classpath;
 developers do not maintain a component list. Details and honest ecosystem
 limits are recorded in [the SBOM plan](docs/06_sbom_plan.md).
+
+Scan both generated formats against Trivy's current vulnerability database:
+
+```bash
+./checkSBOMCVEs.sh
+```
+
+The default security gate blocks known High or Critical matches and operational
+scanner failures. Online/offline cache preparation, report interpretation, and
+the limits of a clean scan are documented in the
+[CVE-check guide](docs/cveCheck.md).
 
 Every commit must be conventional and atomic, bump the single version in
 `pubspec.yaml`, and leave both platforms buildable. The project does not use

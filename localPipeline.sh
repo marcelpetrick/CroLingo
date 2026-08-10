@@ -19,7 +19,8 @@ Runs the complete CroLingo commit gate: repository policy, locked dependencies,
 course-content validation, formatting, strict analysis,
 Gradle-wrapper integrity, documentation/workflow/shell
 linting, tests and coverage, Android lint, security scans, clean Linux/Android
-builds, dual-format SBOM generation, and artifact inspection. The Linux app is launched once unless --noRun
+builds, dual-format SBOM generation and CVE scanning, and artifact inspection.
+The Linux app is launched once unless --noRun
 is supplied. Missing pinned tools are restored by running scripts/bootstrap.sh
 automatically before the first gate. A closing warning review names the
 expected upstream warnings and lists anything unreviewed. Reports are temporary
@@ -132,7 +133,7 @@ report_missing_tools() {
   local tool
   for tool in \
     actionlint cyclonedx gitleaks jq markdownlint-cli2 osv-scanner \
-    pyspdxtools shellcheck syft zizmor; do
+    pyspdxtools shellcheck syft trivy zizmor; do
     if ! command -v "${tool}" >/dev/null 2>&1; then
       if [[ "$1" == report ]]; then
         printf 'Missing required tool: %s\n' "${tool}" >&2
@@ -175,6 +176,7 @@ check_repository() {
     docs/02_roadmap.md \
     docs/03_questions.md \
     docs/06_sbom_plan.md \
+    docs/cveCheck.md \
     .github/workflows/release.yml \
     android/gradlew \
     android/gradlew.bat \
@@ -183,6 +185,8 @@ check_repository() {
     scripts/generate_sbom.sh \
     scripts/test_sbom_validation.sh \
     scripts/validate_sbom.sh \
+    checkSBOMCVEs.sh \
+    generateSBOM.sh \
     tool/sbom/cyclonedx.init.gradle \
     tool/sbom/requirements.in \
     tool/sbom/requirements.txt \
@@ -272,6 +276,12 @@ generate_and_test_sbom() {
   mkdir -p "${REPORT_DIR}/sbom"
   cp build/sbom/CroLingo.cdx.json build/sbom/CroLingo.spdx.json \
     "${REPORT_DIR}/sbom/"
+}
+
+scan_sbom_vulnerabilities() {
+  ./checkSBOMCVEs.sh \
+    --existing \
+    --report-dir "${REPORT_DIR}/trivy"
 }
 
 clean_builds() {
@@ -458,6 +468,7 @@ write_environment() {
     report_version osv-scanner osv-scanner --version
     report_version shellcheck shellcheck --version
     report_version syft syft version
+    report_version trivy trivy --version
     report_version cyclonedx cyclonedx --version
     report_version zizmor zizmor --version
   } >"${REPORT_DIR}/environment.txt" 2>&1
@@ -508,10 +519,16 @@ run_stage "Vulnerability scan" run_vulnerability_scan
 if ((FAILURES == 0)); then
   run_stage "Clean builds" clean_builds
   run_stage "SBOM" generate_and_test_sbom
+  if ((FAILURES == 0)); then
+    run_stage "SBOM CVE scan" scan_sbom_vulnerabilities
+  else
+    record "SBOM CVE scan" SKIP "SBOM generation failed"
+  fi
   run_stage "Artifact inspection" inspect_artifacts
 else
   record "Clean builds" SKIP "quality gate failed"
   record "SBOM" SKIP "quality gate failed"
+  record "SBOM CVE scan" SKIP "quality gate failed"
   record "Artifact inspection" SKIP "builds skipped"
 fi
 
