@@ -89,6 +89,60 @@ void main() {
     );
   });
 
+  test('validator rejects answers the grader cannot tell apart', () {
+    const course = Course(
+      id: 'course',
+      title: 'Course',
+      concepts: [Concept(id: 'known', croatian: 'Bok', german: 'Hallo')],
+      units: [
+        CourseUnit(
+          id: 'unit',
+          title: 'Unit',
+          description: 'Description',
+          lessons: [
+            Lesson(
+              id: 'lesson',
+              title: 'Lesson',
+              exercises: [
+                Exercise(
+                  id: 'redundant',
+                  type: ExerciseType.translation,
+                  masteryDimension: MasteryDimension.germanToCroatian,
+                  prompt: 'Prompt',
+                  // Two spellings, one answer once punctuation is ignored.
+                  acceptedAnswers: ['Bok!', 'Bok'],
+                  explanation: 'Explanation',
+                  conceptIds: ['known'],
+                  pairs: [],
+                  tiles: [],
+                ),
+                Exercise(
+                  id: 'blank',
+                  type: ExerciseType.translation,
+                  masteryDimension: MasteryDimension.croatianToGerman,
+                  prompt: 'Prompt',
+                  acceptedAnswers: ['...'],
+                  explanation: 'Explanation',
+                  conceptIds: ['known'],
+                  pairs: [],
+                  tiles: [],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+
+    expect(
+      CourseValidator.validate(course),
+      containsAll([
+        'Exercise redundant repeats accepted answer bok',
+        'Exercise blank has a blank accepted answer',
+      ]),
+    );
+  });
+
   test('validator reports every malformed course structure', () {
     const malformed = Course(
       id: 'duplicate',

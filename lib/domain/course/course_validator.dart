@@ -1,4 +1,5 @@
 import 'package:crolingo/domain/course/course.dart';
+import 'package:crolingo/domain/learning/answer_grader.dart';
 
 /// Semantic validator for bundled course content.
 abstract final class CourseValidator {
@@ -33,6 +34,21 @@ abstract final class CourseValidator {
           addId(exercise.id, 'exercise');
           if (exercise.acceptedAnswers.isEmpty) {
             errors.add('Exercise ${exercise.id} has no accepted answer');
+          }
+          // The grader ignores punctuation, so answers that differ only there
+          // are one answer to a learner. Authoring them as two hides the fact
+          // that a variant is still missing, and a punctuation-only answer
+          // would grade an empty submission as correct.
+          final graded = <String>{};
+          for (final answer in exercise.acceptedAnswers) {
+            final normalized = AnswerGrader.normalize(answer);
+            if (normalized.isEmpty) {
+              errors.add('Exercise ${exercise.id} has a blank accepted answer');
+            } else if (!graded.add(normalized)) {
+              errors.add(
+                'Exercise ${exercise.id} repeats accepted answer $normalized',
+              );
+            }
           }
           if (exercise.type == ExerciseType.matching &&
               exercise.pairs.length < 2) {

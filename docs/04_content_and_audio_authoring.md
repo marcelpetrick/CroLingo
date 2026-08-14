@@ -43,7 +43,7 @@ exercise needs these fields:
 | `type` | `matching`, `translation`, `fillBlank`, or `sentence` |
 | `masteryDimension` | Ability measured by this exercise |
 | `prompt` | German instruction or the text to translate |
-| `acceptedAnswers` | Strict answers; the first is shown as correction |
+| `acceptedAnswers` | Every wording that is right; the first is the correction |
 | `explanation` | Short German learning feedback |
 | `conceptIds` | Stable concepts practised by the exercise |
 | `pairs` | Two or more Croatian/German pairs for matching, otherwise empty |
@@ -53,6 +53,13 @@ Translation dimensions are `germanToCroatian` and `croatianToGerman`.
 Matching uses `recognition`, gaps use `grammarApplication`, and sentence tasks
 use `sentenceProduction`. Save real Croatian characters such as `č`, `ć`, `đ`,
 `š`, and `ž` directly in UTF-8; do not replace them with ASCII approximations.
+
+Grading ignores case, surrounding whitespace and punctuation, so `Bok!` and
+`bok` are the same answer and authoring both is an error the validator
+reports. It does not ignore letters: `č` is not `c`, `dán` is not `dan`, and a
+hyphen stays significant. Everything else a learner may legitimately write
+must be authored, which for German usually means the polite and the casual
+wording, for example `Wie geht es dir?` beside `Wie geht's dir?`.
 
 ```mermaid
 flowchart TD
