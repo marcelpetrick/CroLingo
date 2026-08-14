@@ -101,7 +101,10 @@ class _VocabularyProgress implements ProgressRepository {
   Future<List<ExerciseAttempt>> loadAttemptHistory() async => attempts;
 
   @override
-  Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
+  Future<List<DueReview>> loadDueReviews({
+    required Course course,
+    DateTime? now,
+  }) async => [];
 
   @override
   Future<List<LessonProgress>> loadLessonProgress() async => [];

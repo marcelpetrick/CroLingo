@@ -1,3 +1,5 @@
+import 'package:crolingo/domain/course/course.dart';
+
 /// Stored state used to resume and unlock learning.
 class LessonProgress {
   /// Creates a lesson progress snapshot.
@@ -75,19 +77,27 @@ class RecentMistake {
   final DateTime occurredAt;
 }
 
-/// One exercise whose scheduled review is due.
+/// One concept and recall direction whose scheduled review is due.
 class DueReview {
   /// Creates a due-review entry.
   const DueReview({
+    required this.conceptId,
+    required this.dimension,
     required this.lessonId,
     required this.exerciseId,
     required this.due,
   });
 
-  /// Lesson containing the exercise.
+  /// Concept the learner owes a review of.
+  final String conceptId;
+
+  /// Ability being reviewed; the same word is scheduled per direction.
+  final MasteryDimension dimension;
+
+  /// Lesson containing the exercise chosen to practise this concept.
   final String lessonId;
 
-  /// Stable exercise ID.
+  /// Exercise chosen to practise this concept, not the key it is stored under.
   final String exerciseId;
 
   /// UTC due time.
@@ -142,7 +152,14 @@ abstract interface class ProgressRepository {
   Future<List<RecentMistake>> loadRecentMistakes({int limit = 20});
 
   /// Reconstructs and returns currently due FSRS reviews.
-  Future<List<DueReview>> loadDueReviews({DateTime? now});
+  ///
+  /// Scheduling is keyed by concept and recall direction, which only [course]
+  /// can resolve from a stored attempt, so content is supplied by the caller
+  /// rather than held by the repository.
+  Future<List<DueReview>> loadDueReviews({
+    required Course course,
+    DateTime? now,
+  });
 
   /// Loads persisted attempts for local mastery calculations.
   Future<List<ExerciseAttempt>> loadAttemptHistory();

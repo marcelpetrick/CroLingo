@@ -1,10 +1,26 @@
 import 'package:crolingo/app/providers.dart';
+import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/review/review_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+
+/// Minimal content so a due review can be resolved to a Croatian word.
+const _course = Course(
+  id: 'course',
+  title: 'Course',
+  concepts: [Concept(id: 'bok', croatian: 'Bok!', german: 'Hallo!')],
+  units: [
+    CourseUnit(
+      id: 'unit',
+      title: 'Unit',
+      description: 'Description',
+      lessons: [Lesson(id: 'lesson', title: 'Lesson', exercises: [])],
+    ),
+  ],
+);
 
 void main() {
   Future<void> pumpReview(WidgetTester tester, _Progress progress) async {
@@ -29,7 +45,11 @@ void main() {
     addTearDown(router.dispose);
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [progressRepositoryProvider.overrideWithValue(progress)],
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(progress),
+          // Due reviews name a concept, so the screen resolves it to a word.
+          courseProvider.overrideWith((ref) => _course),
+        ],
         child: MaterialApp.router(routerConfig: router),
       ),
     );
@@ -52,6 +72,8 @@ void main() {
       _Progress(
         due: [
           DueReview(
+            conceptId: 'bok',
+            dimension: MasteryDimension.germanToCroatian,
             lessonId: 'faellig',
             exerciseId: 'e1',
             due: DateTime.utc(2026, 8, 9),
@@ -121,7 +143,10 @@ class _Progress implements ProgressRepository {
   final List<LessonProgress> completed;
 
   @override
-  Future<List<DueReview>> loadDueReviews({DateTime? now}) async => due;
+  Future<List<DueReview>> loadDueReviews({
+    required Course course,
+    DateTime? now,
+  }) async => due;
 
   @override
   Future<List<RecentMistake>> loadRecentMistakes({int limit = 20}) async =>

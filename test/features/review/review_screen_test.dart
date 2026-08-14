@@ -1,10 +1,26 @@
 import 'package:crolingo/app/providers.dart';
+import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/review/review_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+
+/// Minimal content so a due review can be resolved to a Croatian word.
+const _course = Course(
+  id: 'course',
+  title: 'Course',
+  concepts: [Concept(id: 'bok', croatian: 'Bok!', german: 'Hallo!')],
+  units: [
+    CourseUnit(
+      id: 'unit',
+      title: 'Unit',
+      description: 'Description',
+      lessons: [Lesson(id: 'lesson', title: 'Lesson', exercises: [])],
+    ),
+  ],
+);
 
 void main() {
   testWidgets('shows and opens every available review family', (tester) async {
@@ -28,6 +44,8 @@ void main() {
       ProviderScope(
         overrides: [
           progressRepositoryProvider.overrideWithValue(_ReviewProgress()),
+          // Due reviews name a concept, so the screen resolves it to a word.
+          courseProvider.overrideWith((ref) => _course),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),
@@ -39,7 +57,11 @@ void main() {
     expect(find.text('2 neu gelernte Lektionen'), findsOneWidget);
     expect(find.text('Deine Antwort: falsch'), findsOneWidget);
 
-    await tester.tap(find.text('Due exercise'));
+    // A due item names the word and the direction, not the exercise slug.
+    expect(find.text('Bok!'), findsOneWidget);
+    expect(find.text('Kroatisch → Deutsch'), findsOneWidget);
+
+    await tester.tap(find.text('Bok!'));
     await tester.pumpAndSettle();
     expect(find.text('opened due-lesson'), findsOneWidget);
 
@@ -65,8 +87,13 @@ void main() {
 
 class _ReviewProgress implements ProgressRepository {
   @override
-  Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [
+  Future<List<DueReview>> loadDueReviews({
+    required Course course,
+    DateTime? now,
+  }) async => [
     DueReview(
+      conceptId: 'bok',
+      dimension: MasteryDimension.croatianToGerman,
       lessonId: 'due-lesson',
       exerciseId: 'due-exercise',
       due: DateTime.utc(2026, 8, 7),

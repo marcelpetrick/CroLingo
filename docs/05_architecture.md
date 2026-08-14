@@ -238,18 +238,33 @@ sequenceDiagram
 
 ### Reconstructing due reviews
 
-CroLingo stores no scheduler state per exercise. `loadDueReviews` replays the
+CroLingo stores no scheduler state at all. `loadDueReviews` replays the
 persisted attempt history through the FSRS adapter, mapping first-attempt
 correct to Good, one prior error to Hard, and two or more to Again. The
 schedule is therefore always consistent with the attempt log, and swapping the
 scheduler cannot corrupt stored data.
 
+Replay is keyed by concept and recall direction, not by exercise. Recalling
+`hvala` from German is a different ability from recognising it in Croatian, and
+both belong to the word rather than to whichever exercise practised it. Keying
+by exercise made every newly authored exercise start cold even for a word the
+learner had known for months, which grows worse as the course does.
+
+Because only content can say which concept an attempt practised, the course is
+passed into `loadDueReviews` rather than held by the repository, and the
+`ReviewPlanner` doing the mapping lives in `domain/review`. A due concept is
+presented through the exercise the learner has seen least recently, so a
+repeated review varies instead of drilling one item.
+
 ```mermaid
 flowchart LR
-  Attempts[("AttemptEntries<br/>ordered by time")] --> Replay["replay per exercise"]
+  Attempts[("AttemptEntries<br/>ordered by time")] --> Planner["ReviewPlanner"]
+  Course[("course_de_hr.json<br/>concepts per exercise")] --> Planner
+  Planner --> Replay["replay per concept<br/>and recall direction"]
   Replay --> Rating["rating from priorIncorrectAttempts<br/>0 = Good, 1 = Hard, 2+ = Again"]
   Rating --> Fsrs["FsrsReviewScheduler<br/>desiredRetention 0.9, fuzzing off"]
-  Fsrs --> Due["DueReview list"]
+  Fsrs --> Pick["pick least recently practised exercise"]
+  Pick --> Due["DueReview list"]
   Due --> ReviewScreen["ReviewScreen"]
 ```
 

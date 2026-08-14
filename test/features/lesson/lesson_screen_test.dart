@@ -319,7 +319,10 @@ class _RecordingProgress implements ProgressRepository {
   int attempts = 0;
 
   @override
-  Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
+  Future<List<DueReview>> loadDueReviews({
+    required Course course,
+    DateTime? now,
+  }) async => [];
 
   @override
   Future<List<ExerciseAttempt>> loadAttemptHistory() async => [];

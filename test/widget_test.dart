@@ -257,6 +257,8 @@ void main() {
           appSettingsProvider.overrideWith(
             (ref) => Stream.value(AppSettings.defaults),
           ),
+          // The review screen resolves due concepts through the course.
+          courseProvider.overrideWith((ref) => _dashboardCourse),
           progressRepositoryProvider.overrideWithValue(
             _FakeProgress(
               progress: [
@@ -303,7 +305,10 @@ class _FakeProgress implements ProgressRepository {
   Future<List<ExerciseAttempt>> loadAttemptHistory() async => [];
 
   @override
-  Future<List<DueReview>> loadDueReviews({DateTime? now}) async => [];
+  Future<List<DueReview>> loadDueReviews({
+    required Course course,
+    DateTime? now,
+  }) async => [];
 
   @override
   Future<List<LessonProgress>> loadLessonProgress() async => progress;

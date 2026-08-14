@@ -1,8 +1,43 @@
 import 'package:crolingo/data/progress/app_database.dart';
 import 'package:crolingo/data/progress/drift_progress_repository.dart';
+import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// Scheduling resolves an attempt to a concept through content, so the
+/// repository test needs a course that contains the exercise it records.
+const _course = Course(
+  id: 'course',
+  title: 'Course',
+  concepts: [Concept(id: 'bok', croatian: 'Bok!', german: 'Hallo!')],
+  units: [
+    CourseUnit(
+      id: 'unit',
+      title: 'Unit',
+      description: 'Description',
+      lessons: [
+        Lesson(
+          id: 'begrussen',
+          title: 'Begrüßen',
+          exercises: [
+            Exercise(
+              id: 'hello',
+              type: ExerciseType.translation,
+              masteryDimension: MasteryDimension.germanToCroatian,
+              prompt: 'Übersetze: Hallo!',
+              acceptedAnswers: ['Bok!'],
+              explanation: 'Explanation',
+              conceptIds: ['bok'],
+              pairs: [],
+              tiles: [],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ],
+);
 
 void main() {
   late AppDatabase database;
@@ -37,6 +72,7 @@ void main() {
     final history = await repository.loadAttemptHistory();
     final mistakes = await repository.loadRecentMistakes(limit: 1);
     final due = await repository.loadDueReviews(
+      course: _course,
       now: DateTime.utc(2026, 8, 8),
     );
     expect(rows, hasLength(2));
@@ -47,6 +83,9 @@ void main() {
     expect(rows.first.occurredAt.toUtc(), DateTime.utc(2026, 8, 7, 8));
     expect(mistakes.single.submittedAnswer, 'Falsch');
     expect(due.single.exerciseId, 'hello');
+    // Scheduling is keyed by the word and direction, not by the exercise.
+    expect(due.single.conceptId, 'bok');
+    expect(due.single.dimension, MasteryDimension.germanToCroatian);
   });
 
   test('upserts resumable progress and aggregates local stats', () async {

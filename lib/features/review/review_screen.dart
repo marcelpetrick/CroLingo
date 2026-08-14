@@ -1,6 +1,7 @@
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
+import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,7 @@ class ReviewScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
       FutureBuilder<_ReviewData>(
-        future: _loadReview(ref.read(progressRepositoryProvider)),
+        future: _loadReview(ref),
         builder: (context, snapshot) {
           final mistakes = snapshot.data?.mistakes ?? const <RecentMistake>[];
           final due = snapshot.data?.due ?? const <DueReview>[];
@@ -48,8 +49,12 @@ class ReviewScreen extends ConsumerWidget {
                           Icons.schedule_rounded,
                           color: context.palette.primary,
                         ),
-                        title: Text(_readableId(item.exerciseId)),
-                        subtitle: const Text('Jetzt wiederholen'),
+                        // The learner owes a word, not an exercise number.
+                        title: Text(
+                          snapshot.data?.concepts[item.conceptId]?.croatian ??
+                              _readableId(item.conceptId),
+                        ),
+                        subtitle: Text(_dimensionLabel(item.dimension)),
                         trailing: const Icon(Icons.play_arrow_rounded),
                         onTap: () => context.push('/lesson/${item.lessonId}'),
                       ),
@@ -141,7 +146,11 @@ class ReviewScreen extends ConsumerWidget {
       );
 }
 
-Future<_ReviewData> _loadReview(ProgressRepository repository) async {
+Future<_ReviewData> _loadReview(WidgetRef ref) async {
+  final repository = ref.read(progressRepositoryProvider);
+  // Reviews are scheduled per concept, so the schedule cannot be read without
+  // the content that says which concept an attempt practised.
+  final course = await ref.read(courseProvider.future);
   final recent =
       (await repository.loadLessonProgress())
           .where((lesson) => lesson.completedAt != null)
@@ -150,9 +159,10 @@ Future<_ReviewData> _loadReview(ProgressRepository repository) async {
           (left, right) => right.completedAt!.compareTo(left.completedAt!),
         );
   return _ReviewData(
-    due: await repository.loadDueReviews(),
+    due: await repository.loadDueReviews(course: course),
     mistakes: await repository.loadRecentMistakes(),
     recent: recent,
+    concepts: {for (final concept in course.concepts) concept.id: concept},
   );
 }
 
@@ -161,12 +171,23 @@ class _ReviewData {
     required this.due,
     required this.mistakes,
     required this.recent,
+    required this.concepts,
   });
 
   final List<DueReview> due;
   final List<RecentMistake> mistakes;
   final List<LessonProgress> recent;
+  final Map<String, Concept> concepts;
 }
+
+/// German name for the ability a due review measures.
+String _dimensionLabel(MasteryDimension dimension) => switch (dimension) {
+  MasteryDimension.recognition => 'Wiedererkennen',
+  MasteryDimension.germanToCroatian => 'Deutsch → Kroatisch',
+  MasteryDimension.croatianToGerman => 'Kroatisch → Deutsch',
+  MasteryDimension.sentenceProduction => 'Satz bilden',
+  MasteryDimension.grammarApplication => 'Lücke füllen',
+};
 
 String _readableId(String value) {
   final words = value.split('-').where((word) => word.isNotEmpty).join(' ');
