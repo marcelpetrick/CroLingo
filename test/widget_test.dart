@@ -7,6 +7,7 @@ import 'package:crolingo/domain/settings/app_settings.dart';
 import 'package:crolingo/features/home/home_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
+import 'package:crolingo/features/vocabulary/vocabulary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -178,9 +179,9 @@ void main() {
     expect(find.text('Offline · Keine Werbung · Keine Herzen'), findsOneWidget);
 
     await tester.tap(find.text('Wortschatz'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     expect(appRouter.state.uri.path, '/more/vocabulary');
-    expect(find.text('Wortschatz'), findsOneWidget);
+    expect(find.byType(VocabularyScreen), findsOneWidget);
   });
 
   testWidgets('supports a narrow phone at 200 percent text scaling', (

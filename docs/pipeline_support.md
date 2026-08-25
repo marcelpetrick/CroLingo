@@ -82,7 +82,7 @@ grow with the project are dated rather than presented as permanent claims.
 
 ## Dependency and supply-chain controls
 
-- **Flutter is pinned to 3.44.9 and Java to 21.** Android platform 36, build
+- **Flutter is pinned to 3.47.1 and Java to 21.** Android platform 36, build
   tools 36.0.0, NDK 28.2.13676358, and Gradle 9.1.0 are also explicit. A stable,
   repeatable toolchain prevents an unannounced upstream update from changing a
   supposedly identical build.

@@ -10,11 +10,9 @@ void main() {
     late Course course;
 
     setUpAll(() {
-      final decoded =
-          jsonDecode(
-                File('assets/content/course_de_hr.json').readAsStringSync(),
-              )
-              as Map<String, Object?>;
+      final decoded = jsonDecode(
+        File('assets/content/course_de_hr.json').readAsStringSync(),
+      ) as Map<String, Object?>;
       course = Course.fromJson(decoded);
     });
 

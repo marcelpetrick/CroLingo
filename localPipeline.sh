@@ -372,7 +372,7 @@ accepted_warning_reason() {
       printf 'Gradle embeds its own Kotlin and differs from the pinned plugin'
       ;;
     *'flutter_tools/gradle/src/main/kotlin'*)
-      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.44.9"
+      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.47.1"
       ;;
     *"'android.builtInKotlin=false' is deprecated"* | \
       *"'android.newDsl=false' is deprecated"*)
@@ -380,6 +380,12 @@ accepted_warning_reason() {
       ;;
     *"Deprecated 'org.jetbrains.kotlin.android' plugin usage"*)
       printf 'Follows the Flutter template flags, also for bundled plugins'
+      ;;
+    *"'fun Project.android(configure: Action<BaseAppModuleExtension>): Unit' is deprecated"*)
+      printf 'Flutter template keeps the legacy Android DSL until its migration lands'
+      ;;
+    *"'fun Project.android(configure: Action<LibraryExtension>): Unit' is deprecated"*)
+      printf 'Flutter integration_test keeps the legacy Android DSL upstream'
       ;;
     *'Deprecated Gradle features were used'*)
       printf 'Aggregate notice for the deprecations listed above'

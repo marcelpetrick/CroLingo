@@ -16,18 +16,16 @@ enum SpeechPlatform {
 }
 
 /// Replaceable Android method invocation.
-typedef AndroidSpeechInvoker =
-    Future<Object?> Function(
-      String method,
-      Object? arguments,
-    );
+typedef AndroidSpeechInvoker = Future<Object?> Function(
+  String method,
+  Object? arguments,
+);
 
 /// Replaceable local command invocation.
-typedef SpeechCommandRunner =
-    Future<ProcessResult> Function(
-      String executable,
-      List<String> arguments,
-    );
+typedef SpeechCommandRunner = Future<ProcessResult> Function(
+  String executable,
+  List<String> arguments,
+);
 
 /// Android system TTS and Linux local-command implementation.
 class PlatformSpeechService implements SpeechService {

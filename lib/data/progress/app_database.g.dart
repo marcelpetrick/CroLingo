@@ -1810,16 +1810,11 @@ class $$StudyDayEntriesTableTableManager
               $$StudyDayEntriesTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$StudyDayEntriesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> dayKey = const Value.absent(),
-                Value<int> xp = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => StudyDayEntriesCompanion(
-                dayKey: dayKey,
-                xp: xp,
-                rowid: rowid,
-              ),
+          updateCompanionCallback: ({
+            Value<String> dayKey = const Value.absent(),
+            Value<int> xp = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => StudyDayEntriesCompanion(dayKey: dayKey, xp: xp, rowid: rowid),
           createCompanionCallback:
               ({
                 required String dayKey,

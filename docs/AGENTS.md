@@ -49,6 +49,9 @@
   scanner-controlled display values and never add dashboard scripts, telemetry,
   external assets, or network requests.
 - Run `./localPipeline.sh --noRun` before every commit. Do not weaken a guardrail just to pass it.
+- Keep the analyzer-backed `riverpod_lint` plugin enabled and exactly aligned
+  with its pinned development dependency; a successful analysis must include
+  its rules rather than a placebo wrapper command.
 - Decide from exit codes, never from the shape of output. A grep count, a
   matched pattern, or a command piped into `tail` can all report success while
   the underlying tool failed; `set -o pipefail` or `${PIPESTATUS[0]}` is
