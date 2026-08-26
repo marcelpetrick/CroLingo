@@ -212,11 +212,11 @@ check_gradle_wrapper() {
     return 1
   fi
   printf '%s  %s\n' \
-    '76805e32c009c0cf0dd5d206bddc9fb22ea42e84db904b764f3047de095493f3' \
+    'b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13' \
     'android/gradle/wrapper/gradle-wrapper.jar' \
     | sha256sum --check
   grep -Fqx \
-    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip' \
+    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-all.zip' \
     android/gradle/wrapper/gradle-wrapper.properties
 }
 

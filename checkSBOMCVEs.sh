@@ -104,12 +104,12 @@ for tool in osv-scanner trivy; do
     exit 1
   fi
 done
-if ! osv-scanner --version | grep -Fqx 'osv-scanner version: 2.5.0'; then
-  printf '%s\n' 'Expected the repository-pinned OSV-Scanner 2.5.0.' >&2
+if ! osv-scanner --version | grep -Fqx 'osv-scanner version: 2.5.1'; then
+  printf '%s\n' 'Expected the repository-pinned OSV-Scanner 2.5.1.' >&2
   exit 1
 fi
 
-# OSV-Scanner 2.5.0 still reads the OSV-Scalibr variable, while current
+# The pinned OSV-Scanner still reads the OSV-Scalibr variable, while current
 # upstream documentation names OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY. Export
 # both to keep this pin and its eventual successor on one ignored local cache.
 export OSV_SCALIBR_LOCAL_DB_CACHE_DIRECTORY="${OSV_CACHE_DIR}"
@@ -144,7 +144,8 @@ rm -f "${REPORT_DIR}/dashboard.html" \
 OSV_CYCLONEDX_INPUT="${REPORT_DIR}/osv-input-cyclonedx.json"
 OSV_SPDX_INPUT="${REPORT_DIR}/osv-input-spdx.json"
 
-# OSV-Scanner 2.5.0's direct SBOM extractor drops Maven namespaces. Generate
+# OSV-Scanner's direct SBOM extractor dropped Maven namespaces when it was
+# last reviewed, in 2.5.0. Generate
 # its documented intermediate inventory dynamically from each authoritative
 # SBOM so `group:artifact` survives both online batch and offline matching.
 jq --arg source "${CYCLONEDX_FILE}" '{
@@ -338,7 +339,7 @@ scan_sbom() {
       '.SchemaVersion == 2
        and .ArtifactType == $artifact_type
        and (.Results | type == "array")
-       and .Trivy.Version == "0.73.0"' "${json_report}" >/dev/null; then
+       and .Trivy.Version == "0.74.0"' "${json_report}" >/dev/null; then
     printf 'Trivy could not produce valid %s reports.\n' "${label}" >&2
     FAILURES=$((FAILURES + 1))
     return

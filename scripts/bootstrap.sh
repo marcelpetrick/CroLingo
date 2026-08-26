@@ -20,15 +20,38 @@ download() {
   fi
 }
 
-verify_sha256() {
+sha256_matches() {
   local expected="$1"
   local file="$2"
   local actual
   actual="$(sha256sum "${file}" | cut -d ' ' -f 1)"
-  if [[ "${actual}" != "${expected}" ]]; then
+  [[ "${actual}" == "${expected}" ]]
+}
+
+verify_sha256() {
+  local expected="$1"
+  local file="$2"
+  if ! sha256_matches "${expected}" "${file}"; then
     printf 'Checksum mismatch for %s\n' "${file}" >&2
     exit 1
   fi
+}
+
+download_verified() {
+  local url="$1"
+  local destination="$2"
+  local checksum="$3"
+  download "${url}" "${destination}"
+  if ! sha256_matches "${checksum}" "${destination}"; then
+    # Some releases publish every version under the same file name, so a
+    # cached download from an earlier pin would fail every later bump. Fetch
+    # once more before treating the mismatch as a corrupt or tampered file.
+    printf '[bootstrap] Replacing cached %s from an earlier pin.\n' \
+      "${destination##*/}"
+    rm -f "${destination}"
+    download "${url}" "${destination}"
+  fi
+  verify_sha256 "${checksum}" "${destination}"
 }
 
 install_tar_binary() {
@@ -37,8 +60,7 @@ install_tar_binary() {
   local checksum="$3"
   local archive="${CACHE_DIR}/${url##*/}"
   local extract_dir="${TOOLING_DIR}/extract-${name}"
-  download "${url}" "${archive}"
-  verify_sha256 "${checksum}" "${archive}"
+  download_verified "${url}" "${archive}" "${checksum}"
   rm -rf "${extract_dir}"
   mkdir -p "${extract_dir}"
   tar -xf "${archive}" -C "${extract_dir}"
@@ -57,8 +79,7 @@ install_raw_binary() {
   local url="$2"
   local checksum="$3"
   local file="${CACHE_DIR}/${url##*/}"
-  download "${url}" "${file}"
-  verify_sha256 "${checksum}" "${file}"
+  download_verified "${url}" "${file}" "${checksum}"
   install -m 0755 "${file}" "${BIN_DIR}/${name}"
 }
 
@@ -77,10 +98,10 @@ install_flutter() {
   fi
 
   local archive="${CACHE_DIR}/${FLUTTER_ARCHIVE}"
-  download \
+  download_verified \
     "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/${FLUTTER_ARCHIVE}" \
-    "${archive}"
-  verify_sha256 "${FLUTTER_SHA256}" "${archive}"
+    "${archive}" \
+    "${FLUTTER_SHA256}"
   rm -rf "${TOOLING_DIR}/flutter"
   tar -xf "${archive}" -C "${TOOLING_DIR}"
 }
@@ -118,8 +139,8 @@ install_quality_tools() {
     '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb'
   install_raw_binary \
     osv-scanner \
-    'https://github.com/google/osv-scanner/releases/download/v2.5.0/osv-scanner_linux_amd64' \
-    'edcfc41d257db36148f065055655fe3fcfc434b0b423ea67468a84c207524e0c'
+    'https://github.com/google/osv-scanner/releases/download/v2.5.1/osv-scanner_linux_amd64' \
+    'f9f25499a2c8cc367b3af45df2ea7eeca7fbccceab9c35079968f4b3652194be'
   install_tar_binary \
     zizmor \
     'https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
@@ -130,12 +151,12 @@ install_quality_tools() {
     '8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198'
   install_tar_binary \
     syft \
-    'https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_amd64.tar.gz' \
-    'bf7b29ff57f06da30918266a0e1c2885a8f99784798d1bdb1628886aa015d788'
+    'https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_amd64.tar.gz' \
+    '2a2e837a2c8d59ec9af5472ee22d3b04ee463c4e44476ecf993fd1e5ab6ebc7f'
   install_tar_binary \
     trivy \
-    'https://github.com/aquasecurity/trivy/releases/download/v0.73.0/trivy_0.73.0_Linux-64bit.tar.gz' \
-    '2edd39da482bb4e9831962487b68f68e3928ec3137794757f54d00383d79547b'
+    'https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz' \
+    '2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a'
   install_raw_binary \
     cyclonedx \
     'https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.33.1/cyclonedx-linux-x64' \
@@ -150,7 +171,7 @@ install_quality_tools() {
     --no-audit \
     --no-fund \
     --save-exact \
-    markdownlint-cli2@0.22.0
+    markdownlint-cli2@0.23.2
 }
 
 install_spdx_validator() {

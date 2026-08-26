@@ -83,17 +83,17 @@ grow with the project are dated rather than presented as permanent claims.
 ## Dependency and supply-chain controls
 
 - **Flutter is pinned to 3.47.1 and Java to 21.** Android platform 36, build
-  tools 36.0.0, NDK 28.2.13676358, and Gradle 9.1.0 are also explicit. A stable,
+  tools 36.0.0, NDK 28.2.13676358, and Gradle 9.3.1 are also explicit. A stable,
   repeatable toolchain prevents an unannounced upstream update from changing a
   supposedly identical build.
 - **Downloaded tooling is versioned and SHA-256 verified.** Current pins include
-  Actionlint 1.7.12, Gitleaks 8.30.1, OSV-Scanner 2.5.0, Zizmor 1.29.0,
-  ShellCheck 0.11.0, markdownlint-cli2 0.22.0, Syft 1.50.0, CycloneDX CLI
+  Actionlint 1.7.12, Gitleaks 8.30.1, OSV-Scanner 2.5.1, Zizmor 1.29.0,
+  ShellCheck 0.11.0, markdownlint-cli2 0.23.2, Syft 1.51.0, CycloneDX CLI
   0.33.1, CycloneDX Gradle Plugin 3.3.0, and SPDX tools-python 0.8.5.
   Reproducibility includes the
   tools that judge the code, not only the application dependencies.
 - **The Gradle wrapper JAR and distribution URL are verified.** The wrapper JAR
-  has a pinned SHA-256 digest and must still point to Gradle 9.1.0. This detects
+  has a pinned SHA-256 digest and must still point to Gradle 9.3.1. This detects
   accidental or malicious replacement of an executable build component.
 - **Dart dependencies use the committed lockfile.** `flutter pub get
   --enforce-lockfile` must succeed and may not modify `pubspec.lock`, so local,
@@ -130,11 +130,11 @@ grow with the project are dated rather than presented as permanent claims.
   release classpath, then produces CycloneDX 1.7 and SPDX 2.3 JSON. Official
   validators fail the gate on malformed documents, and deliberately corrupted
   fixtures prove the rejection path.
-- **Trivy 0.73.0 scans both SBOM representations.** The official binary is
+- **Trivy 0.74.0 scans both SBOM representations.** The official binary is
   checksum-pinned, requires Pub and Maven PURLs, and fails on scanner errors or
   known High/Critical matches. Comparing normalized findings helps catch a
   format-parser regression before it can create false confidence.
-- **OSV-Scanner 2.5.0 independently scans both SBOMs.** Generated adapter
+- **OSV-Scanner 2.5.1 independently scans both SBOMs.** Generated adapter
   inventories must preserve the exact Pub and qualified Maven identities from
   each format, and any OSV advisory blocks the build. Online batched queries
   and repository-local offline databases cover the same documents, reducing

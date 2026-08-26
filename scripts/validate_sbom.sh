@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 if (($# != 3)); then
   printf 'Usage: %s CYCLONEDX_JSON SPDX_JSON VERSION\n' "${0##*/}" >&2
   exit 2
@@ -8,6 +10,17 @@ fi
 CYCLONEDX_FILE="$1"
 SPDX_FILE="$2"
 VERSION="$3"
+
+# The release workflow calls this through package_release.sh, outside the
+# pipeline that exports the pinned toolchain. Find the tools here so every
+# caller validates with the same bootstrapped versions.
+export PATH="${ROOT_DIR}/.tooling/bin:${PATH}"
+for tool in cyclonedx jq pyspdxtools; do
+  if ! command -v "${tool}" >/dev/null 2>&1; then
+    printf 'Missing SBOM tool: %s. Run ./scripts/bootstrap.sh.\n' "${tool}" >&2
+    exit 1
+  fi
+done
 
 for file in "${CYCLONEDX_FILE}" "${SPDX_FILE}"; do
   if [[ ! -s "${file}" ]]; then

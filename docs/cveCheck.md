@@ -18,10 +18,10 @@ configuration, or unpatched operating-system problem.
 1. Keep `scripts/generate_sbom.sh` as the only generator implementation and add
    the requested root `generateSBOM.sh` entry point. This prevents two local
    commands from producing different inventories.
-2. Bootstrap Trivy 0.73.0 from its official Linux release archive, pinned by
+2. Bootstrap Trivy 0.74.0 from its official Linux release archive, pinned by
    the upstream SHA-256 digest. Do not use Docker `latest`, an installer pipe,
    or mutable Trivy Action tags.
-3. Use the already checksum-pinned OSV-Scanner 2.5.0 as an independent matcher
+3. Use the already checksum-pinned OSV-Scanner 2.5.1 as an independent matcher
    over both SBOMs. It uses batched OSV queries online and official ecosystem
    archives offline.
 4. Add `checkSBOMCVEs.sh`. By default it regenerates and validates both SBOMs,
@@ -159,9 +159,9 @@ flowchart TB
   Generator --> Validate["CycloneDX + SPDX validators\nPURL assertions"]
   Validate --> CDX["CycloneDX 1.7 JSON"]
   Validate --> SPDX["SPDX 2.3 JSON"]
-  CDX --> Trivy["Trivy 0.73.0"]
+  CDX --> Trivy["Trivy 0.74.0"]
   SPDX --> Trivy
-  CDX --> OSV["OSV-Scanner 2.5.0"]
+  CDX --> OSV["OSV-Scanner 2.5.1"]
   SPDX --> OSV
   Trivy --> Compare["compare formats"]
   OSV --> Compare

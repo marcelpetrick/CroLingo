@@ -11,7 +11,7 @@ points described below.
 
 ## Decisions and rationale
 
-- Pin [Syft 1.50.0](https://github.com/anchore/syft/releases/tag/v1.50.0)
+- Pin [Syft 1.51.0](https://github.com/anchore/syft/releases/tag/v1.51.0)
   by release checksum. Syft has maintained catalogers for Dart
   `pubspec.lock` files and can emit a resolved inventory without a hand-written
   package list. It also converts the final merged inventory to SPDX while
