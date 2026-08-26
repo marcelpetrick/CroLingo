@@ -46,7 +46,7 @@ material and are not bundled into the app.
 
 **License: GPLv3 or later. See `LICENSE`.**
 
-**Note: projected is generated with AI.**
+**Note: project is generated with AI.**
 
 ## What works today
 
