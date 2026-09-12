@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 /// Local, durable learner preferences.
 class SettingsScreen extends ConsumerWidget {
   /// Creates the settings screen.
-  const SettingsScreen({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

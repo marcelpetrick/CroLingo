@@ -5,7 +5,7 @@ import 'package:crolingo/domain/settings/app_theme_variant.dart';
 /// Drift-backed, app-private preference storage.
 class DriftSettingsRepository implements SettingsRepository {
   /// Creates a repository using the shared application database.
-  const DriftSettingsRepository(this.database);
+  const new(this.database);
 
   /// Database schema version 2 introduced the extensible key/value table.
   static const storageFormatVersion = 1;

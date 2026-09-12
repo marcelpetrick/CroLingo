@@ -88,7 +88,7 @@ class AppSettingEntries extends Table {
 )
 class AppDatabase extends _$AppDatabase {
   /// Opens the production database, or an injected executor for tests.
-  AppDatabase([QueryExecutor? executor])
+  new([QueryExecutor? executor])
     : super(executor ?? driftDatabase(name: 'crolingo'));
 
   @override

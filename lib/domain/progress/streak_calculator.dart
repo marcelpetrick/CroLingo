@@ -1,7 +1,7 @@
 /// Current and historical study streak lengths.
 class Streaks {
   /// Creates streak values.
-  const Streaks({required this.current, required this.longest});
+  const new({required this.current, required this.longest});
 
   /// Active streak ending today or yesterday.
   final int current;
@@ -30,9 +30,6 @@ abstract final class StreakCalculator {
 
     final localToday = DateTime(today.year, today.month, today.day);
     final gap = localToday.difference(days.last).inDays;
-    return Streaks(
-      current: gap == 0 || gap == 1 ? run : 0,
-      longest: longest,
-    );
+    return Streaks(current: gap == 0 || gap == 1 ? run : 0, longest: longest);
   }
 }

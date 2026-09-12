@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 /// Close control, lesson progress bar, and earned XP.
 class LessonHeader extends StatelessWidget {
   /// Creates a lesson header.
-  const LessonHeader({required this.progress, required this.xp, super.key});
+  const new({required this.progress, required this.xp, super.key});
 
   /// Completed fraction of the lesson, between 0 and 1.
   final double progress;

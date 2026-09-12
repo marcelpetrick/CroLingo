@@ -21,7 +21,7 @@ import 'package:go_router/go_router.dart';
 /// Interactive player for one bundled lesson.
 class LessonScreen extends StatefulWidget {
   /// Creates a lesson player for a stable lesson ID.
-  const LessonScreen({
+  const new({
     required this.lessonId,
     this.lesson,
     this.repository,
@@ -95,7 +95,7 @@ class _LessonScreenState extends State<LessonScreen> {
 }
 
 class _LessonPlayer extends StatefulWidget {
-  const _LessonPlayer({
+  const new({
     required this.lesson,
     required this.progress,
     required this.repository,
@@ -213,14 +213,14 @@ class _LessonPlayerState extends State<_LessonPlayer> {
 }
 
 class _LessonPayload {
-  const _LessonPayload(this.lesson, this.progress);
+  const new(this.lesson, this.progress);
 
   final Lesson lesson;
   final LessonProgress? progress;
 }
 
 class _ExerciseView extends StatefulWidget {
-  const _ExerciseView({
+  const new({
     required this.exercise,
     required this.grade,
     required this.submittedAnswer,
@@ -352,7 +352,7 @@ class _ExerciseViewState extends State<_ExerciseView> {
 }
 
 class _Completion extends StatelessWidget {
-  const _Completion({required this.lesson, required this.xp});
+  const new({required this.lesson, required this.xp});
 
   final Lesson lesson;
   final int xp;
@@ -388,7 +388,7 @@ class _Completion extends StatelessWidget {
 }
 
 class _LoadFailure extends StatelessWidget {
-  const _LoadFailure({required this.onClose});
+  const new({required this.onClose});
 
   final VoidCallback onClose;
 

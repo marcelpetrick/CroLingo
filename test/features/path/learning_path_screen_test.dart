@@ -245,7 +245,7 @@ LessonProgress _completed(String lessonId) => LessonProgress(
 );
 
 class _PathProgress implements ProgressRepository {
-  const _PathProgress(this.progress);
+  const new(this.progress);
 
   final List<LessonProgress> progress;
 

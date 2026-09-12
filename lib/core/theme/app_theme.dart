@@ -162,11 +162,7 @@ abstract final class AppTheme {
           fontSize: 17,
           height: 1.4,
         ),
-        bodyMedium: TextStyle(
-          color: palette.slate,
-          fontSize: 15,
-          height: 1.4,
-        ),
+        bodyMedium: TextStyle(color: palette.slate, fontSize: 15, height: 1.4),
       ),
       cardTheme: CardThemeData(
         color: palette.surface,

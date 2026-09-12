@@ -3,7 +3,7 @@ import 'package:crolingo/domain/course/course.dart';
 /// Stored state used to resume and unlock learning.
 class LessonProgress {
   /// Creates a lesson progress snapshot.
-  const LessonProgress({
+  const new({
     required this.lessonId,
     required this.exerciseIndex,
     required this.xp,
@@ -26,7 +26,7 @@ class LessonProgress {
 /// Aggregate local learning statistics.
 class LearningStats {
   /// Creates statistics.
-  const LearningStats({
+  const new({
     required this.totalXp,
     required this.completedLessons,
     required this.studyDays,
@@ -57,7 +57,7 @@ class LearningStats {
 /// One recent incorrect answer available for focused review.
 class RecentMistake {
   /// Creates a recent mistake.
-  const RecentMistake({
+  const new({
     required this.lessonId,
     required this.exerciseId,
     required this.submittedAnswer,
@@ -80,7 +80,7 @@ class RecentMistake {
 /// One concept and recall direction whose scheduled review is due.
 class DueReview {
   /// Creates a due-review entry.
-  const DueReview({
+  const new({
     required this.conceptId,
     required this.dimension,
     required this.lessonId,
@@ -107,7 +107,7 @@ class DueReview {
 /// One persisted answer attempt used for learning analytics.
 class ExerciseAttempt {
   /// Creates an immutable attempt snapshot.
-  const ExerciseAttempt({
+  const new({
     required this.exerciseId,
     required this.correct,
     required this.incorrectBefore,

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 @immutable
 class AppPalette extends ThemeExtension<AppPalette> {
   /// Creates a palette.
-  const AppPalette({
+  const new({
     required this.primary,
     required this.primaryPressed,
     required this.onPrimary,

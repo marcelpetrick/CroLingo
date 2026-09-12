@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 /// Complete local learning statistics without accounts or telemetry.
 class ProfileScreen extends ConsumerStatefulWidget {
   /// Creates the profile screen.
-  const ProfileScreen({this.course, super.key});
+  const new({this.course, super.key});
 
   /// Optional deterministic course source for embedded hosts and tests.
   final Future<Course>? course;
@@ -109,18 +109,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 }
 
 class _ProfileData {
-  const _ProfileData({required this.stats, required this.learnedConcepts});
+  const new({required this.stats, required this.learnedConcepts});
 
   final LearningStats stats;
   final int learnedConcepts;
 }
 
 class _Stat extends StatelessWidget {
-  const _Stat({
-    required this.icon,
-    required this.value,
-    required this.label,
-  });
+  const new({required this.icon, required this.value, required this.label});
 
   final IconData icon;
   final String value;

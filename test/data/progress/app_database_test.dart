@@ -87,9 +87,7 @@ void main() {
   test('accumulates one row per local study day', () async {
     await database
         .into(database.studyDayEntries)
-        .insert(
-          StudyDayEntriesCompanion.insert(dayKey: '2026-08-08', xp: 20),
-        );
+        .insert(StudyDayEntriesCompanion.insert(dayKey: '2026-08-08', xp: 20));
     await database
         .into(database.studyDayEntries)
         .insertOnConflictUpdate(
@@ -97,9 +95,7 @@ void main() {
         );
     await database
         .into(database.studyDayEntries)
-        .insert(
-          StudyDayEntriesCompanion.insert(dayKey: '2026-08-09', xp: 10),
-        );
+        .insert(StudyDayEntriesCompanion.insert(dayKey: '2026-08-09', xp: 10));
 
     final rows = await database.select(database.studyDayEntries).get()
       ..sort((left, right) => left.dayKey.compareTo(right.dayKey));
@@ -140,9 +136,7 @@ void main() {
 
     await upgraded
         .into(upgraded.appSettingEntries)
-        .insert(
-          AppSettingEntriesCompanion.insert(key: 'k', value: 'v'),
-        );
+        .insert(AppSettingEntriesCompanion.insert(key: 'k', value: 'v'));
     expect(
       await upgraded.select(upgraded.appSettingEntries).getSingle(),
       isA<AppSettingEntry>(),

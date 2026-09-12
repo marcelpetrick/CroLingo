@@ -67,13 +67,13 @@ typedef _Key = ({String conceptId, MasteryDimension dimension});
 
 /// Content indexed the way scheduling needs to read it.
 class _Catalogue {
-  const _Catalogue({
+  const new({
     required this.exercises,
     required this.lessons,
     required this.byKey,
   });
 
-  factory _Catalogue.of(Course course) {
+  factory of(Course course) {
     final exercises = <String, Exercise>{};
     final lessons = <String, String>{};
     final byKey = <_Key, List<Exercise>>{};

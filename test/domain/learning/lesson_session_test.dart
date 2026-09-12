@@ -14,11 +14,7 @@ void main() {
     pairs: [],
     tiles: [],
   );
-  const lesson = Lesson(
-    id: 'lesson',
-    title: 'Lesson',
-    exercises: [exercise],
-  );
+  const lesson = Lesson(id: 'lesson', title: 'Lesson', exercises: [exercise]);
 
   test('requires eventual correctness and rewards a clean answer', () {
     final session = LessonSession(lesson)..submit('Bok!');

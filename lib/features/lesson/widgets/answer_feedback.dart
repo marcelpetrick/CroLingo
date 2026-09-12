@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// colour alone.
 class AnswerFeedback extends StatelessWidget {
   /// Creates feedback for one graded answer.
-  const AnswerFeedback({
+  const new({
     required this.correct,
     required this.submitted,
     required this.correction,

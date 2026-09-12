@@ -30,7 +30,7 @@ typedef SpeechCommandRunner = Future<ProcessResult> Function(
 /// Android system TTS and Linux local-command implementation.
 class PlatformSpeechService implements SpeechService {
   /// Creates a production service or a deterministic test adapter.
-  PlatformSpeechService({
+  new({
     SpeechPlatform? platform,
     AndroidSpeechInvoker? androidInvoker,
     SpeechCommandRunner? commandRunner,
@@ -46,9 +46,9 @@ class PlatformSpeechService implements SpeechService {
   final SpeechCommandRunner _commandRunner;
 
   @override
-  Future<SpeechOutcome> speakCroatian(String text) async {
+  Future<SpeechOutcome> speakCroatian(String text) {
     final value = text.trim();
-    if (value.isEmpty) return SpeechOutcome.failed;
+    if (value.isEmpty) return Future.value(SpeechOutcome.failed);
     return switch (platform) {
       SpeechPlatform.android => _speakAndroid(value),
       SpeechPlatform.linux => _speakLinux(value),
@@ -75,10 +75,7 @@ class PlatformSpeechService implements SpeechService {
       ('espeak-ng', ['-v', 'hr']),
     ]) {
       try {
-        final result = await _commandRunner(command.$1, [
-          ...command.$2,
-          text,
-        ]);
+        final result = await _commandRunner(command.$1, [...command.$2, text]);
         if (result.exitCode == 0) return SpeechOutcome.spoken;
       } on ProcessException {
         // Try the next local speech service.
@@ -97,10 +94,8 @@ class PlatformSpeechService implements SpeechService {
     }
   }
 
-  static Future<Object?> _invokeAndroid(
-    String method,
-    Object? arguments,
-  ) => _channel.invokeMethod<Object?>(method, arguments);
+  static Future<Object?> _invokeAndroid(String method, Object? arguments) =>
+      _channel.invokeMethod<Object?>(method, arguments);
 
   static SpeechPlatform _currentPlatform() {
     if (Platform.isAndroid) return SpeechPlatform.android;

@@ -58,9 +58,8 @@ void main() {
         ),
         GoRoute(
           path: '/lesson',
-          builder: (context, state) => const Scaffold(
-            body: LessonHeader(progress: 0.5, xp: 12),
-          ),
+          builder: (context, state) =>
+              const Scaffold(body: LessonHeader(progress: 0.5, xp: 12)),
         ),
       ],
     );

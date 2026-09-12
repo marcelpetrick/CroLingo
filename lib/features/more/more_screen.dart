@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 /// Vocabulary, grammar, profile, and settings hub.
 class MoreScreen extends StatelessWidget {
   /// Creates the More screen.
-  const MoreScreen({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class MoreScreen extends StatelessWidget {
 }
 
 class _MoreTile extends StatelessWidget {
-  const _MoreTile({
+  const new({
     required this.icon,
     required this.title,
     required this.subtitle,

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// semantic label carry the meaning on their own.
 class LanguageDirectionHeader extends StatelessWidget {
   /// Creates a direction header for one mastery dimension.
-  const LanguageDirectionHeader({required this.dimension, super.key});
+  const new({required this.dimension, super.key});
 
   /// Ability measured by the current exercise.
   final MasteryDimension dimension;

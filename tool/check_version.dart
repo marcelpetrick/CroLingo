@@ -8,13 +8,9 @@ final versionPattern = RegExp(
 typedef AppVersion = ({int major, int minor, int patch, int build});
 
 void main() {
-  final staged = _git([
-    'diff',
-    '--cached',
-    '--name-only',
-    '--',
-    'pubspec.yaml',
-  ]).trim().isNotEmpty;
+  final staged = _git(['diff', '--cached', '--name-only', '--', 'pubspec.yaml'])
+      .trim()
+      .isNotEmpty;
   final currentText = staged
       ? _git(['show', ':pubspec.yaml'])
       : _git(['show', 'HEAD:pubspec.yaml']);

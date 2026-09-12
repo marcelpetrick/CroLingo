@@ -124,17 +124,15 @@ Future<void> _write(
 
 /// The Croatian chequy, drawn from the flag's red and white.
 class _Sahovnica extends StatelessWidget {
-  const _Sahovnica();
+  const new();
 
   static const _red = Color(0xFFD32F2F);
   static const _white = Color(0xFFFFFFFF);
   static const _squares = 5;
 
   @override
-  Widget build(BuildContext context) => CustomPaint(
-    painter: _SahovnicaPainter(),
-    child: const SizedBox.expand(),
-  );
+  Widget build(BuildContext context) =>
+      CustomPaint(painter: _SahovnicaPainter(), child: const SizedBox.expand());
 }
 
 class _SahovnicaPainter extends CustomPainter {
@@ -161,7 +159,7 @@ class _SahovnicaPainter extends CustomPainter {
 
 /// Pre-Android-26 icon: chequy field, white medallion, crow.
 class _LegacyIcon extends StatelessWidget {
-  const _LegacyIcon();
+  const new();
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -199,7 +197,7 @@ class _LegacyIcon extends StatelessWidget {
 
 /// Adaptive background layer: the chequy alone.
 class _AdaptiveBackground extends StatelessWidget {
-  const _AdaptiveBackground();
+  const new();
 
   @override
   Widget build(BuildContext context) => const _Sahovnica();
@@ -207,7 +205,7 @@ class _AdaptiveBackground extends StatelessWidget {
 
 /// Adaptive foreground layer: medallion and crow inside the safe zone.
 class _AdaptiveForeground extends StatelessWidget {
-  const _AdaptiveForeground();
+  const new();
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(

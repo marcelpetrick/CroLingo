@@ -27,9 +27,7 @@ void main() {
     addTearDown(repository.close);
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          settingsRepositoryProvider.overrideWithValue(repository),
-        ],
+        overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
         child: const MaterialApp(home: SettingsScreen()),
       ),
     );

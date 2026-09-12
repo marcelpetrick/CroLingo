@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Root application widget.
 class CroLingoApp extends ConsumerWidget {
   /// Creates the CroLingo application.
-  const CroLingoApp({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

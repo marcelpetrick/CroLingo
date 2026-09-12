@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Accessible control for optional Croatian pronunciation playback.
 class SpeechButton extends ConsumerStatefulWidget {
   /// Creates a playback button for one Croatian string.
-  const SpeechButton({required this.text, this.service, super.key});
+  const new({required this.text, this.service, super.key});
 
   /// Croatian text sent to the platform speech service.
   final String text;
@@ -40,9 +40,8 @@ class _SpeechButtonState extends ConsumerState<SpeechButton> {
       _announcement = announcement;
     });
     if (outcome != SpeechOutcome.spoken) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$announcement.')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('$announcement.')));
     }
   }
 

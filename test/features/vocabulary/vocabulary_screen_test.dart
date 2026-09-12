@@ -93,7 +93,7 @@ Future<void> _pumpVocabulary(
 }
 
 class _VocabularyProgress implements ProgressRepository {
-  const _VocabularyProgress(this.attempts);
+  const new(this.attempts);
 
   final List<ExerciseAttempt> attempts;
 

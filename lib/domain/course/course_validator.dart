@@ -73,9 +73,7 @@ abstract final class CourseValidator {
           if (exercise.type == ExerciseType.translation &&
               exercise.masteryDimension != MasteryDimension.germanToCroatian &&
               exercise.masteryDimension != MasteryDimension.croatianToGerman) {
-            errors.add(
-              'Translation ${exercise.id} needs a recall direction',
-            );
+            errors.add('Translation ${exercise.id} needs a recall direction');
           }
           for (final conceptId in exercise.conceptIds) {
             if (!conceptIds.contains(conceptId)) {

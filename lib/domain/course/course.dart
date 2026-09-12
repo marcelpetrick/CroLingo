@@ -1,7 +1,7 @@
 /// One offline Croatian course.
 class Course {
   /// Creates a course.
-  const Course({
+  const new({
     required this.id,
     required this.title,
     required this.units,
@@ -9,7 +9,7 @@ class Course {
   });
 
   /// Parses a course from validated JSON.
-  factory Course.fromJson(Map<String, Object?> json) => Course(
+  factory fromJson(Map<String, Object?> json) => Course(
     id: _string(json, 'id'),
     title: _string(json, 'title'),
     units: _maps(json, 'units').map(CourseUnit.fromJson).toList(),
@@ -32,7 +32,7 @@ class Course {
 /// A themed group of lessons.
 class CourseUnit {
   /// Creates a course unit.
-  const CourseUnit({
+  const new({
     required this.id,
     required this.title,
     required this.description,
@@ -40,7 +40,7 @@ class CourseUnit {
   });
 
   /// Parses a unit from JSON.
-  factory CourseUnit.fromJson(Map<String, Object?> json) => CourseUnit(
+  factory fromJson(Map<String, Object?> json) => CourseUnit(
     id: _string(json, 'id'),
     title: _string(json, 'title'),
     description: _string(json, 'description'),
@@ -63,14 +63,10 @@ class CourseUnit {
 /// A short, replayable learning session.
 class Lesson {
   /// Creates a lesson.
-  const Lesson({
-    required this.id,
-    required this.title,
-    required this.exercises,
-  });
+  const new({required this.id, required this.title, required this.exercises});
 
   /// Parses a lesson from JSON.
-  factory Lesson.fromJson(Map<String, Object?> json) => Lesson(
+  factory fromJson(Map<String, Object?> json) => Lesson(
     id: _string(json, 'id'),
     title: _string(json, 'title'),
     exercises: _maps(json, 'exercises').map(Exercise.fromJson).toList(),
@@ -122,7 +118,7 @@ enum MasteryDimension {
 /// One gradable text exercise.
 class Exercise {
   /// Creates an exercise.
-  const Exercise({
+  const new({
     required this.id,
     required this.type,
     required this.masteryDimension,
@@ -135,7 +131,7 @@ class Exercise {
   });
 
   /// Parses an exercise from JSON.
-  factory Exercise.fromJson(Map<String, Object?> json) => Exercise(
+  factory fromJson(Map<String, Object?> json) => Exercise(
     id: _string(json, 'id'),
     type: ExerciseType.values.byName(_string(json, 'type')),
     masteryDimension: MasteryDimension.values.byName(
@@ -180,10 +176,10 @@ class Exercise {
 /// One Croatian/German matching pair.
 class WordPair {
   /// Creates a pair.
-  const WordPair({required this.croatian, required this.german});
+  const new({required this.croatian, required this.german});
 
   /// Parses a pair from JSON.
-  factory WordPair.fromJson(Map<String, Object?> json) => WordPair(
+  factory fromJson(Map<String, Object?> json) => WordPair(
     croatian: _string(json, 'croatian'),
     german: _string(json, 'german'),
   );
@@ -198,14 +194,10 @@ class WordPair {
 /// A vocabulary or grammar concept.
 class Concept {
   /// Creates a concept.
-  const Concept({
-    required this.id,
-    required this.croatian,
-    required this.german,
-  });
+  const new({required this.id, required this.croatian, required this.german});
 
   /// Parses a concept from JSON.
-  factory Concept.fromJson(Map<String, Object?> json) => Concept(
+  factory fromJson(Map<String, Object?> json) => Concept(
     id: _string(json, 'id'),
     croatian: _string(json, 'croatian'),
     german: _string(json, 'german'),

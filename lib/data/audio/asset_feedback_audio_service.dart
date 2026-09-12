@@ -36,7 +36,7 @@ class AudioplayersFeedbackAssetPlayer implements FeedbackAssetPlayer {
 /// Plays original, bundled success and retry tones fully offline.
 class AssetFeedbackAudioService implements FeedbackAudioService {
   /// Creates the production service or accepts an isolated test player.
-  AssetFeedbackAudioService({FeedbackAssetPlayer? player})
+  new({FeedbackAssetPlayer? player})
     : _player = player ?? AudioplayersFeedbackAssetPlayer();
 
   static const _successAsset = 'audio/success.wav';

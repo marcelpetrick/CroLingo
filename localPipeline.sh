@@ -98,7 +98,7 @@ cleanup() {
 }
 trap 'cleanup $?' EXIT
 
-export PATH="${TOOLING_BIN}:${ROOT_DIR}/.tooling/npm/node_modules/.bin:${PATH}"
+export PATH="${ROOT_DIR}/.tooling/flutter/bin:${TOOLING_BIN}:${ROOT_DIR}/.tooling/npm/node_modules/.bin:${PATH}"
 export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk}"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
@@ -212,11 +212,11 @@ check_gradle_wrapper() {
     return 1
   fi
   printf '%s  %s\n' \
-    'b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13' \
+    '7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d' \
     'android/gradle/wrapper/gradle-wrapper.jar' \
     | sha256sum --check
   grep -Fqx \
-    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-all.zip' \
+    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.7.1-all.zip' \
     android/gradle/wrapper/gradle-wrapper.properties
 }
 
@@ -372,7 +372,7 @@ accepted_warning_reason() {
       printf 'Gradle embeds its own Kotlin and differs from the pinned plugin'
       ;;
     *'flutter_tools/gradle/src/main/kotlin'*)
-      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.47.1"
+      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.47.4"
       ;;
     *"'android.builtInKotlin=false' is deprecated"* | \
       *"'android.newDsl=false' is deprecated"*)
@@ -386,6 +386,12 @@ accepted_warning_reason() {
       ;;
     *"'fun Project.android(configure: Action<LibraryExtension>): Unit' is deprecated"*)
       printf 'Flutter integration_test keeps the legacy Android DSL upstream'
+      ;;
+    *"API 'applicationVariants' is obsolete"* | \
+      *"API 'testVariants' is obsolete"* | \
+      *"API 'unitTestVariants' is obsolete"* | \
+      *"API 'libraryVariants' is obsolete"*)
+      printf 'Flutter and bundled plugins still use the legacy Android variant API'
       ;;
     *'Deprecated Gradle features were used'*)
       printf 'Aggregate notice for the deprecations listed above'

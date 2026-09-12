@@ -3,7 +3,7 @@ import 'package:crolingo/domain/settings/app_theme_variant.dart';
 /// User-controlled preferences loaded from app-private storage.
 class AppSettings {
   /// Creates an immutable settings snapshot.
-  const AppSettings({
+  const new({
     required this.feedbackSoundsEnabled,
     required this.themeVariant,
     required this.developerUnlockAllLessons,

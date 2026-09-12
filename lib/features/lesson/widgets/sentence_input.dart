@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// Builds a Croatian sentence from shuffled tiles.
 class SentenceInput extends StatefulWidget {
   /// Creates a sentence-building input for one exercise.
-  const SentenceInput({
+  const new({
     required this.exercise,
     required this.enabled,
     required this.onChanged,

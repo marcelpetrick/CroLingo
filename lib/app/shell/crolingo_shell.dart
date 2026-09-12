@@ -5,11 +5,7 @@ import 'package:go_router/go_router.dart';
 /// Phone-first navigation shell shared by Android and Linux.
 class CroLingoShell extends StatelessWidget {
   /// Creates the navigation shell.
-  const CroLingoShell({
-    required this.location,
-    required this.child,
-    super.key,
-  });
+  const new({required this.location, required this.child, super.key});
 
   /// Current route path.
   final String location;

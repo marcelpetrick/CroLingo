@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 /// the pipeline checks.
 class AppVersion {
   /// Creates a reader using a replaceable asset bundle.
-  AppVersion({AssetBundle? bundle}) : bundle = bundle ?? rootBundle;
+  new({AssetBundle? bundle}) : bundle = bundle ?? rootBundle;
 
   static final _pattern = RegExp(r'^version:[ \t]*(\S+)', multiLine: true);
 

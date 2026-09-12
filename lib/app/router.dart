@@ -36,19 +36,14 @@ final appRouter = GoRouter(
       ),
     ),
     ShellRoute(
-      builder: (context, state, child) => CroLingoShell(
-        location: state.uri.path,
-        child: child,
-      ),
+      builder: (context, state, child) =>
+          CroLingoShell(location: state.uri.path, child: child),
       routes: [
         GoRoute(path: '/', builder: _home),
         GoRoute(path: '/path', builder: _path),
         GoRoute(path: '/review', builder: _review),
         GoRoute(path: '/more', builder: _more),
-        GoRoute(
-          path: '/more/vocabulary',
-          builder: _vocabulary,
-        ),
+        GoRoute(path: '/more/vocabulary', builder: _vocabulary),
         GoRoute(path: '/more/profile', builder: _profile),
         GoRoute(path: '/more/settings', builder: _settings),
       ],

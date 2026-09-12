@@ -1,7 +1,7 @@
 /// Current answer reported by one exercise-family input.
 class ExerciseAnswer {
   /// Creates an answer snapshot.
-  const ExerciseAnswer({required this.value, required this.canSubmit});
+  const new({required this.value, required this.canSubmit});
 
   /// Empty answer used before the learner interacts with an exercise.
   static const empty = ExerciseAnswer(value: '', canSubmit: false);

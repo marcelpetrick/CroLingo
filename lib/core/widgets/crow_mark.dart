@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// Small original geometric crow mark used in the application shell.
 class CrowMark extends StatelessWidget {
   /// Creates a crow mark at [size].
-  const CrowMark({this.size = 72, super.key});
+  const new({this.size = 72, super.key});
 
   /// Width and height of the mark.
   final double size;
@@ -28,7 +28,7 @@ class CrowMark extends StatelessWidget {
 }
 
 class _CrowPainter extends CustomPainter {
-  const _CrowPainter({
+  const new({
     required this.bodyColor,
     required this.wingColor,
     required this.accentColor,

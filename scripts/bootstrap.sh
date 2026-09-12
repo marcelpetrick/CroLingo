@@ -5,9 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TOOLING_DIR="${ROOT_DIR}/.tooling"
 BIN_DIR="${TOOLING_DIR}/bin"
 CACHE_DIR="${TOOLING_DIR}/cache"
-FLUTTER_VERSION="3.47.1"
+FLUTTER_VERSION="3.47.4"
 FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
-FLUTTER_SHA256="a1d8166c0309267cb7dc99f1424eecf08b86946ad3b50723c6f59945964aea45"
+FLUTTER_SHA256="5b45f0ceda99b9bebdc873e7e69f6450aeb4c30f454b505e2e62fc9255a907d3"
 
 mkdir -p "${BIN_DIR}" "${CACHE_DIR}"
 
@@ -143,16 +143,16 @@ install_quality_tools() {
     'f9f25499a2c8cc367b3af45df2ea7eeca7fbccceab9c35079968f4b3652194be'
   install_tar_binary \
     zizmor \
-    'https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
-    'dd96df044a6e8538d5f423790f453bdd03d49e5b2bcc38214acc41a2f1297839'
+    'https://github.com/zizmorcore/zizmor/releases/download/v1.30.1/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
+    'e65324f4430c2717591937edcec90ccbefaf14c174f8ec9415e03ca875b46e1a'
   install_tar_binary \
     shellcheck \
     'https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz' \
     '8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198'
   install_tar_binary \
     syft \
-    'https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_amd64.tar.gz' \
-    '2a2e837a2c8d59ec9af5472ee22d3b04ee463c4e44476ecf993fd1e5ab6ebc7f'
+    'https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_amd64.tar.gz' \
+    '8fcb33017a0dc1058298c923c436d19dfa68ae93968e0b423248542e3afb9fc3'
   install_tar_binary \
     trivy \
     'https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz' \

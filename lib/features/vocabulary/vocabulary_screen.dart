@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 /// Local vocabulary list with fine-grained learning strength.
 class VocabularyScreen extends ConsumerStatefulWidget {
   /// Creates the vocabulary screen.
-  const VocabularyScreen({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<VocabularyScreen> createState() => _VocabularyScreenState();
@@ -66,7 +66,7 @@ class _VocabularyScreenState extends ConsumerState<VocabularyScreen> {
 }
 
 class _ConceptCard extends StatelessWidget {
-  const _ConceptCard({required this.mastery});
+  const new({required this.mastery});
 
   final ConceptMastery mastery;
 

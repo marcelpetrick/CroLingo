@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// Pairs each Croatian word with its German meaning.
 class MatchingInput extends StatefulWidget {
   /// Creates a matching input for one exercise.
-  const MatchingInput({
+  const new({
     required this.exercise,
     required this.enabled,
     required this.onChanged,

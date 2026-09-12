@@ -26,9 +26,8 @@ void main() {
   });
 
   test('returns null when the pubspec declares no version', () async {
-    final version = await AppVersion(
-      bundle: _StubBundle('name: crolingo\n'),
-    ).load();
+    final version = await AppVersion(bundle: _StubBundle('name: crolingo\n'))
+        .load();
 
     expect(version, isNull);
   });
@@ -44,7 +43,7 @@ void main() {
 }
 
 class _StubBundle extends CachingAssetBundle {
-  _StubBundle(this.source);
+  new(this.source);
 
   final String source;
 

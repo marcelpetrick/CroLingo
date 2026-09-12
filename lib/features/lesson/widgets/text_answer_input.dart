@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Typed answer shared by translation and fill-in-the-blank exercises.
 class TextAnswerInput extends StatefulWidget {
   /// Creates a typed-answer input for one exercise.
-  const TextAnswerInput({
+  const new({
     required this.exercise,
     required this.enabled,
     required this.onChanged,

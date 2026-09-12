@@ -4,7 +4,7 @@ import 'package:unorm_dart/unorm_dart.dart' as unicode;
 /// Result of grading one submitted text answer.
 class GradeResult {
   /// Creates a grade result.
-  const GradeResult({required this.isCorrect, required this.correction});
+  const new({required this.isCorrect, required this.correction});
 
   /// Whether the answer matches an authored accepted form.
   final bool isCorrect;
@@ -18,9 +18,7 @@ abstract final class AnswerGrader {
   // Marks a learner may reasonably omit or add without being wrong. Letters
   // stay untouched: `č` is not `c`, and `dán` is not `dan`. Hyphens stay too,
   // because a German compound changes meaning when its hyphen disappears.
-  static final RegExp _ignorablePunctuation = RegExp(
-    '[.,!?;:…’‘“”„«»\'"()]',
-  );
+  static final RegExp _ignorablePunctuation = RegExp('[.,!?;:…’‘“”„«»\'"()]');
 
   static final RegExp _whitespace = RegExp(r'\s+');
 

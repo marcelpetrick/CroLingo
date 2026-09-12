@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 /// Learner dashboard and continuation entry point.
 class HomeScreen extends ConsumerStatefulWidget {
   /// Creates the dashboard.
-  const HomeScreen({this.course, super.key});
+  const new({this.course, super.key});
 
   /// Optional deterministic course source for tests.
   final Future<Course>? course;
@@ -106,7 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class _ContinuationCard extends StatelessWidget {
-  const _ContinuationCard({required this.data, required this.onOpen});
+  const new({required this.data, required this.onOpen});
 
   final _HomeData data;
   final VoidCallback onOpen;
@@ -178,14 +178,14 @@ class _ContinuationCard extends StatelessWidget {
 }
 
 class _HomeData {
-  const _HomeData({required this.position, required this.courseTitle});
+  const new({required this.position, required this.courseTitle});
 
   final CoursePosition? position;
   final String courseTitle;
 }
 
 class _Stats extends ConsumerWidget {
-  const _Stats();
+  const new();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
@@ -217,7 +217,7 @@ class _Stats extends ConsumerWidget {
 }
 
 class _Header extends ConsumerWidget {
-  const _Header();
+  const new();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -266,11 +266,7 @@ class _Header extends ConsumerWidget {
 }
 
 class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.value,
-    required this.label,
-  });
+  const new({required this.icon, required this.value, required this.label});
 
   final IconData icon;
   final String value;

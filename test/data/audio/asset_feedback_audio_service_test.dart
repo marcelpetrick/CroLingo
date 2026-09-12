@@ -21,10 +21,7 @@ void main() {
   test('audio failures never interrupt the lesson', () async {
     final service = AssetFeedbackAudioService(player: _FailingPlayer());
 
-    await expectLater(
-      service.play(AnswerFeedbackSound.success),
-      completes,
-    );
+    await expectLater(service.play(AnswerFeedbackSound.success), completes);
   });
 
   test('bundled cues are distinct and have audible safe peaks', () async {

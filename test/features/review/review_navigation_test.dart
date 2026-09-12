@@ -132,7 +132,7 @@ void main() {
 }
 
 class _Progress implements ProgressRepository {
-  const _Progress({
+  const new({
     this.due = const [],
     this.mistakes = const [],
     this.completed = const [],

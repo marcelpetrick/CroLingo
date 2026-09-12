@@ -1482,7 +1482,16 @@ class $$AttemptEntriesTableTableManager
                 occurredAt: occurredAt,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$AttemptEntriesTable, AttemptEntry>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $AttemptEntriesTable,
+                    AttemptEntry
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1682,7 +1691,18 @@ class $$LessonProgressEntriesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$LessonProgressEntriesTable, LessonProgressEntry>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $LessonProgressEntriesTable,
+                    LessonProgressEntry
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1826,7 +1846,16 @@ class $$StudyDayEntriesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$StudyDayEntriesTable, StudyDayEntry>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $StudyDayEntriesTable,
+                    StudyDayEntry
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1978,7 +2007,16 @@ class $$AppSettingEntriesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$AppSettingEntriesTable, AppSettingEntry>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $AppSettingEntriesTable,
+                    AppSettingEntry
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

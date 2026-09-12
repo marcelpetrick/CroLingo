@@ -63,11 +63,11 @@ void main() {
 }
 
 class _Unreadable implements Exception {
-  const _Unreadable();
+  const new();
 }
 
 class _Progress implements ProgressRepository {
-  const _Progress();
+  const new();
 
   @override
   Future<List<LessonProgress>> loadLessonProgress() async => [];

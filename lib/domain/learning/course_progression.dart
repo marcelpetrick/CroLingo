@@ -4,7 +4,7 @@ import 'package:crolingo/domain/progress/progress_repository.dart';
 /// The next ordered lesson a learner can start or resume.
 class CoursePosition {
   /// Creates a stable position in the course hierarchy.
-  const CoursePosition({
+  const new({
     required this.unit,
     required this.lesson,
     required this.unitNumber,
@@ -31,10 +31,7 @@ class CoursePosition {
 /// Pure sequential progression rules shared by dashboard and path UI.
 abstract final class CourseProgression {
   /// Returns the first incomplete lesson, or null when the course is complete.
-  static CoursePosition? next(
-    Course course,
-    List<LessonProgress> progress,
-  ) {
+  static CoursePosition? next(Course course, List<LessonProgress> progress) {
     final byLesson = {for (final item in progress) item.lessonId: item};
     for (var unitIndex = 0; unitIndex < course.units.length; unitIndex++) {
       final unit = course.units[unitIndex];

@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 /// Sequential Adriatic-journey learning path.
 class LearningPathScreen extends ConsumerStatefulWidget {
   /// Creates the learning path.
-  const LearningPathScreen({this.course, super.key});
+  const new({this.course, super.key});
 
   /// Optional course source for deterministic tests.
   final Future<Course>? course;
@@ -54,10 +54,7 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
         ..add(Text('Einheit ${unitIndex + 1} · ${unit.title}'))
         ..add(const SizedBox(height: 20))
         ..add(
-          _UnitBanner(
-            completed: unitCompleted,
-            description: unit.description,
-          ),
+          _UnitBanner(completed: unitCompleted, description: unit.description),
         )
         ..add(const SizedBox(height: 28));
       for (
@@ -128,7 +125,7 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
 }
 
 class _UnitBanner extends StatelessWidget {
-  const _UnitBanner({required this.completed, required this.description});
+  const new({required this.completed, required this.description});
 
   final bool completed;
   final String description;
@@ -172,14 +169,14 @@ class _UnitBanner extends StatelessWidget {
 }
 
 class _PathData {
-  const _PathData(this.course, this.progress);
+  const new(this.course, this.progress);
 
   final Course course;
   final List<LessonProgress> progress;
 }
 
 class _LessonNode extends StatelessWidget {
-  const _LessonNode({
+  const new({
     required this.number,
     required this.title,
     required this.completed,

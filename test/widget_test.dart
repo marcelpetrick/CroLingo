@@ -103,9 +103,7 @@ void main() {
             ),
           ),
         ],
-        child: MaterialApp(
-          home: HomeScreen(course: Future.value(_pathCourse)),
-        ),
+        child: MaterialApp(home: HomeScreen(course: Future.value(_pathCourse))),
       ),
     );
     await tester.pumpAndSettle();
@@ -298,7 +296,7 @@ Future<void> _pumpUntil(WidgetTester tester, Finder finder) async {
 }
 
 class _FakeProgress implements ProgressRepository {
-  _FakeProgress({this.progress = const []});
+  new({this.progress = const []});
 
   final List<LessonProgress> progress;
 
@@ -370,9 +368,7 @@ const _dashboardCourse = Course(
       id: 'erste-worte',
       title: 'Erste Worte',
       description: 'Begrüße Menschen und stelle dich vor.',
-      lessons: [
-        Lesson(id: 'begrussen', title: 'Begrüßen', exercises: []),
-      ],
+      lessons: [Lesson(id: 'begrussen', title: 'Begrüßen', exercises: [])],
     ),
   ],
 );

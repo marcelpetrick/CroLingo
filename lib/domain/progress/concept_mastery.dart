@@ -4,7 +4,7 @@ import 'package:crolingo/domain/progress/progress_repository.dart';
 /// Mastery result for one course concept.
 class ConceptMastery {
   /// Creates a mastery snapshot.
-  const ConceptMastery({required this.concept, required this.scores});
+  const new({required this.concept, required this.scores});
 
   /// Vocabulary or grammar concept being measured.
   final Concept concept;
@@ -65,7 +65,7 @@ abstract final class ConceptMasteryCalculator {
 }
 
 class _Score {
-  const _Score(this.total, this.count);
+  const new(this.total, this.count);
 
   final double total;
   final int count;

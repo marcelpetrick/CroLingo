@@ -10,7 +10,7 @@ import 'package:drift/drift.dart';
 /// SQLite implementation of local learning progress.
 class DriftProgressRepository implements ProgressRepository {
   /// Creates a repository backed by [database].
-  DriftProgressRepository(this.database, {ReviewScheduler? reviewScheduler})
+  new(this.database, {ReviewScheduler? reviewScheduler})
     : reviewScheduler = reviewScheduler ?? FsrsReviewScheduler();
 
   /// Owned database connection.

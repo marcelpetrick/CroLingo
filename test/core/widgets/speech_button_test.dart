@@ -62,7 +62,7 @@ void main() {
 }
 
 class _FakeSpeechService implements SpeechService {
-  _FakeSpeechService(this.outcome);
+  new(this.outcome);
 
   final SpeechOutcome outcome;
   final spoken = <String>[];

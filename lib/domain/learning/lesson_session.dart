@@ -4,7 +4,7 @@ import 'package:crolingo/domain/learning/answer_grader.dart';
 /// Immutable state of one in-progress lesson.
 class LessonSessionState {
   /// Creates lesson state.
-  const LessonSessionState({
+  const new({
     required this.index,
     required this.xp,
     required this.incorrectAttempts,
@@ -14,7 +14,7 @@ class LessonSessionState {
   });
 
   /// Initial state.
-  const LessonSessionState.initial()
+  const new initial()
     : index = 0,
       xp = 0,
       incorrectAttempts = 0,
@@ -44,10 +44,10 @@ class LessonSessionState {
 /// Pure lesson state machine with unlimited retries.
 class LessonSession {
   /// Starts a session for [lesson].
-  LessonSession(this.lesson);
+  new(this.lesson);
 
   /// Resumes a stored exercise and XP checkpoint.
-  LessonSession.resume(this.lesson, {required int index, required int xp})
+  new resume(this.lesson, {required int index, required int xp})
     : state = LessonSessionState(
         index: index.clamp(0, lesson.exercises.length - 1),
         xp: xp,

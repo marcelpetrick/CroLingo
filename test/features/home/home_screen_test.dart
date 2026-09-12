@@ -23,9 +23,8 @@ void main() {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => Scaffold(
-            body: HomeScreen(course: Future<Course>.value(_course)),
-          ),
+          builder: (context, state) =>
+              Scaffold(body: HomeScreen(course: Future<Course>.value(_course))),
         ),
         GoRoute(
           path: '/path',
@@ -79,10 +78,7 @@ void main() {
   testWidgets('celebrates a finished course and routes to the path', (
     tester,
   ) async {
-    await pumpHome(
-      tester,
-      progress: [_done('hallo'), _done('tschuess')],
-    );
+    await pumpHome(tester, progress: [_done('hallo'), _done('tschuess')]);
 
     expect(find.text('Kurs abgeschlossen'), findsOneWidget);
     expect(find.byIcon(Icons.workspace_premium_rounded), findsOneWidget);
@@ -96,11 +92,7 @@ void main() {
   testWidgets('hides the version when the pubspec cannot be read', (
     tester,
   ) async {
-    await pumpHome(
-      tester,
-      progress: const [],
-      versionUnavailable: true,
-    );
+    await pumpHome(tester, progress: const [], versionUnavailable: true);
 
     expect(find.textContaining('Version '), findsNothing);
     expect(find.text('CroLingo'), findsOneWidget);
@@ -117,9 +109,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          progressRepositoryProvider.overrideWithValue(
-            const _Progress([]),
-          ),
+          progressRepositoryProvider.overrideWithValue(const _Progress([])),
         ],
         child: MaterialApp(
           home: Scaffold(body: HomeScreen(course: course.future)),
@@ -137,7 +127,7 @@ void main() {
 }
 
 class _BrokenCourse implements Exception {
-  const _BrokenCourse();
+  const new();
 }
 
 LessonProgress _done(String lessonId) => LessonProgress(
@@ -148,7 +138,7 @@ LessonProgress _done(String lessonId) => LessonProgress(
 );
 
 class _Progress implements ProgressRepository {
-  const _Progress(this.stored);
+  const new(this.stored);
 
   final List<LessonProgress> stored;
 

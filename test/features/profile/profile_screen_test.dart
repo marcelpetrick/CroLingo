@@ -43,7 +43,7 @@ void main() {
 }
 
 class _Progress implements ProgressRepository {
-  const _Progress({this.startedOn});
+  const new({this.startedOn});
 
   final DateTime? startedOn;
 
