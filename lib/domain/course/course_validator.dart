@@ -50,9 +50,26 @@ abstract final class CourseValidator {
               );
             }
           }
-          if (exercise.type == ExerciseType.matching &&
-              exercise.pairs.length < 2) {
-            errors.add('Matching exercise ${exercise.id} needs two pairs');
+          if (exercise.type == ExerciseType.matching) {
+            if (exercise.pairs.length < 2) {
+              errors.add('Matching exercise ${exercise.id} needs two pairs');
+            }
+            final croatianLabels = <String>{};
+            final germanLabels = <String>{};
+            for (final pair in exercise.pairs) {
+              if (!croatianLabels.add(pair.croatian)) {
+                errors.add(
+                  'Matching exercise ${exercise.id} repeats Croatian '
+                  '${pair.croatian}',
+                );
+              }
+              if (!germanLabels.add(pair.german)) {
+                errors.add(
+                  'Matching exercise ${exercise.id} repeats German '
+                  '${pair.german}',
+                );
+              }
+            }
           }
           if (exercise.type == ExerciseType.sentence &&
               exercise.tiles.length < 2) {

@@ -138,6 +138,52 @@ void main() {
     );
   });
 
+  test('validator rejects ambiguous matching labels', () {
+    const course = Course(
+      id: 'course',
+      title: 'Course',
+      concepts: [Concept(id: 'known', croatian: 'Bok', german: 'Hallo')],
+      units: [
+        CourseUnit(
+          id: 'unit',
+          title: 'Unit',
+          description: 'Description',
+          lessons: [
+            Lesson(
+              id: 'lesson',
+              title: 'Lesson',
+              exercises: [
+                Exercise(
+                  id: 'ambiguous',
+                  type: ExerciseType.matching,
+                  masteryDimension: MasteryDimension.recognition,
+                  prompt: 'Prompt',
+                  acceptedAnswers: ['vollständig'],
+                  explanation: 'Explanation',
+                  conceptIds: ['known'],
+                  pairs: [
+                    WordPair(croatian: 'Bok', german: 'Hallo'),
+                    WordPair(croatian: 'Bok', german: 'Guten Tag'),
+                    WordPair(croatian: 'Dobar dan', german: 'Hallo'),
+                  ],
+                  tiles: [],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+
+    expect(
+      CourseValidator.validate(course),
+      containsAll([
+        'Matching exercise ambiguous repeats Croatian Bok',
+        'Matching exercise ambiguous repeats German Hallo',
+      ]),
+    );
+  });
+
   test('validator reports every malformed course structure', () {
     const malformed = Course(
       id: 'duplicate',
