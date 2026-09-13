@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
@@ -23,7 +25,11 @@ const _course = Course(
 );
 
 void main() {
-  Future<void> pumpReview(WidgetTester tester, _Progress progress) async {
+  Future<void> pumpReview(
+    WidgetTester tester,
+    ProgressRepository progress, {
+    bool settle = true,
+  }) async {
     tester.view
       ..physicalSize = const Size(1236, 3600)
       ..devicePixelRatio = 3;
@@ -56,8 +62,29 @@ void main() {
         child: MaterialApp.router(routerConfig: router),
       ),
     );
-    await tester.pumpAndSettle();
+    if (settle) await tester.pumpAndSettle();
   }
+
+  testWidgets('shows an explicit loading state', (tester) async {
+    await pumpReview(tester, _PendingProgress(), settle: false);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.text('Noch nichts fällig'), findsNothing);
+  });
+
+  testWidgets('shows repository failures instead of an empty state', (
+    tester,
+  ) async {
+    await pumpReview(tester, const _FailingProgress());
+
+    expect(
+      find.text('Wiederholungen konnten nicht geladen werden.'),
+      findsOneWidget,
+    );
+    expect(find.text('Erneut versuchen'), findsOneWidget);
+    expect(find.text('Noch nichts fällig'), findsNothing);
+  });
 
   testWidgets('disables every mode when nothing has been practised', (
     tester,
@@ -183,4 +210,19 @@ class _Progress implements ProgressRepository {
 
   @override
   Future<void> saveLessonProgress(LessonProgress progress) async {}
+}
+
+class _PendingProgress extends _Progress {
+  final _pending = Completer<List<LessonProgress>>();
+
+  @override
+  Future<List<LessonProgress>> loadLessonProgress() => _pending.future;
+}
+
+class _FailingProgress extends _Progress {
+  const new();
+
+  @override
+  Future<List<LessonProgress>> loadLessonProgress() async =>
+      throw StateError('simulated read failure');
 }

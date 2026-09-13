@@ -8,20 +8,62 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Focused review entry point based on stored mistakes.
-class ReviewScreen extends ConsumerWidget {
+class ReviewScreen extends ConsumerStatefulWidget {
   /// Creates the review screen.
   const new({super.key});
 
   @override
-  Widget build(
-    BuildContext context,
-    WidgetRef ref,
-  ) => FutureBuilder<_ReviewData>(
-    future: _loadReview(ref),
+  ConsumerState<ReviewScreen> createState() => _ReviewScreenState();
+}
+
+class _ReviewScreenState extends ConsumerState<ReviewScreen> {
+  late Future<_ReviewData> _review;
+
+  @override
+  void initState() {
+    super.initState();
+    _review = _loadReview(ref);
+  }
+
+  void _retry() => setState(() => _review = _loadReview(ref));
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<_ReviewData>(
+    future: _review,
     builder: (context, snapshot) {
-      final mistakes = snapshot.data?.mistakes ?? const <RecentMistake>[];
-      final due = snapshot.data?.due ?? const <DueReview>[];
-      final recent = snapshot.data?.recent ?? const <LessonProgress>[];
+      if (snapshot.connectionState != ConnectionState.done) {
+        return Center(
+          child: Semantics(
+            label: 'Wiederholungen werden geladen',
+            child: const CircularProgressIndicator(),
+          ),
+        );
+      }
+      if (snapshot.hasError) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Wiederholungen konnten nicht geladen werden.',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                FilledButton(
+                  onPressed: _retry,
+                  child: const Text('Erneut versuchen'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      final data = snapshot.requireData;
+      final mistakes = data.mistakes;
+      final due = data.due;
+      final recent = data.recent;
       return ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -50,7 +92,7 @@ class ReviewScreen extends ConsumerWidget {
                     ),
                     // The learner owes a word, not an exercise number.
                     title: Text(
-                      snapshot.data?.concepts[item.conceptId]?.croatian ??
+                      data.concepts[item.conceptId]?.croatian ??
                           _readableId(item.conceptId),
                     ),
                     subtitle: Text(_dimensionLabel(item.dimension)),
