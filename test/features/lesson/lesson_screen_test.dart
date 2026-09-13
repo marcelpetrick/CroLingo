@@ -219,6 +219,36 @@ void main() {
     expect(find.text('Was gehört zusammen?'), findsOneWidget);
     expect(find.text('0 XP'), findsOneWidget);
   });
+
+  testWidgets('reviews only the selected exercise without changing progress', (
+    tester,
+  ) async {
+    final progress = _RecordingProgress();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'begrussen',
+          reviewExerciseId: 'blank',
+          lesson: Future<Lesson>.value(_completeLesson),
+          repository: progress,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Fülle die Lücke'), findsOneWidget);
+    expect(find.text('Was gehört zusammen?'), findsNothing);
+    await tester.enterText(find.byKey(const Key('answerField')), 'Bok');
+    await tester.pump();
+    await _pressButton(tester, 'Prüfen');
+    await _pressButton(tester, 'Weiter');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lektion geschafft!'), findsOneWidget);
+    expect(find.text('Zur Wiederholung'), findsOneWidget);
+    expect(progress.attempts, 1);
+    expect(progress.progress, isEmpty);
+  });
 }
 
 const _completeLesson = Lesson(

@@ -55,7 +55,9 @@ class ReviewScreen extends ConsumerWidget {
                     ),
                     subtitle: Text(_dimensionLabel(item.dimension)),
                     trailing: const Icon(Icons.play_arrow_rounded),
-                    onTap: () => context.push('/lesson/${item.lessonId}'),
+                    onTap: () => context.push(
+                      _reviewPath(item.lessonId, item.exerciseId),
+                    ),
                   ),
                 ),
               const SizedBox(height: 14),
@@ -76,7 +78,9 @@ class ReviewScreen extends ConsumerWidget {
                     title: Text(_readableId(mistake.exerciseId)),
                     subtitle: Text('Deine Antwort: ${mistake.submittedAnswer}'),
                     trailing: const Icon(Icons.play_arrow_rounded),
-                    onTap: () => context.push('/lesson/${mistake.lessonId}'),
+                    onTap: () => context.push(
+                      _reviewPath(mistake.lessonId, mistake.exerciseId),
+                    ),
                   ),
                 ),
             ],
@@ -112,7 +116,9 @@ class ReviewScreen extends ConsumerWidget {
             enabled: due.isNotEmpty,
             onTap: due.isEmpty
                 ? null
-                : () => context.push('/lesson/${due.first.lessonId}'),
+                : () => context.push(
+                    _reviewPath(due.first.lessonId, due.first.exerciseId),
+                  ),
           ),
           _ReviewOption(
             icon: Icons.error_outline_rounded,
@@ -123,7 +129,12 @@ class ReviewScreen extends ConsumerWidget {
             enabled: mistakes.isNotEmpty,
             onTap: mistakes.isEmpty
                 ? null
-                : () => context.push('/lesson/${mistakes.first.lessonId}'),
+                : () => context.push(
+                    _reviewPath(
+                      mistakes.first.lessonId,
+                      mistakes.first.exerciseId,
+                    ),
+                  ),
           ),
           _ReviewOption(
             icon: Icons.auto_awesome_outlined,
@@ -189,6 +200,11 @@ String _readableId(String value) {
   final words = value.split('-').where((word) => word.isNotEmpty).join(' ');
   return '${words[0].toUpperCase()}${words.substring(1)}';
 }
+
+String _reviewPath(String lessonId, String exerciseId) => Uri(
+  pathSegments: ['', 'lesson', lessonId],
+  queryParameters: {'exercise': exerciseId},
+).toString();
 
 class _EmptyReview extends StatelessWidget {
   const new();

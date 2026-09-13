@@ -23,6 +23,7 @@ class LessonScreen extends StatefulWidget {
   /// Creates a lesson player for a stable lesson ID.
   const new({
     required this.lessonId,
+    this.reviewExerciseId,
     this.lesson,
     this.repository,
     this.feedbackAudioService,
@@ -32,6 +33,9 @@ class LessonScreen extends StatefulWidget {
 
   /// Lesson to load.
   final String lessonId;
+
+  /// One exercise to practise without changing lesson-unlock progress.
+  final String? reviewExerciseId;
 
   /// Optional preloaded lesson for deterministic hosts and tests.
   final Future<Lesson>? lesson;
@@ -54,11 +58,25 @@ class _LessonScreenState extends State<LessonScreen> {
 
   Future<_LessonPayload> _loadPayload() async {
     final lesson = await (widget.lesson ?? _loadLesson());
+    final reviewExerciseId = widget.reviewExerciseId;
+    if (reviewExerciseId != null) {
+      final exercise = lesson.exercises
+          .where((item) => item.id == reviewExerciseId)
+          .firstOrNull;
+      if (exercise == null) {
+        throw StateError('Unknown review exercise: $reviewExerciseId');
+      }
+      return _LessonPayload(
+        Lesson(id: lesson.id, title: lesson.title, exercises: [exercise]),
+        null,
+        isReview: true,
+      );
+    }
     final allProgress = await widget.repository?.loadLessonProgress();
     final progress = allProgress
         ?.where((item) => item.lessonId == widget.lessonId)
         .firstOrNull;
-    return _LessonPayload(lesson, progress);
+    return _LessonPayload(lesson, progress, isReview: false);
   }
 
   Future<Lesson> _loadLesson() async {
@@ -84,6 +102,7 @@ class _LessonScreenState extends State<LessonScreen> {
           return _LessonPlayer(
             lesson: payload.lesson,
             progress: payload.progress,
+            isReview: payload.isReview,
             repository: widget.repository,
             feedbackAudioService: widget.feedbackAudioService,
             feedbackSoundsEnabled: widget.feedbackSoundsEnabled,
@@ -98,6 +117,7 @@ class _LessonPlayer extends StatefulWidget {
   const new({
     required this.lesson,
     required this.progress,
+    required this.isReview,
     required this.repository,
     required this.feedbackAudioService,
     required this.feedbackSoundsEnabled,
@@ -105,6 +125,7 @@ class _LessonPlayer extends StatefulWidget {
 
   final Lesson lesson;
   final LessonProgress? progress;
+  final bool isReview;
   final ProgressRepository? repository;
   final FeedbackAudioService? feedbackAudioService;
   final bool feedbackSoundsEnabled;
@@ -165,6 +186,7 @@ class _LessonPlayerState extends State<_LessonPlayer> {
   }
 
   Future<void> _saveProgress() async {
+    if (widget.isReview) return;
     final state = _session.state;
     await widget.repository?.saveLessonProgress(
       LessonProgress(
@@ -185,7 +207,11 @@ class _LessonPlayerState extends State<_LessonPlayer> {
   Widget build(BuildContext context) {
     final state = _session.state;
     if (state.isComplete) {
-      return _Completion(lesson: widget.lesson, xp: state.xp);
+      return _Completion(
+        lesson: widget.lesson,
+        xp: state.xp,
+        isReview: widget.isReview,
+      );
     }
     final exercise = widget.lesson.exercises[state.index];
     return Column(
@@ -213,10 +239,11 @@ class _LessonPlayerState extends State<_LessonPlayer> {
 }
 
 class _LessonPayload {
-  const new(this.lesson, this.progress);
+  const new(this.lesson, this.progress, {required this.isReview});
 
   final Lesson lesson;
   final LessonProgress? progress;
+  final bool isReview;
 }
 
 class _ExerciseView extends StatefulWidget {
@@ -352,10 +379,11 @@ class _ExerciseViewState extends State<_ExerciseView> {
 }
 
 class _Completion extends StatelessWidget {
-  const new({required this.lesson, required this.xp});
+  const new({required this.lesson, required this.xp, required this.isReview});
 
   final Lesson lesson;
   final int xp;
+  final bool isReview;
 
   @override
   Widget build(BuildContext context) => Center(
@@ -378,8 +406,8 @@ class _Completion extends StatelessWidget {
           Text('${lesson.title} · $xp XP'),
           const SizedBox(height: 24),
           FilledButton(
-            onPressed: () => context.go('/path'),
-            child: const Text('Zum Lernweg'),
+            onPressed: () => context.go(isReview ? '/review' : '/path'),
+            child: Text(isReview ? 'Zur Wiederholung' : 'Zum Lernweg'),
           ),
         ],
       ),

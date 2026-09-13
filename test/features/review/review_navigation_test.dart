@@ -37,7 +37,10 @@ void main() {
         GoRoute(
           path: '/lesson/:lessonId',
           builder: (context, state) => Scaffold(
-            body: Text('opened ${state.pathParameters['lessonId']}'),
+            body: Text(
+              'opened ${state.pathParameters['lessonId']} '
+              '${state.uri.queryParameters['exercise']}',
+            ),
           ),
         ),
       ],
@@ -85,7 +88,7 @@ void main() {
     await tester.tap(find.text('Empfohlen & fällig'));
     await tester.pumpAndSettle();
 
-    expect(find.text('opened faellig'), findsOneWidget);
+    expect(find.text('opened faellig e1'), findsOneWidget);
   });
 
   testWidgets('opens the lesson behind a recent mistake', (tester) async {
@@ -106,7 +109,7 @@ void main() {
     await tester.tap(find.text('Letzte Fehler'));
     await tester.pumpAndSettle();
 
-    expect(find.text('opened fehler'), findsOneWidget);
+    expect(find.text('opened fehler e2'), findsOneWidget);
   });
 
   testWidgets('replays a recently completed lesson', (tester) async {
@@ -127,7 +130,7 @@ void main() {
     await tester.tap(find.text('Neu gelernt'));
     await tester.pumpAndSettle();
 
-    expect(find.text('opened gelernt'), findsOneWidget);
+    expect(find.text('opened gelernt null'), findsOneWidget);
   });
 }
 

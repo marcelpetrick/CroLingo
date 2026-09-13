@@ -28,6 +28,7 @@ final appRouter = GoRouter(
               );
           return LessonScreen(
             lessonId: state.pathParameters['lessonId']!,
+            reviewExerciseId: state.uri.queryParameters['exercise'],
             repository: ref.read(progressRepositoryProvider),
             feedbackAudioService: ref.read(feedbackAudioServiceProvider),
             feedbackSoundsEnabled: soundsEnabled,

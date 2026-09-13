@@ -34,7 +34,10 @@ void main() {
         GoRoute(
           path: '/lesson/:lessonId',
           builder: (context, state) => Scaffold(
-            body: Text('opened ${state.pathParameters['lessonId']}'),
+            body: Text(
+              'opened ${state.pathParameters['lessonId']} '
+              '${state.uri.queryParameters['exercise']}',
+            ),
           ),
         ),
       ],
@@ -63,20 +66,20 @@ void main() {
 
     await tester.tap(find.text('Bok!'));
     await tester.pumpAndSettle();
-    expect(find.text('opened due-lesson'), findsOneWidget);
+    expect(find.text('opened due-lesson due-exercise'), findsOneWidget);
 
     router.go('/review');
     await tester.pumpAndSettle();
     await tester.tap(find.text('Mistake exercise'));
     await tester.pumpAndSettle();
-    expect(find.text('opened mistake-lesson'), findsOneWidget);
+    expect(find.text('opened mistake-lesson mistake-exercise'), findsOneWidget);
 
     router.go('/review');
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('Recent new'), 200);
     await tester.tap(find.text('Recent new').first);
     await tester.pumpAndSettle();
-    expect(find.text('opened recent-new'), findsOneWidget);
+    expect(find.text('opened recent-new null'), findsOneWidget);
 
     router.go('/review');
     await tester.pumpAndSettle();
