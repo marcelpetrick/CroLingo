@@ -59,6 +59,31 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('recovers when the speech service throws', (tester) async {
+    final service = _ThrowingSpeechService();
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: SpeechButton(text: 'Ne.', service: service),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Kroatisch anhören: Ne.'));
+    await tester.pumpAndSettle();
+
+    expect(service.attempts, 1);
+    expect(
+      find.text('Aussprache konnte nicht wiedergegeben werden.'),
+      findsOneWidget,
+    );
+    expect(find.byIcon(Icons.volume_up_rounded), findsOneWidget);
+    final button = tester.widget<IconButton>(find.byType(IconButton));
+    expect(button.onPressed, isNotNull);
+  });
 }
 
 class _FakeSpeechService implements SpeechService {
@@ -71,6 +96,19 @@ class _FakeSpeechService implements SpeechService {
   Future<SpeechOutcome> speakCroatian(String text) async {
     spoken.add(text);
     return outcome;
+  }
+
+  @override
+  Future<void> stop() async {}
+}
+
+class _ThrowingSpeechService implements SpeechService {
+  int attempts = 0;
+
+  @override
+  Future<SpeechOutcome> speakCroatian(String text) async {
+    attempts++;
+    throw StateError('simulated speech failure');
   }
 
   @override

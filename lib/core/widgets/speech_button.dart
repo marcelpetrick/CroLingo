@@ -28,7 +28,12 @@ class _SpeechButtonState extends ConsumerState<SpeechButton> {
       _busy = true;
       _announcement = 'Wiedergabe wird gestartet';
     });
-    final outcome = await _service().speakCroatian(widget.text);
+    late final SpeechOutcome outcome;
+    try {
+      outcome = await _service().speakCroatian(widget.text);
+    } on Object {
+      outcome = SpeechOutcome.failed;
+    }
     if (!mounted) return;
     final announcement = switch (outcome) {
       SpeechOutcome.spoken => 'Kroatische Aussprache wiedergegeben',
