@@ -218,6 +218,15 @@ void main() {
 
     expect(find.text('Was gehört zusammen?'), findsOneWidget);
     expect(find.text('0 XP'), findsOneWidget);
+
+    await _choose(tester, 0, 'Hallo!');
+    await _choose(tester, 1, 'Guten Tag!');
+    await _pressButton(tester, 'Prüfen');
+    await tester.pumpAndSettle();
+
+    final replayCheckpoint = progress.progress.single;
+    expect(replayCheckpoint.completedAt, DateTime.utc(2026, 8, 9));
+    expect(replayCheckpoint.xp, 50);
   });
 
   testWidgets('reviews only the selected exercise without changing progress', (

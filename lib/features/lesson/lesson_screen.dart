@@ -135,6 +135,8 @@ class _LessonPlayer extends StatefulWidget {
 }
 
 class _LessonPlayerState extends State<_LessonPlayer> {
+  late final LessonProgress? _completedProgress =
+      widget.progress?.completedAt == null ? null : widget.progress;
   late final LessonSession _session =
       widget.progress == null || widget.progress!.completedAt != null
       ? LessonSession(widget.lesson)
@@ -188,12 +190,15 @@ class _LessonPlayerState extends State<_LessonPlayer> {
   Future<void> _saveProgress() async {
     if (widget.isReview) return;
     final state = _session.state;
+    final completedProgress = _completedProgress;
     await widget.repository?.saveLessonProgress(
       LessonProgress(
         lessonId: widget.lesson.id,
         exerciseIndex: state.index,
-        xp: state.xp,
-        completedAt: state.isComplete ? DateTime.now().toUtc() : null,
+        xp: (completedProgress?.xp ?? 0) + state.xp,
+        completedAt: state.isComplete
+            ? DateTime.now().toUtc()
+            : completedProgress?.completedAt,
       ),
     );
   }
