@@ -1,3 +1,4 @@
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,30 +13,44 @@ class MoreScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        Text('Mehr', style: Theme.of(context).textTheme.headlineLarge),
+        MotionEntrance(
+          child: Text('Mehr', style: Theme.of(context).textTheme.headlineLarge),
+        ),
         const SizedBox(height: 20),
-        _MoreTile(
-          icon: Icons.menu_book_rounded,
-          title: 'Wortschatz',
-          subtitle: 'Deine gelernten Wörter',
-          onTap: () => context.push('/more/vocabulary'),
+        MotionEntrance(
+          delay: const Duration(milliseconds: 45),
+          child: _MoreTile(
+            icon: Icons.menu_book_rounded,
+            title: 'Wortschatz',
+            subtitle: 'Deine gelernten Wörter',
+            onTap: () => context.push('/more/vocabulary'),
+          ),
         ),
-        const _MoreTile(
-          icon: Icons.account_tree_outlined,
-          title: 'Grammatik',
-          subtitle: 'Bereits eingeführte Regeln',
+        const MotionEntrance(
+          delay: Duration(milliseconds: 90),
+          child: _MoreTile(
+            icon: Icons.account_tree_outlined,
+            title: 'Grammatik',
+            subtitle: 'Bereits eingeführte Regeln',
+          ),
         ),
-        _MoreTile(
-          icon: Icons.bar_chart_rounded,
-          title: 'Profil & Statistik',
-          subtitle: 'Fortschritt, XP und Lerntage',
-          onTap: () => context.push('/more/profile'),
+        MotionEntrance(
+          delay: const Duration(milliseconds: 135),
+          child: _MoreTile(
+            icon: Icons.bar_chart_rounded,
+            title: 'Profil & Statistik',
+            subtitle: 'Fortschritt, XP und Lerntage',
+            onTap: () => context.push('/more/profile'),
+          ),
         ),
-        _MoreTile(
-          icon: Icons.settings_outlined,
-          title: 'Einstellungen',
-          subtitle: 'Darstellung, Bewegung und Feedback',
-          onTap: () => context.push('/more/settings'),
+        MotionEntrance(
+          delay: const Duration(milliseconds: 180),
+          child: _MoreTile(
+            icon: Icons.settings_outlined,
+            title: 'Einstellungen',
+            subtitle: 'Darstellung, Bewegung und Feedback',
+            onTap: () => context.push('/more/settings'),
+          ),
         ),
         const SizedBox(height: 24),
         Center(
@@ -64,16 +79,34 @@ class _MoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onTap != null;
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
+        enabled: enabled,
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        leading: Icon(icon, color: context.palette.primary),
+        leading: Icon(
+          icon,
+          color: enabled ? context.palette.primary : context.palette.slate,
+        ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle),
-        trailing: onTap == null
-            ? null
+        trailing: !enabled
+            ? Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                  color: context.palette.selectedSurface,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Bald',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                ),
+              )
             : const Icon(Icons.chevron_right_rounded),
       ),
     );

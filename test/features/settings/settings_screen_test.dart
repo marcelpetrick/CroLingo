@@ -99,6 +99,28 @@ void main() {
     expect(repository.current.feedbackSoundsEnabled, isTrue);
   });
 
+  testWidgets('persists the reduced-motion preference', (tester) async {
+    tester.view
+      ..physicalSize = const Size(1236, 3600)
+      ..devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    final repository = _MemorySettingsRepository();
+    addTearDown(repository.close);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+        child: const MaterialApp(home: SettingsScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Bewegungen reduzieren'));
+    await tester.pumpAndSettle();
+
+    expect(repository.current.reduceMotion, isTrue);
+    expect(find.textContaining('Feieranimationen'), findsOneWidget);
+  });
+
   testWidgets('shows safe defaults while settings are still loading', (
     tester,
   ) async {
@@ -140,6 +162,18 @@ class _MemorySettingsRepository implements SettingsRepository {
   Future<void> setFeedbackSoundsEnabled({required bool enabled}) async {
     current = AppSettings(
       feedbackSoundsEnabled: enabled,
+      reduceMotion: current.reduceMotion,
+      themeVariant: current.themeVariant,
+      developerUnlockAllLessons: current.developerUnlockAllLessons,
+    );
+    _changes.add(current);
+  }
+
+  @override
+  Future<void> setReduceMotion({required bool enabled}) async {
+    current = AppSettings(
+      feedbackSoundsEnabled: current.feedbackSoundsEnabled,
+      reduceMotion: enabled,
       themeVariant: current.themeVariant,
       developerUnlockAllLessons: current.developerUnlockAllLessons,
     );
@@ -150,6 +184,7 @@ class _MemorySettingsRepository implements SettingsRepository {
   Future<void> setDeveloperUnlockAllLessons({required bool enabled}) async {
     current = AppSettings(
       feedbackSoundsEnabled: current.feedbackSoundsEnabled,
+      reduceMotion: current.reduceMotion,
       themeVariant: current.themeVariant,
       developerUnlockAllLessons: enabled,
     );
@@ -160,6 +195,7 @@ class _MemorySettingsRepository implements SettingsRepository {
   Future<void> setThemeVariant(AppThemeVariant variant) async {
     current = AppSettings(
       feedbackSoundsEnabled: current.feedbackSoundsEnabled,
+      reduceMotion: current.reduceMotion,
       themeVariant: variant,
       developerUnlockAllLessons: current.developerUnlockAllLessons,
     );

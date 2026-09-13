@@ -7,11 +7,12 @@ class DriftSettingsRepository implements SettingsRepository {
   /// Creates a repository using the shared application database.
   const new(this.database);
 
-  /// Database schema version 2 introduced the extensible key/value table.
-  static const storageFormatVersion = 1;
+  /// Preference format 2 adds the reduced-motion setting.
+  static const storageFormatVersion = 2;
 
   static const _formatVersionKey = 'settings_format_version';
   static const _feedbackSoundsKey = 'feedback_sounds_enabled';
+  static const _reduceMotionKey = 'reduce_motion';
   static const _themeVariantKey = 'theme_variant';
   static const _developerUnlockKey = 'developer_unlock_all_lessons';
 
@@ -31,6 +32,10 @@ class DriftSettingsRepository implements SettingsRepository {
   @override
   Future<void> setFeedbackSoundsEnabled({required bool enabled}) =>
       _write(_feedbackSoundsKey, '$enabled');
+
+  @override
+  Future<void> setReduceMotion({required bool enabled}) =>
+      _write(_reduceMotionKey, '$enabled');
 
   @override
   Future<void> setThemeVariant(AppThemeVariant variant) =>
@@ -59,6 +64,11 @@ class DriftSettingsRepository implements SettingsRepository {
         'false' => false,
         'true' || null => true,
         _ => AppSettings.defaults.feedbackSoundsEnabled,
+      },
+      reduceMotion: switch (values[_reduceMotionKey]) {
+        'true' => true,
+        'false' || null => false,
+        _ => AppSettings.defaults.reduceMotion,
       },
       themeVariant: AppThemeVariant.fromStorage(values[_themeVariantKey]),
       developerUnlockAllLessons: switch (values[_developerUnlockKey]) {

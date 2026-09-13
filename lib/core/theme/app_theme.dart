@@ -36,7 +36,7 @@ abstract final class AppTheme {
     crown: Color(0xFFFBBF24),
     background: Color(0xFF12101E),
     surface: Color(0xFF1E1B33),
-    selectedSurface: Color(0xFF2E2A4D),
+    selectedSurface: Color(0xFF1B162D),
     charcoal: Color(0xFFF2EEFF),
     slate: Color(0xFFBCB4DC),
     border: Color(0xFF403A66),
@@ -129,14 +129,21 @@ abstract final class AppTheme {
         ).copyWith(
           primary: palette.primary,
           onPrimary: palette.onPrimary,
+          secondary: palette.accent,
+          tertiary: palette.crown,
           error: palette.error,
           surface: palette.surface,
           onSurface: palette.charcoal,
+          onSurfaceVariant: palette.slate,
+          surfaceContainerLow: palette.background,
+          surfaceContainer: palette.selectedSurface,
           outline: palette.border,
         );
     return ThemeData(
       colorScheme: scheme,
       scaffoldBackgroundColor: palette.background,
+      canvasColor: palette.background,
+      dividerColor: palette.border,
       useMaterial3: true,
       extensions: [palette],
       textTheme: TextTheme(
@@ -157,15 +164,27 @@ abstract final class AppTheme {
           fontSize: 22,
           fontWeight: FontWeight.w700,
         ),
+        titleMedium: TextStyle(
+          color: palette.charcoal,
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
+        ),
         bodyLarge: TextStyle(
           color: palette.charcoal,
           fontSize: 17,
           height: 1.4,
         ),
-        bodyMedium: TextStyle(color: palette.slate, fontSize: 15, height: 1.4),
+        bodyMedium: TextStyle(color: palette.slate, fontSize: 16, height: 1.4),
+        bodySmall: TextStyle(color: palette.slate, fontSize: 13, height: 1.35),
+        labelLarge: TextStyle(
+          color: palette.charcoal,
+          fontSize: 16,
+          fontWeight: FontWeight.w800,
+        ),
       ),
       cardTheme: CardThemeData(
         color: palette.surface,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -175,6 +194,11 @@ abstract final class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(54),
+          backgroundColor: palette.primary,
+          foregroundColor: palette.onPrimary,
+          disabledBackgroundColor: palette.selectedSurface,
+          disabledForegroundColor: palette.slate,
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -183,11 +207,83 @@ abstract final class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: palette.surface,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         height: 72,
-        labelTextStyle: const WidgetStatePropertyAll(
-          TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+        indicatorColor: palette.selectedSurface,
+        indicatorShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            color: selected ? palette.primary : palette.slate,
+            size: selected ? 27 : 25,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => TextStyle(
+            color: states.contains(WidgetState.selected)
+                ? palette.primary
+                : palette.slate,
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: palette.surface,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: palette.border, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: palette.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: palette.error, width: 1.5),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: palette.surface,
+        selectedColor: palette.selectedSurface,
+        side: BorderSide(color: palette.border, width: 1.5),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        labelStyle: TextStyle(
+          color: palette.charcoal,
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      listTileTheme: ListTileThemeData(
+        iconColor: palette.primary,
+        textColor: palette.charcoal,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: palette.primary,
+        linearTrackColor: palette.selectedSurface,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: palette.charcoal,
+        contentTextStyle: TextStyle(color: palette.background),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+        },
       ),
     );
   }

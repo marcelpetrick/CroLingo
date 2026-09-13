@@ -24,33 +24,67 @@ class CroLingoShell extends StatelessWidget {
             (candidate) => candidate != '/' && location.startsWith(candidate),
           );
     return Scaffold(
-      body: SafeArea(child: child),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: index < 0 ? 0 : index,
-        indicatorColor: context.palette.selectedSurface,
-        onDestinationSelected: (value) => context.go(_locations[value]),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: 'Start',
+      body: SafeArea(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                context.palette.selectedSurface.withValues(alpha: 0.55),
+                context.palette.background,
+              ],
+              stops: const [0, 0.38],
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.route_outlined),
-            selectedIcon: Icon(Icons.route_rounded),
-            label: 'Lernweg',
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: child,
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.refresh_outlined),
-            selectedIcon: Icon(Icons.refresh_rounded),
-            label: 'Üben',
+        ),
+      ),
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(
+          color: context.palette.surface,
+          border: Border(top: BorderSide(color: context.palette.border)),
+        ),
+        child: Center(
+          heightFactor: 1,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: SizedBox(
+              width: double.infinity,
+              child: NavigationBar(
+                selectedIndex: index < 0 ? 0 : index,
+                onDestinationSelected: (value) => context.go(_locations[value]),
+                destinations: const [
+                  NavigationDestination(
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home_rounded),
+                    label: 'Start',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.route_outlined),
+                    selectedIcon: Icon(Icons.route_rounded),
+                    label: 'Lernweg',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.refresh_outlined),
+                    selectedIcon: Icon(Icons.refresh_rounded),
+                    label: 'Üben',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.grid_view_outlined),
+                    selectedIcon: Icon(Icons.grid_view_rounded),
+                    label: 'Mehr',
+                  ),
+                ],
+              ),
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.grid_view_outlined),
-            selectedIcon: Icon(Icons.grid_view_rounded),
-            label: 'Mehr',
-          ),
-        ],
+        ),
       ),
     );
   }

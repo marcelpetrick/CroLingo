@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:crolingo/core/theme/app_theme.dart';
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/audio/feedback_audio_service.dart';
@@ -11,6 +11,7 @@ import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/lesson/widgets/answer_feedback.dart';
 import 'package:crolingo/features/lesson/widgets/exercise_answer.dart';
 import 'package:crolingo/features/lesson/widgets/language_direction_header.dart';
+import 'package:crolingo/features/lesson/widgets/lesson_celebration.dart';
 import 'package:crolingo/features/lesson/widgets/lesson_header.dart';
 import 'package:crolingo/features/lesson/widgets/matching_input.dart';
 import 'package:crolingo/features/lesson/widgets/sentence_input.dart';
@@ -89,25 +90,30 @@ class _LessonScreenState extends State<LessonScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
-      child: FutureBuilder<_LessonPayload>(
-        future: _lesson,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return _LoadFailure(onClose: () => context.pop());
-          }
-          final payload = snapshot.data;
-          if (payload == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return _LessonPlayer(
-            lesson: payload.lesson,
-            progress: payload.progress,
-            isReview: payload.isReview,
-            repository: widget.repository,
-            feedbackAudioService: widget.feedbackAudioService,
-            feedbackSoundsEnabled: widget.feedbackSoundsEnabled,
-          );
-        },
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: FutureBuilder<_LessonPayload>(
+            future: _lesson,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return _LoadFailure(onClose: () => context.pop());
+              }
+              final payload = snapshot.data;
+              if (payload == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return _LessonPlayer(
+                lesson: payload.lesson,
+                progress: payload.progress,
+                isReview: payload.isReview,
+                repository: widget.repository,
+                feedbackAudioService: widget.feedbackAudioService,
+                feedbackSoundsEnabled: widget.feedbackSoundsEnabled,
+              );
+            },
+          ),
+        ),
       ),
     ),
   );
@@ -222,10 +228,12 @@ class _LessonPlayerState extends State<_LessonPlayer> {
   Widget build(BuildContext context) {
     final state = _session.state;
     if (state.isComplete) {
-      return _Completion(
-        lesson: widget.lesson,
+      return LessonCelebration(
+        lessonTitle: widget.lesson.title,
         xp: state.xp,
-        isReview: widget.isReview,
+        review: widget.isReview,
+        actionLabel: widget.isReview ? 'Zur Wiederholung' : 'Zum Lernweg',
+        onContinue: () => context.go(widget.isReview ? '/review' : '/path'),
       );
     }
     final exercise = widget.lesson.exercises[state.index];
@@ -238,14 +246,29 @@ class _LessonPlayerState extends State<_LessonPlayer> {
           xp: state.xp,
         ),
         Expanded(
-          child: _ExerciseView(
-            key: ValueKey('${exercise.id}-${state.grade == null}'),
-            exercise: exercise,
-            grade: state.grade,
-            submittedAnswer: state.submittedAnswer,
-            onSubmit: _submit,
-            onRetry: () => _refresh(_session.retry),
-            onContinue: _continue,
+          child: AnimatedSwitcher(
+            duration: AppMotion.responsive(context, AppMotion.quick),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) => FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween(
+                  begin: const Offset(0.025, 0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            ),
+            child: _ExerciseView(
+              key: ValueKey('${exercise.id}-${state.grade == null}'),
+              exercise: exercise,
+              grade: state.grade,
+              submittedAnswer: state.submittedAnswer,
+              onSubmit: _submit,
+              onRetry: () => _refresh(_session.retry),
+              onContinue: _continue,
+            ),
           ),
         ),
       ],
@@ -391,43 +414,6 @@ class _ExerciseViewState extends State<_ExerciseView> {
       ],
     );
   }
-}
-
-class _Completion extends StatelessWidget {
-  const new({required this.lesson, required this.xp, required this.isReview});
-
-  final Lesson lesson;
-  final int xp;
-  final bool isReview;
-
-  @override
-  Widget build(BuildContext context) => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(28),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.workspace_premium_rounded,
-            size: 84,
-            color: context.palette.crown,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Lektion geschafft!',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          const SizedBox(height: 8),
-          Text('${lesson.title} · $xp XP'),
-          const SizedBox(height: 24),
-          FilledButton(
-            onPressed: () => context.go(isReview ? '/review' : '/path'),
-            child: Text(isReview ? 'Zur Wiederholung' : 'Zum Lernweg'),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 class _LoadFailure extends StatelessWidget {

@@ -1,4 +1,5 @@
 import 'package:crolingo/app/providers.dart';
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
@@ -44,6 +45,9 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
   }) {
     final children = <Widget>[];
     String? previousLessonId;
+    var motionIndex = 0;
+    Duration stagger() =>
+        Duration(milliseconds: (motionIndex++ * 42).clamp(0, 252));
     for (var unitIndex = 0; unitIndex < course.units.length; unitIndex++) {
       final unit = course.units[unitIndex];
       final unitCompleted = unit.lessons.every(
@@ -54,7 +58,13 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
         ..add(Text('Einheit ${unitIndex + 1} · ${unit.title}'))
         ..add(const SizedBox(height: 20))
         ..add(
-          _UnitBanner(completed: unitCompleted, description: unit.description),
+          MotionEntrance(
+            delay: stagger(),
+            child: _UnitBanner(
+              completed: unitCompleted,
+              description: unit.description,
+            ),
+          ),
         )
         ..add(const SizedBox(height: 28));
       for (
@@ -68,12 +78,15 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
             previousLessonId == null ||
             completed.contains(previousLessonId);
         children.add(
-          _LessonNode(
-            number: lessonIndex + 1,
-            title: lesson.title,
-            completed: completed.contains(lesson.id),
-            unlocked: unlocked,
-            onTap: () => _open(lesson.id),
+          MotionEntrance(
+            delay: stagger(),
+            child: _LessonNode(
+              number: lessonIndex + 1,
+              title: lesson.title,
+              completed: completed.contains(lesson.id),
+              unlocked: unlocked,
+              onTap: () => _open(lesson.id),
+            ),
           ),
         );
         previousLessonId = lesson.id;
@@ -112,9 +125,11 @@ class _LearningPathScreenState extends ConsumerState<LearningPathScreen> {
       return ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
         children: [
-          Text(
-            'Dein Lernweg',
-            style: Theme.of(context).textTheme.headlineLarge,
+          MotionEntrance(
+            child: Text(
+              'Dein Lernweg',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
           ),
           const SizedBox(height: 6),
           ..._sections(data.course, completed, unlockAll: unlockAll),
@@ -191,51 +206,66 @@ class _LessonNode extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: EdgeInsets.only(left: number.isEven ? 78 : 22, bottom: 22),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(18),
-      onTap: unlocked ? onTap : null,
-      child: Row(
-        children: [
-          Container(
-            width: 68,
-            height: 68,
-            decoration: BoxDecoration(
-              color: completed
-                  ? context.palette.success
-                  : unlocked
-                  ? context.palette.primary
-                  : context.palette.selectedSurface,
-              border: Border.all(
-                color: unlocked
-                    ? context.palette.primaryPressed
-                    : context.palette.border,
-                width: 2,
+  Widget build(BuildContext context) => Semantics(
+    button: unlocked,
+    enabled: unlocked,
+    onTap: unlocked ? onTap : null,
+    label:
+        'Lektion $number, $title, '
+        '${completed
+            ? 'abgeschlossen'
+            : unlocked
+            ? 'verfügbar'
+            : 'gesperrt'}',
+    child: ExcludeSemantics(
+      child: Padding(
+        padding: EdgeInsets.only(left: number.isEven ? 78 : 22, bottom: 22),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: unlocked ? onTap : null,
+          child: Row(
+            children: [
+              AnimatedContainer(
+                duration: AppMotion.responsive(context, AppMotion.quick),
+                width: 68,
+                height: 68,
+                decoration: BoxDecoration(
+                  color: completed
+                      ? context.palette.success
+                      : unlocked
+                      ? context.palette.primary
+                      : context.palette.selectedSurface,
+                  border: Border.all(
+                    color: unlocked
+                        ? context.palette.primaryPressed
+                        : context.palette.border,
+                    width: 2,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Icon(
+                  completed
+                      ? Icons.check_rounded
+                      : unlocked
+                      ? Icons.play_arrow_rounded
+                      : Icons.lock_outline_rounded,
+                  color: unlocked
+                      ? context.palette.onPrimary
+                      : context.palette.slate,
+                  size: 32,
+                ),
               ),
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Icon(
-              completed
-                  ? Icons.check_rounded
-                  : unlocked
-                  ? Icons.play_arrow_rounded
-                  : Icons.lock_outline_rounded,
-              color: unlocked
-                  ? context.palette.onPrimary
-                  : context.palette.slate,
-              size: 32,
-            ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  'Lektion $number · $title',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              'Lektion $number · $title',
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ),
-        ],
+        ),
       ),
     ),
   );

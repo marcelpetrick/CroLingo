@@ -38,7 +38,8 @@ Current status: loops 1 through 5 are complete, including durable SQLite
 attempts/checkpoints, sequential unlocking, and all text exercise families.
 Streak statistics, recent-mistake and recently-learned replay, deterministic
 FSRS due dates, and fine-grained concept mastery from loop 6 are implemented. Automated
-320-pixel/200%-text accessibility checks are active; extended
+320-pixel/200%-text accessibility checks and a persistent reduced-motion
+preference are active; extended
 assistive-technology review and physical-device checks remain. The complete
 local profile reports start date, XP, lessons, vocabulary, study days, and
 current/longest streaks.
@@ -78,6 +79,8 @@ everyday units.
   third-party assets, palettes, fonts, exact screens, terminology, rewards, or
   mascot treatment.
 - Implement Home, Path, Review, and More navigation. More contains Vocabulary, Grammar, Profile, and Settings.
+- Use short, non-blocking transitions for navigation, exercise feedback, XP,
+  and completion rewards; honor system and learner reduced-motion choices.
 
 ### 3. Content and persistence
 

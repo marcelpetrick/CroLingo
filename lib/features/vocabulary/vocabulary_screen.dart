@@ -1,4 +1,5 @@
 import 'package:crolingo/app/providers.dart';
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/domain/course/course.dart';
@@ -56,8 +57,10 @@ class _VocabularyScreenState extends ConsumerState<VocabularyScreen> {
             sliver: SliverList.separated(
               itemCount: snapshot.data!.length,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) =>
-                  _ConceptCard(mastery: snapshot.data![index]),
+              itemBuilder: (context, index) => MotionEntrance(
+                delay: Duration(milliseconds: (index * 32).clamp(0, 192)),
+                child: _ConceptCard(mastery: snapshot.data![index]),
+              ),
             ),
           ),
       ],

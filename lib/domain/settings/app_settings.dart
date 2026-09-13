@@ -5,6 +5,7 @@ class AppSettings {
   /// Creates an immutable settings snapshot.
   const new({
     required this.feedbackSoundsEnabled,
+    required this.reduceMotion,
     required this.themeVariant,
     required this.developerUnlockAllLessons,
   });
@@ -12,12 +13,16 @@ class AppSettings {
   /// Safe defaults used before a stored preference exists.
   static const defaults = AppSettings(
     feedbackSoundsEnabled: true,
+    reduceMotion: false,
     themeVariant: AppThemeVariant.adriatic,
     developerUnlockAllLessons: false,
   );
 
   /// Plays distinct tones after correct and incorrect answers.
   final bool feedbackSoundsEnabled;
+
+  /// Disables decorative transitions while preserving state feedback.
+  final bool reduceMotion;
 
   /// Selected application appearance.
   final AppThemeVariant themeVariant;
@@ -39,6 +44,9 @@ abstract interface class SettingsRepository {
 
   /// Persists the answer-feedback sound preference.
   Future<void> setFeedbackSoundsEnabled({required bool enabled});
+
+  /// Persists whether decorative movement is reduced.
+  Future<void> setReduceMotion({required bool enabled});
 
   /// Persists the selected appearance.
   Future<void> setThemeVariant(AppThemeVariant variant);

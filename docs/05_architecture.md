@@ -140,6 +140,7 @@ flowchart TB
 
   subgraph Core["lib/core — shared UI"]
     Theme["theme/app_theme, app_palette<br/>five appearances"]
+    Motion["motion/app_motion<br/>timing and reduced-motion primitives"]
     Widgets["widgets/crow_mark, speech_button"]
     Version["version/app_version<br/>reads the bundled pubspec"]
   end
@@ -174,7 +175,7 @@ parameter, which is what makes the domain testable without a device:
 | `courseProvider` | validated `Course` snapshot | `AssetCourseRepository` |
 | `databaseProvider` | Drift database lifecycle | `AppDatabase` |
 | `progressRepositoryProvider` | attempts, checkpoints, statistics | `DriftProgressRepository` |
-| `settingsRepositoryProvider` | durable preferences | `DriftSettingsRepository` |
+| `settingsRepositoryProvider` | appearance, sound, motion, and developer preferences | `DriftSettingsRepository` |
 | `appSettingsProvider` | reactive `AppSettings` stream | derived |
 | `feedbackAudioServiceProvider` | answer tones | `AssetFeedbackAudioService` |
 | `speechServiceProvider` | Croatian pronunciation | `PlatformSpeechService` |
@@ -387,8 +388,9 @@ separate, external checkpoint.
 - **Generated code is verified, not trusted.** `app_database.g.dart` is
   regenerated in the pipeline and the run fails if the committed file differs.
 - **Accessibility is structural.** Correctness is signalled by icon, label, and
-  shape as well as colour, and layouts are checked at 320 logical pixels and
-  200% text scaling by automated tests.
+  shape as well as colour, layouts are checked at 320 logical pixels and 200%
+  text scaling, and decorative motion resolves immediately when either the OS
+  or learner requests reduced motion.
 
 ## Known architectural debt
 

@@ -27,6 +27,11 @@ class SettingsScreen extends ConsumerWidget {
           AppSettings.defaults.developerUnlockAllLessons,
       loading: () => AppSettings.defaults.developerUnlockAllLessons,
     );
+    final reduceMotion = settings.when(
+      data: (data) => data.reduceMotion,
+      error: (error, stackTrace) => AppSettings.defaults.reduceMotion,
+      loading: () => AppSettings.defaults.reduceMotion,
+    );
     final variant = settings.when(
       data: (data) => data.themeVariant,
       error: (error, stackTrace) => AppSettings.defaults.themeVariant,
@@ -52,6 +57,11 @@ class SettingsScreen extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 16),
+        Text(
+          'Feedback & Bewegung',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 8),
         Card(
           child: SwitchListTile.adaptive(
             value: value,
@@ -68,6 +78,25 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: const Text(
               'Spielt einen hellen Ping bei richtigen Antworten und einen '
               'Fehlerton bei falschen Antworten.',
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: SwitchListTile.adaptive(
+            value: reduceMotion,
+            onChanged: settings.hasValue
+                ? (enabled) => ref
+                      .read(settingsRepositoryProvider)
+                      .setReduceMotion(enabled: enabled)
+                : null,
+            secondary: Icon(
+              Icons.motion_photos_off_outlined,
+              color: context.palette.primary,
+            ),
+            title: const Text('Bewegungen reduzieren'),
+            subtitle: const Text(
+              'Schaltet dekorative Übergänge und Feieranimationen aus.',
             ),
           ),
         ),

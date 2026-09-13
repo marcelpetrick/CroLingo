@@ -92,6 +92,20 @@ void main() {
     expect(settings.feedbackSoundsEnabled, isFalse);
   });
 
+  test('stores and restores the reduced-motion preference', () async {
+    final database = AppDatabase(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftSettingsRepository(database);
+
+    expect((await repository.load()).reduceMotion, isFalse);
+
+    await repository.setReduceMotion(enabled: true);
+    expect((await repository.load()).reduceMotion, isTrue);
+
+    await repository.setReduceMotion(enabled: false);
+    expect((await repository.load()).reduceMotion, isFalse);
+  });
+
   test('ignores an appearance this build does not know', () async {
     final database = AppDatabase(NativeDatabase.memory());
     addTearDown(database.close);

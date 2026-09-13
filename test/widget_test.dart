@@ -4,6 +4,7 @@ import 'package:crolingo/app/router.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
+import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:crolingo/features/home/home_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
@@ -39,6 +40,33 @@ void main() {
     expect(find.text('Begrüßen'), findsOneWidget);
     expect(find.text('Lektion starten'), findsOneWidget);
     expect(find.text('Keine Herzen'), findsNothing);
+  });
+
+  testWidgets('applies the learner reduced-motion preference', (tester) async {
+    appRouter.go('/');
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsProvider.overrideWith(
+            (ref) => Stream.value(
+              const AppSettings(
+                feedbackSoundsEnabled: true,
+                reduceMotion: true,
+                themeVariant: AppThemeVariant.adriatic,
+                developerUnlockAllLessons: false,
+              ),
+            ),
+          ),
+          courseProvider.overrideWith((ref) => _dashboardCourse),
+          progressRepositoryProvider.overrideWithValue(_FakeProgress()),
+        ],
+        child: const CroLingoApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final context = tester.element(find.byType(HomeScreen));
+    expect(MediaQuery.disableAnimationsOf(context), isTrue);
   });
 
   testWidgets('shows the running version on the dashboard', (tester) async {
@@ -174,6 +202,7 @@ void main() {
     await tester.tap(find.text('Mehr'));
     await tester.pumpAndSettle();
     expect(find.text('Wortschatz'), findsOneWidget);
+    expect(find.text('Bald'), findsOneWidget);
     expect(find.text('Offline · Keine Werbung · Keine Herzen'), findsOneWidget);
 
     await tester.tap(find.text('Wortschatz'));

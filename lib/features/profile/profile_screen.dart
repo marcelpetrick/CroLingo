@@ -1,4 +1,5 @@
 import 'package:crolingo/app/providers.dart';
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
@@ -64,43 +65,46 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             sliver: SliverList.separated(
               itemCount: 7,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) => [
-                _Stat(
-                  icon: Icons.bolt_rounded,
-                  value: '${snapshot.data!.stats.totalXp}',
-                  label: 'XP insgesamt',
-                ),
-                _Stat(
-                  icon: Icons.check_circle_outline_rounded,
-                  value: '${snapshot.data!.stats.completedLessons}',
-                  label: 'Lektionen',
-                ),
-                _Stat(
-                  icon: Icons.menu_book_rounded,
-                  value: '${snapshot.data!.learnedConcepts}',
-                  label: 'Wörter gelernt',
-                ),
-                _Stat(
-                  icon: Icons.calendar_today_outlined,
-                  value: '${snapshot.data!.stats.studyDays}',
-                  label: 'Lerntage',
-                ),
-                _Stat(
-                  icon: Icons.local_fire_department_outlined,
-                  value: '${snapshot.data!.stats.currentStreak}',
-                  label: 'Aktuelle Serie',
-                ),
-                _Stat(
-                  icon: Icons.emoji_events_outlined,
-                  value: '${snapshot.data!.stats.longestStreak}',
-                  label: 'Längste Serie',
-                ),
-                _Stat(
-                  icon: Icons.flag_outlined,
-                  value: _date(snapshot.data!.stats.startedOn),
-                  label: 'Gestartet',
-                ),
-              ][index],
+              itemBuilder: (context, index) => MotionEntrance(
+                delay: Duration(milliseconds: (index * 38).clamp(0, 190)),
+                child: [
+                  _Stat(
+                    icon: Icons.bolt_rounded,
+                    value: '${snapshot.data!.stats.totalXp}',
+                    label: 'XP insgesamt',
+                  ),
+                  _Stat(
+                    icon: Icons.check_circle_outline_rounded,
+                    value: '${snapshot.data!.stats.completedLessons}',
+                    label: 'Lektionen',
+                  ),
+                  _Stat(
+                    icon: Icons.menu_book_rounded,
+                    value: '${snapshot.data!.learnedConcepts}',
+                    label: 'Wörter gelernt',
+                  ),
+                  _Stat(
+                    icon: Icons.calendar_today_outlined,
+                    value: '${snapshot.data!.stats.studyDays}',
+                    label: 'Lerntage',
+                  ),
+                  _Stat(
+                    icon: Icons.local_fire_department_outlined,
+                    value: '${snapshot.data!.stats.currentStreak}',
+                    label: 'Aktuelle Serie',
+                  ),
+                  _Stat(
+                    icon: Icons.emoji_events_outlined,
+                    value: '${snapshot.data!.stats.longestStreak}',
+                    label: 'Längste Serie',
+                  ),
+                  _Stat(
+                    icon: Icons.flag_outlined,
+                    value: _date(snapshot.data!.stats.startedOn),
+                    label: 'Gestartet',
+                  ),
+                ][index],
+              ),
             ),
           ),
       ],

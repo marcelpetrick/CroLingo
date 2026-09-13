@@ -56,9 +56,9 @@ Session checkpoint on 2026-08-09:
    keyboard traversal, contrast, reduced motion, 200% text, interruption
    recovery, upgrades, and airplane-mode operation on Linux and both reference
    phones. `integration_test/` is the harness for the automatable part; run it
-   with `scripts/run_integration_tests.sh <serial>` on each phone. Contrast is
-   already asserted per appearance by an automated test. The rest still needs a
-   person and must not be inferred from a green pipeline.
+   with `scripts/run_integration_tests.sh <serial>` on each phone. Contrast and
+   reduced-motion behavior are asserted by automated tests. The rest still
+   needs a person and must not be inferred from a green pipeline.
 9. **Add stable signed delivery.** Complete. The external Android key is backed
    up outside Git and installed as protected CI secrets. Releases verify the
    committed public certificate fingerprint before publication, enabling

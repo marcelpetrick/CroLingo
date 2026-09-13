@@ -56,6 +56,12 @@ void main() {
           textFloor,
         );
         check(
+          'secondary on surface',
+          palette.slate,
+          palette.surface,
+          textFloor,
+        );
+        check(
           'body on selected surface',
           palette.charcoal,
           palette.selectedSurface,
@@ -79,6 +85,30 @@ void main() {
           palette.error,
           palette.errorSurface,
           iconFloor,
+        );
+        check(
+          'primary icon on selected surface',
+          palette.primary,
+          palette.selectedSurface,
+          iconFloor,
+        );
+        check(
+          'accent icon on surface',
+          palette.accent,
+          palette.surface,
+          iconFloor,
+        );
+        check(
+          'text on correct feedback',
+          palette.charcoal,
+          palette.successSurface,
+          textFloor,
+        );
+        check(
+          'text on incorrect feedback',
+          palette.charcoal,
+          palette.errorSurface,
+          textFloor,
         );
         check(
           'mascot eye on mascot body',

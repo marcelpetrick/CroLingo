@@ -253,7 +253,7 @@ void main() {
     await _pressButton(tester, 'Weiter');
     await tester.pumpAndSettle();
 
-    expect(find.text('Lektion geschafft!'), findsOneWidget);
+    expect(find.text('Stark wiederholt!'), findsOneWidget);
     expect(find.text('Zur Wiederholung'), findsOneWidget);
     expect(progress.attempts, 1);
     expect(progress.progress, isEmpty);

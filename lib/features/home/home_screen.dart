@@ -1,4 +1,5 @@
 import 'package:crolingo/app/providers.dart';
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
 import 'package:crolingo/domain/course/course.dart';
@@ -57,17 +58,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
       children: [
-        const _Header(),
+        const MotionEntrance(child: _Header()),
         const SizedBox(height: 24),
-        Text(
-          'Bok! Bereit für Kroatisch?',
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Kleine Schritte, klare Antworten und so viele Versuche, '
-          'wie du brauchst.',
-          style: Theme.of(context).textTheme.bodyLarge,
+        MotionEntrance(
+          delay: const Duration(milliseconds: 45),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Bok! Bereit für Kroatisch?',
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Kleine Schritte, klare Antworten und so viele Versuche, '
+                'wie du brauchst.',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 24),
         FutureBuilder<_HomeData>(
@@ -92,14 +101,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               );
             }
-            return _ContinuationCard(
-              data: data,
-              onOpen: () => _open(data.position),
+            return MotionEntrance(
+              delay: const Duration(milliseconds: 90),
+              child: _ContinuationCard(
+                data: data,
+                onOpen: () => _open(data.position),
+              ),
             );
           },
         ),
         const SizedBox(height: 16),
-        const _Stats(),
+        const MotionEntrance(
+          delay: Duration(milliseconds: 135),
+          child: _Stats(),
+        ),
       ],
     );
   }
@@ -123,21 +138,34 @@ class _ContinuationCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  complete
-                      ? Icons.workspace_premium_rounded
-                      : Icons.flag_rounded,
-                  color: complete
-                      ? context.palette.crown
-                      : context.palette.accent,
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: context.palette.selectedSurface,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    complete
+                        ? Icons.workspace_premium_rounded
+                        : Icons.flag_rounded,
+                    color: complete
+                        ? context.palette.crown
+                        : context.palette.accent,
+                  ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     complete
                         ? 'Kurs abgeschlossen'
                         : 'Einheit ${position.unitNumber} · '
                               '${position.unit.title}',
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: context.palette.slate,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],

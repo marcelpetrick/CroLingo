@@ -1,3 +1,4 @@
+import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,16 +27,47 @@ class LessonHeader extends StatelessWidget {
         Expanded(
           child: Semantics(
             label: '${(progress * 100).round()} Prozent abgeschlossen',
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 12,
-              borderRadius: BorderRadius.circular(12),
+            child: ExcludeSemantics(
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: progress),
+                duration: AppMotion.responsive(context, AppMotion.standard),
+                curve: Curves.easeOutCubic,
+                builder: (context, value, child) => LinearProgressIndicator(
+                  value: value,
+                  minHeight: 12,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
           ),
         ),
         const SizedBox(width: 12),
-        Icon(Icons.bolt_rounded, color: context.palette.crown),
-        Text('$xp XP', style: const TextStyle(fontWeight: FontWeight.w800)),
+        Semantics(
+          label: '$xp Erfahrungspunkte',
+          child: ExcludeSemantics(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                color: context.palette.selectedSurface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.bolt_rounded, color: context.palette.crown),
+                  TweenAnimationBuilder<int>(
+                    tween: IntTween(begin: 0, end: xp),
+                    duration: AppMotion.responsive(context, AppMotion.standard),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, value, child) => Text(
+                      '$value XP',
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     ),
   );

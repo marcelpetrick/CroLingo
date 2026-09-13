@@ -186,6 +186,7 @@ void main() {
             (ref) => Stream.value(
               const AppSettings(
                 feedbackSoundsEnabled: true,
+                reduceMotion: false,
                 themeVariant: AppThemeVariant.adriatic,
                 developerUnlockAllLessons: true,
               ),

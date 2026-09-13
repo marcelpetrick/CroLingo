@@ -63,6 +63,9 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
   learning-UX principles. Keep original colors, type, crow, path, components,
   wording, rewards, sounds, and illustrations.
 - **Dark mode?** Superseded. The learner picks one of five appearances in settings: Adria-Blau (default), Neon-Violett, Mitternacht, Minze, and Hoher Kontrast. Colours live in an `AppPalette` theme extension, never as literals in a widget, and every reader-facing pair is asserted against WCAG contrast floors by a test. The high-contrast appearance is held to AAA because it exists for low vision.
+- **Reduced motion?** Short decorative transitions are enabled by default. The
+  app honors the operating system preference and provides a persistent learner
+  switch that resolves every animation directly to its final state.
 - **Orientation?** Portrait-first on Android; Linux fixed portrait. Landscape is not an MVP acceptance requirement.
 
 ## Security and delivery
