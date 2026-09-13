@@ -183,7 +183,17 @@ class _LessonPlayerState extends State<_LessonPlayer> {
   }
 
   void _enqueue(Future<void> Function() operation) {
-    _pendingWrite = _pendingWrite.then((_) => operation());
+    _pendingWrite = _pendingWrite.then((_) => operation()).catchError((
+      Object error,
+      StackTrace stackTrace,
+    ) {
+      if (!mounted) return;
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        const SnackBar(
+          content: Text('Dein Fortschritt konnte nicht gespeichert werden.'),
+        ),
+      );
+    });
     unawaited(_pendingWrite);
   }
 

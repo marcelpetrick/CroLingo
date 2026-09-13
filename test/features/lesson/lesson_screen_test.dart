@@ -258,6 +258,34 @@ void main() {
     expect(progress.attempts, 1);
     expect(progress.progress, isEmpty);
   });
+
+  testWidgets('recovers the progress queue after a failed write', (
+    tester,
+  ) async {
+    final progress = _FailingOnceProgress();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LessonScreen(
+          lessonId: 'reverse',
+          lesson: Future<Lesson>.value(_reverseLesson),
+          repository: progress,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byKey(const Key('answerField')), 'Hallo!');
+    await tester.pump();
+    await _pressButton(tester, 'Prüfen');
+
+    expect(
+      find.text('Dein Fortschritt konnte nicht gespeichert werden.'),
+      findsOneWidget,
+    );
+
+    await _pressButton(tester, 'Weiter');
+    expect(progress.progress.single.completedAt, isNotNull);
+  });
 }
 
 const _completeLesson = Lesson(
@@ -399,6 +427,33 @@ class _RecordingProgress implements ProgressRepository {
     progress
       ..removeWhere((item) => item.lessonId == value.lessonId)
       ..add(value);
+  }
+}
+
+class _FailingOnceProgress extends _RecordingProgress {
+  var _shouldFail = true;
+
+  @override
+  Future<void> recordAttempt({
+    required String lessonId,
+    required String exerciseId,
+    required String submittedAnswer,
+    required bool correct,
+    required int incorrectBefore,
+    required DateTime occurredAt,
+  }) async {
+    if (_shouldFail) {
+      _shouldFail = false;
+      throw StateError('simulated write failure');
+    }
+    await super.recordAttempt(
+      lessonId: lessonId,
+      exerciseId: exerciseId,
+      submittedAnswer: submittedAnswer,
+      correct: correct,
+      incorrectBefore: incorrectBefore,
+      occurredAt: occurredAt,
+    );
   }
 }
 
