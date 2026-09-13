@@ -20,6 +20,18 @@ const _sentence = Exercise(
   tiles: ['Dobar', 'dan!'],
 );
 
+const _sentenceWithDuplicates = Exercise(
+  id: 'sentence-duplicates',
+  type: ExerciseType.sentence,
+  masteryDimension: MasteryDimension.sentenceProduction,
+  prompt: 'Baue: Sie nennt sich.',
+  acceptedAnswers: ['se zove se'],
+  explanation: 'Both reflexive pronouns are required.',
+  conceptIds: ['reflexive-pronoun'],
+  pairs: [],
+  tiles: ['se', 'zove', 'se'],
+);
+
 void main() {
   testWidgets('takes a tile back out of the sentence', (tester) async {
     final reported = <ExerciseAnswer>[];
@@ -47,6 +59,38 @@ void main() {
     await tester.pump();
 
     expect(reported.last.value, 'dan!');
+  });
+
+  testWidgets('keeps duplicate sentence tiles independently selectable', (
+    tester,
+  ) async {
+    final reported = <ExerciseAnswer>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SentenceInput(
+            exercise: _sentenceWithDuplicates,
+            enabled: true,
+            onChanged: reported.add,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('availableTile-0')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('availableTile-2')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('availableTile-1')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('availableTile-2')));
+    await tester.pump();
+    expect(reported.last.value, 'se zove se');
+
+    await tester.tap(find.byKey(const ValueKey('selectedTile-0')));
+    await tester.pump();
+    expect(reported.last.value, 'zove se');
+    expect(find.byKey(const ValueKey('availableTile-0')), findsOneWidget);
   });
 
   testWidgets('closes the lesson from the header', (tester) async {

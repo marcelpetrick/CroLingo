@@ -27,22 +27,24 @@ class SentenceInput extends StatefulWidget {
 }
 
 class _SentenceInputState extends State<SentenceInput> {
-  final _selectedTiles = <String>[];
+  final _selectedTileIndices = <int>[];
 
   void _update(void Function() action) {
     setState(action);
     widget.onChanged(
       ExerciseAnswer(
-        value: _selectedTiles.join(' '),
-        canSubmit: _selectedTiles.isNotEmpty,
+        value: _selectedTileIndices
+            .map((index) => widget.exercise.tiles[index])
+            .join(' '),
+        canSubmit: _selectedTileIndices.isNotEmpty,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final remaining = widget.exercise.tiles.where(
-      (tile) => !_selectedTiles.contains(tile),
+    final remaining = widget.exercise.tiles.indexed.where(
+      (entry) => !_selectedTileIndices.contains(entry.$1),
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,11 +60,12 @@ class _SentenceInputState extends State<SentenceInput> {
           child: Wrap(
             spacing: 8,
             children: [
-              for (final tile in _selectedTiles)
+              for (final index in _selectedTileIndices)
                 ActionChip(
-                  label: Text(tile),
+                  key: ValueKey('selectedTile-$index'),
+                  label: Text(widget.exercise.tiles[index]),
                   onPressed: widget.enabled
-                      ? () => _update(() => _selectedTiles.remove(tile))
+                      ? () => _update(() => _selectedTileIndices.remove(index))
                       : null,
                 ),
             ],
@@ -72,11 +75,12 @@ class _SentenceInputState extends State<SentenceInput> {
         Wrap(
           spacing: 8,
           children: [
-            for (final tile in remaining)
+            for (final entry in remaining)
               ActionChip(
-                label: Text(tile),
+                key: ValueKey('availableTile-${entry.$1}'),
+                label: Text(entry.$2),
                 onPressed: widget.enabled
-                    ? () => _update(() => _selectedTiles.add(tile))
+                    ? () => _update(() => _selectedTileIndices.add(entry.$1))
                     : null,
               ),
           ],
