@@ -29,7 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   audioplayers: 6.8.1
-  cupertino_icons: 1.0.9
+  cupertino_icons: 2.0.0
   drift: 2.35.0
   drift_flutter: 0.3.1
   flutter:
