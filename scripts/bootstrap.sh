@@ -140,7 +140,7 @@ install_quality_tools() {
   install_raw_binary \
     osv-scanner \
     'https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_amd64' \
-    '160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a4b3cdd5e80c96cc2e4218b'
+    '160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b'
   install_tar_binary \
     zizmor \
     'https://github.com/zizmorcore/zizmor/releases/download/v1.32.0/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
