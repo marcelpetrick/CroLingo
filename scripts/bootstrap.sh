@@ -139,24 +139,24 @@ install_quality_tools() {
     '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb'
   install_raw_binary \
     osv-scanner \
-    'https://github.com/google/osv-scanner/releases/download/v2.5.1/osv-scanner_linux_amd64' \
-    'f9f25499a2c8cc367b3af45df2ea7eeca7fbccceab9c35079968f4b3652194be'
+    'https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_amd64' \
+    '160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a4b3cdd5e80c96cc2e4218b'
   install_tar_binary \
     zizmor \
-    'https://github.com/zizmorcore/zizmor/releases/download/v1.30.1/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
-    'e65324f4430c2717591937edcec90ccbefaf14c174f8ec9415e03ca875b46e1a'
+    'https://github.com/zizmorcore/zizmor/releases/download/v1.32.0/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
+    'bb110cc765eca9cd7efb2e284a956be5974c60027b0970f16397d86208a9957b'
   install_tar_binary \
     shellcheck \
     'https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz' \
     '8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198'
   install_tar_binary \
     syft \
-    'https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_amd64.tar.gz' \
-    '8fcb33017a0dc1058298c923c436d19dfa68ae93968e0b423248542e3afb9fc3'
+    'https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_linux_amd64.tar.gz' \
+    '1c2493cfcf52d3367d6cb25780d9190c111c2219c34c820574c43e8bae15c528'
   install_tar_binary \
     trivy \
-    'https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz' \
-    '2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a'
+    'https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz' \
+    'c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0'
   install_raw_binary \
     cyclonedx \
     'https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.33.1/cyclonedx-linux-x64' \
@@ -171,7 +171,7 @@ install_quality_tools() {
     --no-audit \
     --no-fund \
     --save-exact \
-    markdownlint-cli2@0.23.2
+    markdownlint-cli2@0.24.0
 }
 
 install_spdx_validator() {

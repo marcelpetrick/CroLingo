@@ -6,7 +6,7 @@ initscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin:3.3.0'
+        classpath 'org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin:3.5.1'
     }
 }
 
@@ -21,7 +21,7 @@ gradle.afterProject { project ->
         project.tasks.named('cyclonedxDirectBom').configure {
             includeConfigs = ['releaseRuntimeClasspath']
             projectType = 'application'
-            // Plugin 3.3.0 defaults to its newest supported schema, 1.6. The
+            // Plugin 3.5.1 defaults to its newest supported schema, 1.6. The
             // merged public document is normalized to 1.7 by CycloneDX CLI.
             includeBomSerialNumber = false
             includeLicenseText = false

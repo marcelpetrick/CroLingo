@@ -11,9 +11,9 @@ is published.
   and Android release classpath.
 - Pub and Maven components contain Package URLs (PURLs) for unambiguous
   ecosystem and version matching.
-- Trivy 0.74.0 scans both SBOM formats and blocks known High or Critical
+- Trivy 0.76.1 scans both SBOM formats and blocks known High or Critical
   findings.
-- OSV-Scanner 2.5.1 independently scans both inventories and blocks every
+- OSV-Scanner 2.7.0 independently scans both inventories and blocks every
   matched advisory, including advisories without reliable severity metadata.
 - CycloneDX and SPDX package inventories and normalized results must agree.
 - Missing reports, malformed input, database errors, scanner errors, or

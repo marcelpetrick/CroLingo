@@ -11,13 +11,13 @@ points described below.
 
 ## Decisions and rationale
 
-- Pin [Syft 1.51.0](https://github.com/anchore/syft/releases/tag/v1.51.0)
+- Pin [Syft 1.56.0](https://github.com/anchore/syft/releases/tag/v1.51.0)
   by release checksum. Syft has maintained catalogers for Dart
   `pubspec.lock` files and can emit a resolved inventory without a hand-written
   package list. It also converts the final merged inventory to SPDX while
   retaining its packages and relationships.
 - Pin the official [CycloneDX Gradle Plugin
-  3.3.0](https://plugins.gradle.org/plugin/org.cyclonedx.bom/3.3.0). It resolves
+  3.5.1](https://plugins.gradle.org/plugin/org.cyclonedx.bom/3.5.1). It resolves
   the Android Gradle configurations, including transitive Maven artifacts that
   a source-directory scan cannot reliably infer. It will be applied through a
   repository-owned Gradle initialization script so SBOM infrastructure does

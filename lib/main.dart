@@ -11,18 +11,19 @@ import 'package:window_manager/window_manager.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isLinux) {
-    await windowManager.ensureInitialized();
-    const options = WindowOptions(
-      size: Size(412, 915),
-      minimumSize: Size(412, 915),
-      maximumSize: Size(412, 915),
-      center: true,
-      title: 'CroLingo',
-    );
-    await windowManager.waitUntilReadyToShow(options, () async {
-      await windowManager.show();
-      await windowManager.focus();
-    });
+    final window = WindowManager.instance.getCurrent();
+    if (window == null) {
+      throw StateError('The Linux application window is unavailable.');
+    }
+    final size = const Size(412, 915).toNative();
+    window
+      ..setSize(size, false)
+      ..minimumSize = size
+      ..maximumSize = size
+      ..title = 'CroLingo'
+      ..center()
+      ..show()
+      ..focus();
   }
   runApp(const ProviderScope(child: CroLingoApp()));
 }

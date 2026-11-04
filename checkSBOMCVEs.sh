@@ -104,8 +104,8 @@ for tool in osv-scanner trivy; do
     exit 1
   fi
 done
-if ! osv-scanner --version | grep -Fqx 'osv-scanner version: 2.5.1'; then
-  printf '%s\n' 'Expected the repository-pinned OSV-Scanner 2.5.1.' >&2
+if ! osv-scanner --version | grep -Fqx 'osv-scanner version: 2.7.0'; then
+  printf '%s\n' 'Expected the repository-pinned OSV-Scanner 2.7.0.' >&2
   exit 1
 fi
 
@@ -339,7 +339,7 @@ scan_sbom() {
       '.SchemaVersion == 2
        and .ArtifactType == $artifact_type
        and (.Results | type == "array")
-       and .Trivy.Version == "0.74.0"' "${json_report}" >/dev/null; then
+       and .Trivy.Version == "0.76.1"' "${json_report}" >/dev/null; then
     printf 'Trivy could not produce valid %s reports.\n' "${label}" >&2
     FAILURES=$((FAILURES + 1))
     return

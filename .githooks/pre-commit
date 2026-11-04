@@ -2,4 +2,7 @@
 set -Eeuo pipefail
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
+# Git exports repository-specific variables to hooks. They must not leak into
+# Flutter SDK git calls, which otherwise read this repository instead.
+while IFS= read -r name; do unset "${name}"; done < <(git rev-parse --local-env-vars)
 exec "${ROOT_DIR}/localPipeline.sh" --noRun
