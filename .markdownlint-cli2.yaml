@@ -9,8 +9,3 @@ ignores:
   - ".tooling/**"
   - "build/**"
   - "linux/flutter/ephemeral/**"
-  - "docs/00_product_spec.md"
-  # Social-media drafts, not project documentation. A LinkedIn post needs the
-  # bare URLs and bare hashtag lines these rules forbid, so linting one can
-  # only ever be answered by breaking the post.
-  - "4x_crolingo.md"

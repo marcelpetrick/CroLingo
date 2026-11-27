@@ -54,7 +54,8 @@ Matching uses `recognition`, gaps use `grammarApplication`, and sentence tasks
 use `sentenceProduction`. Save real Croatian characters such as `č`, `ć`, `đ`,
 `š`, and `ž` directly in UTF-8; do not replace them with ASCII approximations.
 
-Grading ignores case, surrounding whitespace and punctuation, so `Bok!` and
+Grading ignores case and selected punctuation, collapses repeated spaces,
+and trims surrounding whitespace. For example, `Bok!` and
 `bok` are the same answer and authoring both is an error the validator
 reports. It does not ignore letters: `č` is not `c`, `dán` is not `dan`, and a
 hyphen stays significant. Everything else a learner may legitimately write
@@ -81,8 +82,9 @@ dart run tool/validate_content.dart
 ```
 
 The validator rejects duplicate IDs, missing references, incompatible mastery
-dimensions, too few matching items or sentence tiles, too few concept
-exposures, and a missing translation direction. Automated validation cannot
+dimensions, ambiguous matching labels, too few pairs or sentence tiles,
+insufficient concept exposures, and missing translation directions. Sentence
+tasks can repeat tiles when the accepted answer uses them more than once. Automated validation cannot
 judge naturalness or pronunciation; a Croatian/German speaker must approve
 release content.
 
@@ -95,9 +97,8 @@ semantic validation, supports Unicode directly, and is substantially less
 verbose than XML. Do not embed exercises as Dart constants or introduce a
 second XML representation.
 
-As the curriculum grows, authors may work in a separate private content
-repository or a purpose-built editor. That authoring source exports one
-deterministic, schema-versioned JSON content pack. Content CI validates IDs,
+The proposed [Content Studio](editor.md) is a separate application package
+in the monorepo. It will export a deterministic, schema-versioned JSON pack. Content CI validates IDs,
 language rules, media references, and hashes before an approved pack is copied
 into this repository and bundled with a normal app release.
 

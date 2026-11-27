@@ -121,10 +121,10 @@ jobs:
           `arm64-v8a.apk`. Android may ask you to allow installation
           from the browser or file manager used to open it.
 
-          APK releases use CroLingo's stable external signing identity. Starting
-          with this release, later APKs can upgrade in place and retain local
-          learning progress. Builds older than this signing transition must be
-          uninstalled once before installing this release.
+          Official APKs from v0.0.56 onward share CroLingo's stable signing key.
+          Upgrade in place from a stable-signed APK to keep local progress.
+          An APK with a different key may require a fresh install.
+          Uninstalling removes local learning progress.
 
           Verify downloads with `SHA256SUMS.txt` when possible.
           CycloneDX 1.7 and SPDX 2.3 JSON SBOMs are attached for automated

@@ -1,4 +1,12 @@
-2/x: CroLingo
+# CroLingo LinkedIn drafts
+
+These drafts record earlier development milestones. The links point to the
+releases discussed at the time. For current figures, see the
+[pipeline facts](docs/pipeline_support.md).
+
+<!-- markdownlint-disable MD018 MD034 -->
+
+## 2/x: CroLingo
 
 As written, I had started to gather all ideas and document what we want. Of course, there exist magic tools which transform unstructured input into well defined requirements and which help you to make them conflict free, unambiguous, atomic, feasible and verifiable. Yada yada, you know the drill.
 Then the development started, we have a first MVP (minimum viable product) now, as Android release package and Linux Desktop build. The first content is added, so the first user feedback could be gathered today. I have to admit, offering an app with well known competitors yields a lot "oh, but here it should behave like this" .. anyway, input from the target audience is really dear to me. So we have now plenty more things to implement and some to adjust. But we did not experience a single crash or logic deadlock.
@@ -8,10 +16,7 @@ I've added on-device screenshots from one of the recent builds. If you want the 
 
 I'll keep you updated what comes next. 🇭🇷 ❤️ 🇩🇪
 
-
-
-
-2/x: 𝐂𝐫𝐨𝐋𝐢𝐧𝐠𝐨
+## 2/x: 𝐂𝐫𝐨𝐋𝐢𝐧𝐠𝐨
 
 As written, I had started to gather all ideas and document what we want. Of course, there exist magic tools which transform unstructured input into well-defined #requirements and which help you to make them conflict-free, unambiguous, atomic, feasible and verifiable. Yada yada, you know the drill.
 
@@ -23,10 +28,9 @@ I've added on-device screenshots from one of the recent builds. If you want the 
 
 I'll keep you updated on what comes next. 🇭🇷 ❤️ 🇩🇪
 
------------
+---
 
-
-3/x: 𝐂𝐫𝐨𝐋𝐢𝐧𝐠𝐨: pipelines
+## 3/x: 𝐂𝐫𝐨𝐋𝐢𝐧𝐠𝐨: pipelines
 
 In a feature-driven world, support-software rarely gets the stage it deserves. Ask a stakeholder what a pipeline is and get 🙃 ..  which is sad. Because how else do you want to verify it you built it correctly?
 
@@ -43,12 +47,12 @@ I'll keep you updated on what comes next. 🇭🇷 ❤️ 🇩🇪
 
 #continuousIntegration #continuousDeployment #pipelines #automation
 
-----------
+---
 
-3/x: 𝐂𝐫𝐨𝐋𝐢𝐧𝐠𝐨: SBOMs and CVEs
+## 4/x: CroLingo SBOMs and CVEs
 
-application saftey and security the the word of the year. The cyber resiluience act as framework for risk reduction is in place. so having a fetted proper SDLC and good infrastrcuutre, like the pipeline-tooling, I showcased yesterday, helps. Aprt from the proper mindeset for everyone involved.
+Application security starts with how we build and maintain software. CroLingo’s pipeline generates a software bill of materials from resolved dependencies and checks the inventory against vulnerability databases before release.
 
-so the pipelines can create us some sBIOM, which can bthen be used to check against databases with known exploitable software-issues (also caled CVEs).
+The [SBOM and CVE draft](docs/linkedin_cve_review.md) describes the checks, the dated scan results, and the Cyber Resilience Act timeline.
 
-people like alex sänn could definitley tell more about this. but i wanted to show this seprare from the pipeline topic, because most people zone out after too depp technical details.
+<!-- markdownlint-enable MD018 MD034 -->

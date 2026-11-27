@@ -1,11 +1,15 @@
 # CroLingo
 
 [![Quality](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/quality.yml)
-[![Release](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml)
+[![Release workflow](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml/badge.svg)](https://github.com/marcelpetrick/CroLingo/actions/workflows/release.yml)
+[![Latest release](https://img.shields.io/github/v/release/marcelpetrick/CroLingo?label=latest%20release)](https://github.com/marcelpetrick/CroLingo/releases/latest)
 ![Coverage gate](https://img.shields.io/badge/coverage-%E2%89%A598%25-brightgreen)
-![Flutter](https://img.shields.io/badge/Flutter-3.47.1-02569B?logo=flutter)
+![Flutter](https://img.shields.io/badge/Flutter-3.50.1-02569B?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.14.0-0175C2?logo=dart)
+![Android minimum API 24](https://img.shields.io/badge/Android-min%20API%2024-3DDC84?logo=android)
 ![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20Linux-1769D2)
-[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+[![SBOM formats](https://img.shields.io/badge/SBOM-CycloneDX%20%7C%20SPDX-5067C5)](docs/06_sbom_plan.md)
+[![License: GPLv3 or later](https://img.shields.io/badge/license-GPLv3%20or%20later-blue.svg)](LICENSE)
 
 CroLingo is a friendly, offline-first app for German-speaking beginners who
 want to learn Croatian. It combines a short Adriatic-themed learning path with
@@ -20,9 +24,9 @@ The app is built once with Flutter and runs on:
 - current ARM64 phones such as Xiaomi/Poco devices;
 - Linux x64 in a fixed 412×915 phone-shaped desktop window.
 
-The first text-learning milestone is complete. The next phase expands the
-course and adds device-provided Croatian playback. Native-speaker recordings,
-learner recording, and pronunciation comparison remain later work.
+The app includes two text-learning units and optional Croatian playback
+through the device’s speech service. Course expansion, native-speaker
+recordings, learner recording, and pronunciation comparison are planned.
 
 ## Current state
 
@@ -46,7 +50,7 @@ material and are not bundled into the app.
 
 **License: GPLv3 or later. See `LICENSE`.**
 
-**Note: project is generated with AI.**
+**Note: this project was developed with AI assistance.**
 
 ## What works today
 
@@ -66,7 +70,7 @@ material and are not bundled into the app.
 - private on-device statistics for XP, lessons, learned words, study days,
   streaks, and the first learning date;
 - reproducible Android APK/AAB and native Linux builds;
-- strict analysis, linting, tests, coverage, security scans, and CI.
+- strict analysis, linting, tests, coverage, security scans, and CI;
 - automated narrow-phone and 200% text-scaling layout checks.
 
 FSRS-based due-date scheduling drives recommended reviews with 90% desired
@@ -78,9 +82,9 @@ external checkpoints live in [the development roadmap](docs/02_roadmap.md).
 ## Bootstrap a fresh clone
 
 Linux development requires Git, `curl`, `unzip`, `xz`, CMake, Ninja, Clang,
-GTK 3 and GStreamer development headers, Java 21, Node.js with npm, and an
-Android SDK. Croatian
-speech on Linux additionally uses `espeak-ng` or Speech Dispatcher. On Manjaro
+GTK 3 and GStreamer development headers, Java 21, Node.js 22 or newer with npm,
+Python 3.11 or newer with venv support, `jq`, and an Android SDK. Croatian
+speech on Linux uses `espeak-ng` or Speech Dispatcher. On Manjaro
 install the media dependencies with
 `sudo pacman -S espeak-ng gstreamer gst-plugins-base`; on Ubuntu use
 `sudo apt-get install espeak-ng libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev`.
@@ -92,21 +96,23 @@ For a complete Manjaro/Arch workstation setup, run:
 
 ```bash
 sudo pacman -Syu
-sudo pacman -S --needed base-devel git curl unzip xz cmake ninja clang pkgconf gtk3 gstreamer gst-plugins-base jdk21-openjdk android-tools android-udev nodejs npm espeak-ng
+sudo pacman -S --needed base-devel git curl unzip xz cmake ninja clang pkgconf gtk3 gstreamer gst-plugins-base jdk21-openjdk android-tools android-udev nodejs npm espeak-ng python jq
 sudo archlinux-java set java-21-openjdk
 ```
 
-The Android SDK command-line tools must exist below `ANDROID_HOME`. This
-workstation already uses `$HOME/Android/Sdk`; a fresh machine can install them
-with Android Studio or Google's command-line tools before continuing.
+Install the Android SDK command-line tools with Android Studio or Google’s
+command-line tools. Point `ANDROID_HOME` at the SDK root if it is outside
+`$HOME/Android/Sdk`. Bootstrap expects `cmdline-tools/latest/bin/sdkmanager`
+under that root.
 
 ```bash
 ./scripts/bootstrap.sh
 ```
 
 The script is safe to rerun. It verifies downloads by checksum, reuses a
-compatible Android SDK, installs missing pinned SDK components, fetches locked
-Dart packages, and activates the tracked Git hooks. Nothing is installed into
+compatible Android SDK, installs the required SDK components, resolves Dart
+packages, and activates the tracked Git hooks. The pipeline enforces the
+committed lockfile. Nothing is installed into
 the repository's tracked source tree.
 
 Check the resulting environment with:
@@ -201,23 +207,20 @@ xdg-open build/security/cve/dashboard.html
 
 The same dashboard is included in the pipeline-report artifact on GitHub.
 
-Every commit must be conventional and atomic, bump the single version in
-`pubspec.yaml`, and leave both platforms buildable. The project does not use
-Git tags for versioning.
+Every commit must be conventional and atomic, bump the version in
+`pubspec.yaml`, and leave both platforms buildable. The Release workflow
+creates Git tags from that version when it publishes.
 
-## Watch the upstream blocker
+## Dependency maintenance
 
-A real Riverpod lint gate and the `sqlite3` 3.x migration both wait on Flutter
-relaxing the `test_api` and `matcher` pins in `flutter_test`. Rather than
-remembering to look:
+Dependabot checks Pub packages and GitHub Actions weekly. Dependency changes
+need the same app-version bump and quality gate as any other commit. Check
+resolved Dart versions with `./scripts/flutterw pub outdated` and keep the
+Riverpod analyzer plugin aligned with its exact development dependency.
 
-```bash
-./scripts/check_analyzer_unblock.sh
-```
-
-It exits 0 while still blocked, 1 once the pins move, and 2 if the check itself
-could not run. The **Upstream watch** workflow runs it weekly, so a red run
-there means work became possible.
+Android Gradle Plugin is pinned to 9.4.1, the last compatible release tested. Version 9.5.3
+flags screenshot compression on the UI thread in Flutter’s bundled
+`integration_test` plugin. The gate still lints the plugin.
 
 ## Regenerate the launcher icon
 
@@ -301,9 +304,9 @@ Both reference phones are ARM64. The pipeline also produces `armeabi-v7a` and
 The manually triggered **Release** GitHub Action first runs the complete
 quality pipeline. Only after every check and build passes does it create a
 `vX.Y.Z` tag and a published GitHub release containing APKs, the AAB, the
-Linux bundle, CycloneDX and SPDX SBOMs, and SHA-256 checksums. The release is marked as the latest one,
-so it appears on the repository landing page and resolves under
-`/releases/latest`. No tag or release is created on failure.
+Linux bundle, CycloneDX and SPDX SBOMs, and SHA-256 checksums. The workflow
+marks it as the [latest release](https://github.com/marcelpetrick/CroLingo/releases/latest).
+It creates the tag and release only after the gate and signing check pass.
 
 After pushing the desired commit, start it from **Actions → Release → Run
 workflow**, or with the installed GitHub CLI:
@@ -313,11 +316,11 @@ gh workflow run release.yml --ref master
 gh run watch
 ```
 
-Open the repository's **Releases** page on either phone and download the file
-ending in `arm64-v8a.apk`. Releases from `0.0.43` onward use one stable external
-signing identity, so Android can install later versions in place while keeping
-the app-private progress database. Earlier releases used ephemeral CI keys and
-must be uninstalled once before installing the first stable-signed release.
+Open the latest release on either phone and download the file
+ending in `arm64-v8a.apk`. Public releases from [`v0.0.56`](https://github.com/marcelpetrick/CroLingo/releases/tag/v0.0.56)
+onward share a stable signing identity. Upgrading in place keeps the local
+progress database. Builds signed with a different key may require a fresh
+install. Uninstalling removes local learning progress.
 
 The public signing certificate SHA-256 fingerprint is stored in
 `android/release-signing-certificate.sha256` and verified before publication.
@@ -349,6 +352,9 @@ Start with these documents before changing product behavior:
 - [Questions and adopted defaults](docs/03_questions.md)
 - [Course content and audio authoring](docs/04_content_and_audio_authoring.md)
 - [Architecture overview](docs/05_architecture.md)
+- [UI and motion](docs/06_ui_motion.md)
+- [Local vulnerability checks](docs/cveCheck.md)
+- [Content Studio proposal](docs/editor.md)
 - [AI agent working agreement](docs/AGENTS.md)
 
 ## Privacy and security

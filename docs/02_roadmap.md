@@ -13,17 +13,9 @@ Linux builds, and mandatory local/online quality gates. Phase two is active.
 System-provided Croatian playback and cross-unit progression are implemented;
 native recordings and pronunciation assessment remain deferred.
 
-Session checkpoint on 2026-08-09:
-
-- Every earlier checkpoint recorded here has been superseded. The `v0.0.32`
-  entries described a prerelease published before the release workflow began
-  publishing normal latest releases, and before the stable Android signing
-  identity existed.
-- Releases now publish as full GitHub releases, signed with the stable
-  external identity and verified against the committed certificate
-  fingerprint.
-- Record a new checkpoint only with the run identifier, the tag, and the
-  version it published, so a stale entry stays obvious.
+The [latest public release](https://github.com/marcelpetrick/CroLingo/releases/latest)
+shows the currently published version. The release workflow signs Android
+artifacts with the stable key and verifies its certificate fingerprint.
 
 ## Ordered work
 
@@ -38,20 +30,21 @@ Session checkpoint on 2026-08-09:
    courtesy, first-meeting, and origin phrases are validated JSON with both
    recall directions, mastery tags, explanations, tests, and two new concepts
    per lesson. Croatian/German human review remains an external checkpoint.
-4. **Maintain the 95% coverage floor.** Complete and enforced for authored
+4. **Maintain the 98% coverage floor.** Complete and enforced for authored
    Dart code. New behavior must add tests without reducing this threshold.
 5. **Expand the A1 path.** Add small reviewed units for family and people,
    numbers and age, food and drinks, home, everyday actions, shopping, and
    travel/directions. Reuse known material in most exercises.
 6. **Complete learner controls.** Largely done. Settings persist the
-   answer-feedback sound preference, one of five appearances including a
-   high-contrast option held to WCAG AAA, and a developer switch that opens
+   answer-feedback sound and reduced-motion preferences, one of five
+   appearances including a high-contrast option held to WCAG AAA, and a
+   developer switch that opens
    locked lessons. Concise grammar references remain open, and must not weaken
    the offline or minimal-permission baseline.
 7. **Harden content authoring.** Version the course schema, produce
-   deterministic validated content packs, and support an optional separate
-   authoring repository that exports reviewed snapshots. Implement the staged
-   [Content Studio design](editor.md); do not add runtime downloads yet.
+   deterministic validated content packs, and implement the staged
+   [Content Studio design](editor.md) as a separate application package in the
+   monorepo. Runtime downloads remain deferred.
 8. **Finish device and accessibility qualification.** Verify TalkBack,
    keyboard traversal, contrast, reduced motion, 200% text, interruption
    recovery, upgrades, and airplane-mode operation on Linux and both reference
@@ -75,12 +68,9 @@ Download the ARM64 APK from the latest published release, verify it against
 `SHA256SUMS.txt`, install it on both reference phones, and record the results of
 the physical-device checklist in the release notes or an issue.
 
-Push before dispatching a release, and dispatch one only when that version is
-actually going onto a device for testing.
-
-The remote workflow, physical devices, human language review, and future
-production signing material are external checkpoints. They must never be
-reported as complete based only on local automated tests.
+Push the versioned commit before dispatching the release workflow. Record
+physical-device and human language results independently of the automated
+workflow. Play Store delivery and signing configuration remain future work.
 
 ## Definition of done for each roadmap item
 

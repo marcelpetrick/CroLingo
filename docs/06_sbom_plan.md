@@ -19,24 +19,21 @@ points described below.
 - Pin the official [CycloneDX Gradle Plugin
   3.6.1](https://plugins.gradle.org/plugin/org.cyclonedx.bom/3.6.1). It resolves
   the Android Gradle configurations, including transitive Maven artifacts that
-  a source-directory scan cannot reliably infer. It will be applied through a
+  a source-directory scan cannot reliably infer. It is applied through a
   repository-owned Gradle initialization script so SBOM infrastructure does
   not alter the application build plugins.
 - Pin the official [CycloneDX CLI
   0.33.1](https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v0.33.1)
-  by release checksum. It will merge the Dart and Android inventories,
+  by release checksum. It merges the Dart and Android inventories,
   normalize them to CycloneDX 1.7 JSON, and validate the CycloneDX document.
 - Validate SPDX with the official SPDX tools-python 0.8.5 semantic validator.
-  Its installation must be isolated below ignored `.tooling/`, fully pinned,
+  Its installation is isolated below ignored `.tooling/`, fully pinned,
   and reproducible from a checked-in requirements lock rather than modifying
   the system Python environment.
-- Generate CycloneDX 1.7, the current stable CycloneDX specification. Generate
-  SPDX 2.3 JSON. SPDX 3.0.1 is the current specification, but the current
-  stable Syft/CycloneDX conversion and official SPDX Python validation path
-  exposes mature software-SBOM interoperability at SPDX 2.3. The pipeline must
-  never mislabel this output as SPDX 3.0.1; support can move forward when the
-  generator, converter, validator, and intended ingestion tools support it
-  end-to-end.
+- Generate CycloneDX 1.7 and SPDX 2.3 JSON. The current Syft conversion and
+  official SPDX Python validator support the SPDX 2.3 path used here. A format
+  upgrade requires the generator, converter, validator, and intended ingestion
+  tools to support the new version end to end.
 
 The two public documents are two serializations of the same merged component
 inventory. Independent generation would risk a CycloneDX file describing Dart
@@ -52,14 +49,14 @@ rather than assuming the limitation still exists.
 
 ## Dependency coverage
 
-The Dart inventory will scan the resolved `pubspec.lock`, not merely declared
+The Dart inventory scans the resolved `pubspec.lock`, not merely declared
 top-level dependencies from `pubspec.yaml`. It therefore contains locked
 direct, development, and transitive Pub packages. Pub's lockfile is a flat
 resolved inventory, so complete dependency-to-dependency edges cannot be
 reconstructed reliably and will not be fabricated.
 
-The Android inventory will ask Gradle to resolve the release classpaths and
-will include direct and transitive Maven/Gradle components exposed by those
+The Android inventory asks Gradle to resolve the release classpath and
+includes direct and transitive Maven/Gradle components exposed by those
 configurations, including Flutter plugins with Android artifacts. Build-only,
 test-only, host SDK, operating-system packages, and the Android platform itself
 are not shipped application components and will be excluded. Native libraries
@@ -68,7 +65,7 @@ where tooling provides no trustworthy standalone package identity.
 
 No dependency component is maintained manually. The only project metadata
 supplied by CroLingo will be the application name, version read from
-`pubspec.yaml`, package identity, and GPL-3.0-only application license. These
+`pubspec.yaml`, package identity, and GPL-3.0-or-later application license. These
 describe CroLingo itself rather than inventing facts about dependencies. The
 small `jq` enrichments in `scripts/generate_sbom.sh` also make CroLingo the SPDX
 document's described application and connect it to every dynamically
@@ -81,7 +78,7 @@ CPE cannot leak into either public format.
 
 ## Outputs and local behavior
 
-One repository script will generate and validate:
+One repository script generates and validates:
 
 - `build/sbom/CroLingo.cdx.json` — CycloneDX 1.7 JSON;
 - `build/sbom/CroLingo.spdx.json` — SPDX 2.3 JSON.
@@ -100,19 +97,19 @@ opt-out that could accidentally produce a release without it.
 ## GitHub Actions and releases
 
 The existing Quality workflow already runs the complete local pipeline on
-push, pull request, and manual dispatch. Its successful run artifact will add
+push, pull request, and manual dispatch. Successful runs upload
 the two validated files from `build/sbom/`; the workflow keeps read-only
 repository permissions.
 
-The manually dispatched Release workflow will generate the files from the
+The manually dispatched Release workflow generates the files from the
 exact checked-out commit as part of the same complete pipeline that builds and
-signs the APK/AAB. `scripts/package_release.sh` will copy them to versioned
+signs the APK/AAB. `scripts/package_release.sh` copies them to versioned
 release assets:
 
 - `CroLingo-<version>.cdx.json`;
 - `CroLingo-<version>.spdx.json`.
 
-They will be included in `SHA256SUMS.txt` and attached by the existing single
+They are included in `SHA256SUMS.txt` and attached by the existing single
 `gh release create` operation. Missing or invalid SBOMs will stop packaging
 before the workflow can create a tag or release. No new workflow permission is
 needed: Quality stays `contents: read`, while only the existing Release job
@@ -120,16 +117,15 @@ retains `contents: write` for its final publication step.
 
 ## Validation and maintenance
 
-Generation will check JSON syntax with `jq`, validate CycloneDX 1.7 with the
+Generation checks JSON syntax with `jq`, validate CycloneDX 1.7 with the
 official CycloneDX CLI, and parse plus semantically validate SPDX 2.3 with
-official SPDX tools-python. Focused script tests will corrupt each format and
+official SPDX tools-python. Focused script tests corrupt each format and
 prove validation fails, inspect component counts and package URLs, and ensure
 both ecosystems are present. Existing actionlint, zizmor, shellcheck,
 markdownlint, secret scanning, vulnerability scanning, builds, and artifact
 inspection remain mandatory.
 
-Pinned binary archives and Python packages will be checksum verified during
-bootstrap. Tool versions and checksums are code-reviewed maintenance data;
+Bootstrap verifies the checksums of pinned binary archives and Python packages. Tool versions and checksums are code-reviewed maintenance data;
 dependency entries are always discovered dynamically. Dependabot does not
 update these non-ecosystem tool pins, so a deliberate maintenance change is
 required when an SBOM tool is upgraded.

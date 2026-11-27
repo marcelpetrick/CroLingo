@@ -4,7 +4,8 @@ Working notes on how CroLingo decides whether a learner was right, what
 changed recently, and what is still open. Not committed policy: the
 implemented parts are marked as such, everything else is a proposal.
 
-Status date: 2026-08-26. Repository at `39be0fc`, everything pushed.
+Originally written on 26 August 2026 at `39be0fc`. Open-work status reviewed
+on 27 November 2026.
 
 ## Part 1 — Text grading
 
@@ -12,7 +13,8 @@ Status date: 2026-08-26. Repository at `39be0fc`, everything pushed.
 
 `AnswerGrader.grade` compares a submission against the authored
 `acceptedAnswers` after normalising both sides the same way. Normalisation is
-NFC, lowercase, drop punctuation, collapse whitespace, trim.
+NFC, lowercase, remove the supported punctuation marks, collapse whitespace,
+and trim.
 
 | Ignored | Significant |
 | --- | --- |
@@ -217,25 +219,17 @@ The pronunciation Stage 2 benchmark. Three routes:
 ### Not started
 
 - A1 content units, in the thematic order above.
-- Integration suite on real hardware. `integration_test/` and
-  `scripts/run_integration_tests.sh` exist and found a real disposal bug when
-  written, but have never run on either ARM64 phone. The application has never
-  been verified on the hardware it targets.
+- Document integration-suite results on both reference Android phones. The
+  suite and runner are described in the [README](README.md#run-the-integration-suite).
 
-### Blocked upstream
+### Resolved upstream blockers
 
-Both wait on the same fact, that `flutter_test` pins `test_api` and `matcher`
-below analyzer 13. The weekly `upstream-watch` workflow tracks it, so neither
-needs attention until it goes red.
-
-- No Riverpod lint rule runs, review item 0.
-- `riverpod_lint` 3.1.8, `drift_dev` 2.34.1 and later, and `build_runner`
-  2.16.0 are unreachable, review item 1.
+Flutter stable relaxed the former analyzer restrictions. Strict Dart analysis
+now runs the Riverpod plugin, and later Drift and Build Runner releases
+resolve. The upstream-watch workflow was retired after the upgrade.
 
 ### Low severity, no urgency
 
-Items 3 to 8 of `docs/review20260809.md`: local-flavoured Drift timestamps,
-the size of `lesson_screen.dart`, a few lines that cannot be covered
-headlessly, the untested database provider, two untested error branches, and
-the specification being excluded from linting. Items 9 to 11 are marked
-Accepted and need no action.
+The [August technical review](docs/review20260809.md) records earlier
+coverage and architecture findings. Use its dated findings as context and
+check the current code or tests before reopening an item.

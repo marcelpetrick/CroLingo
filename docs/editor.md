@@ -4,7 +4,9 @@ This document proposes a friendly desktop authoring application for course
 editors, language reviewers, and native speakers. Its working name is
 **CroLingo Content Studio**. It must hide JSON, database tables, filenames, and
 audio tooling during normal work while producing deterministic, reviewable
-content for the learner application.
+content for the learner application. The editor, schema package, and its
+CI pipeline are planned. The learner app currently consumes the bundled JSON
+course directly.
 
 ## Recommendation
 
@@ -459,8 +461,8 @@ review.
 
 Content Studio follows the same engineering floor as CroLingo: bootstrapping,
 conventional atomic commits, the single repository SemVer, formatting, Dart
-analysis, Flutter/custom lint, unit/widget/integration tests, shell and workflow
-lint, dependency and secret scans, at least 95% authored Dart line coverage,
+analysis, analyzer plugins, unit/widget/integration tests, shell and workflow
+lint, dependency and secret scans, at least 98% authored Dart line coverage,
 clean builds, and artifact inspection. Test database migration fixtures from
 every supported schema and golden deterministic exports.
 
@@ -480,14 +482,13 @@ Required test layers are:
 - Windows and Linux clean build/package tests plus manual smoke tests on real
   audio hardware before a recording-capable release.
 
-The editor has a focused, self-bootstrapping pipeline entry point used by the
-root `localPipeline.sh`. The root pipeline remains the mandatory final
-integration gate and validates the editor, exported content, bundled audio,
-and learner app. A separate path-filtered `editor-quality.yml` workflow runs on
+The planned editor pipeline will have a self-bootstrapping entry point
+called by `localPipeline.sh`. The root gate will cover the editor, exported
+content, bundled audio, and learner app. A separate path-filtered
+`editor-quality.yml` workflow will run on
 pushes and pull requests that touch `tools/content_studio/`, `content_core`,
-schemas, editor fixtures, or content assets. It has a Linux quality/build job
-and a Windows quality/build job, and uploads a portable Windows ZIP plus a
-checksummed Linux bundle for testing. It does not repeat unrelated Android
+schemas, editor fixtures, or content assets. Linux and Windows jobs will
+upload a portable Windows ZIP and a checksummed Linux bundle for testing. It does not repeat unrelated Android
 builds, tag commits, or publish a public release.
 
 Version one distributes a portable Windows ZIP; no installer is required. The

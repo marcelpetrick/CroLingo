@@ -1,8 +1,7 @@
 # LinkedIn post: SBOM and CVE review from a team-lead perspective
 
-Prepared on 13 August 2026. The CRA section is an engineering summary, not
-legal advice; product scope and conformity strategy require a product-specific
-legal assessment.
+The post preserves the 13 August 2026 scan and its negative-control results.
+The CRA timeline was checked on 27 November 2026.
 
 ## Suggested post
 
@@ -14,7 +13,7 @@ For CroLingo, our offline-first Flutter application for Android and Linux, we
 built software supply-chain checks into the same pipeline developers run
 locally and GitHub runs for every quality and release build.
 
-The current evaluation does the following:
+The August evaluation did the following:
 
 - resolves the actual dependency state instead of relying on a manually
   maintained spreadsheet;
@@ -94,8 +93,11 @@ The Cyber Resilience Act, Regulation (EU) 2024/2847, entered into force on
 - provisions concerning notification of conformity assessment bodies have
   applied since 11 June 2026;
 - Article 14 reporting obligations for actively exploited vulnerabilities and
-  severe security incidents apply from 11 September 2026;
-- the main obligations apply from 11 December 2027.
+  severe security incidents for manufacturers have applied since
+  11 September 2026;
+- the main obligations apply from 11 December 2027. The Commission lists
+  that same date for open-source software stewards’ reporting obligations
+  under Article 24(3).
 
 The CRA covers hardware and software products with digital elements made
 available on the EU market. “Free of charge” does not automatically mean out of
@@ -184,5 +186,6 @@ Choose one; using all five in one post would sound less credible.
 
 - [Regulation (EU) 2024/2847, official text](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847)
 - [European Commission summary of the CRA](https://digital-strategy.ec.europa.eu/en/policies/cra-summary)
+- [European Commission CRA reporting obligations](https://digital-strategy.ec.europa.eu/en/policies/cra-reporting)
 - [European Commission CRA implementation timeline](https://digital-strategy.ec.europa.eu/en/factpages/cyber-resilience-act-implementation)
 - [Commission guidance announcement, 27 July 2026](https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation)

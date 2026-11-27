@@ -27,8 +27,7 @@ The built-in image generator received one prompt per image:
    protect learning data from friendly regression bugs, headed `AUTOMATION
    STOPS REGRESSIONS`.
 4. A geometric transit map joining Croatian, German, and software-quality lines
-   from `LOCAL` through `GITHUB CHECKS` to `VERIFIED RELEASE`, with the current
-   test, coverage, and stage figures.
+   from `LOCAL` through `GITHUB CHECKS` to `VERIFIED RELEASE`, with the test, coverage, and stage figures from August 2026.
 5. A cinematic Adriatic release-control room featuring the crow, paired
    Croatian/German vocabulary, six packages, and the headline `FROM COMMIT TO
    CONFIDENCE`.
@@ -38,6 +37,6 @@ Croatian red-white-blue and German black-red-gold cues, a wide LinkedIn layout,
 and no imitation of an existing language-learning brand. The generated PNGs
 were visually inspected, converted to sRGB JPEG, and stripped of metadata.
 
-Figures represent the repository snapshot documented in
-[`docs/pipeline_support.md`](../../docs/pipeline_support.md). Regenerate or edit
-the copy if those figures change materially before publication.
+The embedded figures record the August 2026 snapshot. Use the
+[current pipeline facts](../../docs/pipeline_support.md) when drafting a
+post about the current release.

@@ -66,7 +66,7 @@ jq --arg version "${VERSION}" '
     "name": "CroLingo",
     "version": $version,
     "purl": ("pkg:generic/CroLingo@" + $version),
-    "licenses": [{"license": {"id": "GPL-3.0-only"}}],
+    "licenses": [{"license": {"id": "GPL-3.0-or-later"}}],
     "externalReferences": [{
       "type": "vcs",
       "url": "https://github.com/marcelpetrick/CroLingo"
@@ -98,8 +98,8 @@ jq --arg version "${VERSION}" '
       "versionInfo": $version,
       "downloadLocation": "NOASSERTION",
       "filesAnalyzed": false,
-      "licenseConcluded": "GPL-3.0-only",
-      "licenseDeclared": "GPL-3.0-only",
+      "licenseConcluded": "GPL-3.0-or-later",
+      "licenseDeclared": "GPL-3.0-or-later",
       "copyrightText": "NOASSERTION",
       "primaryPackagePurpose": "APPLICATION",
       "externalRefs": [{

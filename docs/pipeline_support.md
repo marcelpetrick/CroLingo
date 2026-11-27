@@ -1,19 +1,20 @@
 # CroLingo pipeline facts for a LinkedIn post
 
-Snapshot updated on 10 August 2026 at CroLingo `0.0.69+70`. Counts that naturally
-grow with the project are dated rather than presented as permanent claims.
+Test and coverage figures are from the 27 November 2026 Quality run for
+[`99f99ed` (`0.0.88+89`)](https://github.com/marcelpetrick/CroLingo/actions/runs/46013840406).
+Toolchain details reflect the subsequent Gradle patch update.
 
 ## Project snapshot
 
-- **129 automated tests pass.** They cover domain rules, persistence and
+- **154 automated tests pass.** They cover domain rules, persistence and
   migrations, content parsing, platform adapters, widgets, navigation, and
   accessibility behavior. A broad suite makes regressions visible close to the
   change that introduced them instead of during a manual release test.
-- **98.23% authored Dart line coverage: 1,497 of 1,524 lines.** The mandatory
+- **98.22% authored Dart line coverage: 1,982 of 2,018 lines.** The mandatory
   floor is 98%; the pipeline fails below it. Coverage is not treated as proof
   of correctness, but as evidence that new behavior has executable tests and
   that untested areas stay visible.
-- **30 unit and widget test source files plus a real-target integration suite.**
+- **31 unit and widget test source files plus a real-target integration suite.**
   Platform channels for audio, speech, and the on-disk database are tested on a
   Linux desktop or connected Android device because hosted runners do not have
   representative displays and audio hardware. Automation is explicit about
@@ -82,8 +83,8 @@ grow with the project are dated rather than presented as permanent claims.
 
 ## Dependency and supply-chain controls
 
-- **Flutter is pinned to 3.47.1 and Java to 21.** Android platform 36, build
-  tools 36.0.0, NDK 28.2.13676358, and Gradle 9.3.1 are also explicit. A stable,
+- **Flutter is pinned to 3.50.1, Dart to 3.14.0, and Java to 21.** Android platform 36, build
+  tools 36.0.0, NDK 28.2.13676358, and Gradle 9.9.3 are also explicit. A stable,
   repeatable toolchain prevents an unannounced upstream update from changing a
   supposedly identical build.
 - **Downloaded tooling is versioned and SHA-256 verified.** Current pins include
@@ -93,7 +94,7 @@ grow with the project are dated rather than presented as permanent claims.
   Reproducibility includes the
   tools that judge the code, not only the application dependencies.
 - **The Gradle wrapper JAR and distribution URL are verified.** The wrapper JAR
-  has a pinned SHA-256 digest and must still point to Gradle 9.3.1. This detects
+  has a pinned SHA-256 digest and must still point to Gradle 9.9.3. This detects
   accidental or malicious replacement of an executable build component.
 - **Dart dependencies use the committed lockfile.** `flutter pub get
   --enforce-lockfile` must succeed and may not modify `pubspec.lock`, so local,
@@ -104,10 +105,9 @@ grow with the project are dated rather than presented as permanent claims.
 - **Dependabot checks two ecosystems every week:** Dart/Flutter packages and
   GitHub Actions. Automation opens reviewable update proposals without silently
   changing production inputs.
-- **A five-minute weekly upstream-watch workflow tracks a known Flutter
-  analyzer blocker.** Its unusual red result means the blocker moved and a
-  planned upgrade became possible. This replaces a maintenance reminder that a
-  person would eventually forget.
+- **The Riverpod analyzer plugin runs with the exact development pin.**
+  The former Flutter analyzer blocker was resolved and its scheduled watch
+  retired.
 - **Known upstream warnings are classified and counted.** New warnings remain
   visible for human judgment instead of being buried in accepted third-party
   noise or globally suppressed.
@@ -168,9 +168,8 @@ grow with the project are dated rather than presented as permanent claims.
   and prohibited permissions.** A successful compiler exit is not enough; the
   pipeline verifies that the expected distributable was actually produced.
 - **GitHub's quality workflow uploads development artifacts only after
-  success.** It publishes the Linux bundle, APKs, AAB, and diagnostic reports,
-  making remote checks reproducible and their outputs available without a
-  local Android/Flutter setup.
+  success.** Successful jobs upload the Linux bundle, APKs, AAB and SBOMs.
+  Diagnostic reports are also uploaded when the job fails.
 - **Constrained GitHub runners use a low-disk build mode.** Disposable Android
   intermediates are reclaimed before the AAB build while already verified
   outputs are preserved. The workflow also safely removes unrelated preloaded
@@ -223,14 +222,13 @@ grow with the project are dated rather than presented as permanent claims.
 
 ## Compact post-ready figures
 
-- 129 passing automated tests.
-- 98.23% line coverage: 1,497/1,524 authored Dart lines; 98% enforced floor.
-- 20 named local pipeline stages.
+- 154 passing automated tests.
+- 98.22% line coverage: 1,982/2,018 authored Dart lines; 98% enforced floor.
+- 22 named pipeline stages, including the optional local Linux launch.
 - 2 supported build targets: Android and Linux.
 - 2 weekly Dependabot ecosystems: Dart/Flutter and GitHub Actions.
-- 7 pinned auxiliary quality tools, including the Flutter SDK itself.
 - 3 security layers: history secret scan, dependency vulnerability scan, and
   final-APK permission inspection.
-- 6 release packages plus one SHA-256 checksum manifest.
+- 6 build packages, 2 SBOMs, and 1 SHA-256 checksum manifest.
 - 1 script shared by developer machines, GitHub quality checks, and releases.
 - 0 tags or public releases when the complete gate fails.

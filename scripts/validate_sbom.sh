@@ -42,6 +42,7 @@ jq --exit-status --arg version "${VERSION}" '
   and .specVersion == "1.7"
   and .metadata.component.name == "CroLingo"
   and .metadata.component.version == $version
+  and any(.metadata.component.licenses[]?; .license.id == "GPL-3.0-or-later")
   and any(.components[]; (.purl // "") | startswith("pkg:pub/"))
   and any(.components[]; (.purl // "") | startswith("pkg:maven/"))
   and any(.components[]; .name == "flutter_riverpod")
@@ -57,7 +58,8 @@ jq --exit-status --arg version "${VERSION}" '
   and any(.packages[];
     .SPDXID == "SPDXRef-CroLingo"
     and .versionInfo == $version
-    and .licenseDeclared == "GPL-3.0-only")
+    and .licenseDeclared == "GPL-3.0-or-later"
+    and .licenseConcluded == "GPL-3.0-or-later")
   and any(.packages[].externalRefs[]?;
     .referenceType == "purl"
     and (.referenceLocator | startswith("pkg:pub/")))

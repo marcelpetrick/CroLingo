@@ -1,33 +1,33 @@
 # GitHub Actions billing and usage
 
 This document records the billing constraints relevant to CroLingo as of
-2026-08-08. GitHub can change plans and prices, so confirm current values in
+27 November 2026. GitHub can change plans and prices, so confirm current values in
 the linked official documentation before making a spending decision.
 
 ## Current repository situation
 
 `marcelpetrick/CroLingo` is a public repository owned by a personal account,
 so that the project and its releases are openly visible. Its workflows use
-standard GitHub-hosted Ubuntu runners, and **standard hosted runners are free
-for public repositories**. Workflow time in this repository therefore does not
-consume the owner's included Actions minutes and cannot produce a hosted-runner
-bill.
+standard GitHub-hosted Ubuntu runners. **Their compute is free for public
+repositories** and does not consume the owner’s included Actions minutes.
+Artifact and cache storage follow the separately documented storage policies.
 
 The included GitHub Free allowances still bound anything that is not a standard
 runner in a public repository:
 
-- 2,000 GitHub Actions minutes per month for private repositories;
-- 500 MB of shared Actions artifact and GitHub Packages storage; and
-- 10 GB of Actions cache storage per repository.
+- USD 12 of included compute per month for eligible private repository jobs;
+- 500 MB of Actions artifact storage under the GitHub Free plan; and
+- 10 GB of included Actions cache storage per repository.
 
-Minutes reset at the start of each billing cycle. Storage is measured over
-time, so artifact size and retention both matter. Failed and cancelled jobs
-consume the minutes they ran before stopping.
+The compute allowance resets each billing cycle. Different runner types use
+it at different rates. Storage is measured over time, so artifact size and
+retention both matter. Billable jobs can consume compute before they fail or
+are cancelled.
 
-Charges would return if CroLingo were ever made private again, or if a workflow
-were moved to a larger runner class. Self-hosted runner execution does not
-consume hosted-runner minutes either, although the owner remains responsible for
-the machine and its security.
+If CroLingo became private, eligible jobs would draw from the account’s
+included compute allowance before incurring compute charges. Larger hosted
+runners are billable even in public repositories. The owner supplies and
+secures any self-hosted runner.
 
 Making the repository public also means every workflow run, log, and release
 artifact is world-readable. Never place a keystore, password, or token in the
@@ -59,8 +59,8 @@ larger runner classes, and any future change of visibility.
 If the account has no valid payment method or paid Actions usage is not
 enabled, GitHub blocks further hosted-runner usage after the included quota is
 exhausted. If paid usage is enabled, excess usage can be charged to the account.
-The documented baseline price for a standard two-core Linux runner is currently
-USD 0.006 per minute.
+GitHub lists USD 0.006 per minute for billed usage on the standard
+two-core x64 Linux runner.
 
 Configure a budget with **Stop usage when budget limit is reached** if the
 desired maximum spend is zero. Enable included-usage alerts as well; GitHub can
@@ -68,12 +68,12 @@ notify account owners at 90% and 100% of the included allowance.
 
 ## CroLingo estimate and controls
 
-A complete CroLingo Quality or Release job currently takes roughly 15 to 20
-hosted-runner minutes. Those minutes are free while the repository is public.
-If CroLingo were private, the same rate would permit about 100 to 130 complete
-jobs per month within 2,000 minutes, or approximately 50 to 65 Quality-and-
-Release pairs. This is only a planning estimate; the billing view is
-authoritative.
+Five recent successful Quality runs took about 14 to 27 minutes. Standard
+runner compute for those jobs was free. If the repository became private,
+the USD 12 allowance would cover 2,000 minutes at the standard two-core x64
+Linux rate. That is roughly 74 to 142 runs at the observed durations, before
+accounting for other repositories and failed jobs. Consult the account
+billing view for measured usage.
 
 These habits keep runs fast and would keep a private repository inside its
 allowance:
@@ -93,6 +93,8 @@ archive.
 ## Official references
 
 - [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
+- [GitHub Actions storage and compute limits](https://docs.github.com/en/actions/reference/limits)
 - [Included product usage](https://docs.github.com/en/billing/reference/product-usage-included)
-- [Viewing metered usage](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-git-large-file-storage/viewing-your-git-large-file-storage-usage)
+- [Viewing usage](https://docs.github.com/en/billing/how-tos/products/estimate-spending)
+- [Actions runner pricing](https://docs.github.com/en/billing/reference/actions-runner-pricing)
 - [Budgets and alerts](https://docs.github.com/en/billing/concepts/budgets-and-alerts)

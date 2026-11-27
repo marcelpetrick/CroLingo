@@ -216,7 +216,7 @@ check_gradle_wrapper() {
     'android/gradle/wrapper/gradle-wrapper.jar' \
     | sha256sum --check
   grep -Fqx \
-    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.9.2-all.zip' \
+    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.9.3-all.zip' \
     android/gradle/wrapper/gradle-wrapper.properties
 }
 

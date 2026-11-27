@@ -1,8 +1,8 @@
 # CroLingo implementation plan
 
 Execution status and the prioritized next steps are maintained in
-`02_roadmap.md`. The implemented structure is described in
-`05_architecture.md`.
+[the roadmap](02_roadmap.md). The [architecture overview](05_architecture.md)
+describes the implemented structure.
 
 ## Outcome
 
@@ -20,10 +20,10 @@ pronunciation grading remain deferred.
 - Name: CroLingo
 - Dart package: `crolingo`
 - Android application ID: `it.marcelpetrick.crolingo`
-- Platforms: Android API 24–36 and Linux x64
+- Platforms: Android API 24 minimum, API 36 target, and Linux x64
 - Reference devices: Huawei Mate 20 HMA-L29/EMUI 12 and Xiaomi/Poco/Android 16
 - Audience: family/all ages
-- License: GPL-3.0
+- License: GPL-3.0-or-later
 - Storage: offline, app-private SQLite
 - Course content: bundled, validated JSON
 - Linux viewport: centered, fixed, non-resizable 412×915 logical pixels
@@ -57,7 +57,7 @@ everyday units.
 
 ### 1. Foundation and guardrails
 
-- Install and pin Flutter 3.47.1 with Java 21 and Android API 36.
+- Pin the Flutter SDK in bootstrap and CI. Use Java 21 and target Android API 36.
 - Bootstrap only Android and Linux.
 - Add self-bootstrap scripts that reuse compatible system SDKs or install pinned tooling into ignored `.tooling/`.
 - Add a complete local pipeline, tracked Git hooks, strict analyzer configuration, framework-specific linting, coverage gates, content validation, security scans, Android lint, and clean Android/Linux builds.
@@ -78,7 +78,7 @@ everyday units.
 - Use an original geometric crow mascot and Adriatic-journey path; do not copy
   third-party assets, palettes, fonts, exact screens, terminology, rewards, or
   mascot treatment.
-- Implement Home, Path, Review, and More navigation. More contains Vocabulary, Grammar, Profile, and Settings.
+- Implement Home, Path, Review, and More navigation. More contains Vocabulary, Profile, and Settings. A grammar reference remains planned.
 - Use short, non-blocking transitions for navigation, exercise feedback, XP,
   and completion rewards; honor system and learner reduced-motion choices.
 
@@ -112,7 +112,7 @@ everyday units.
 - Put FSRS behind a replaceable `ReviewScheduler`, initially using default parameters and 90% desired retention.
 - Map first-attempt correct to Good, one prior error to Hard, and two or more prior errors to Again.
 - Provide Due/Recommended, Recent Mistakes, and Recently Learned review modes.
-- Use UTC timestamps and Europe/Berlin calendar dates for current/longest streaks.
+- Store attempt timestamps in UTC and derive study dates from the device’s local calendar.
 - Show start date, XP, completed lessons, streaks, and learned vocabulary locally.
 
 ### 7. Hardening and delivery
@@ -149,8 +149,8 @@ everyday units.
 - Keep one bundled offline course and sequential cross-unit progression until
   the content model has enough evidence to justify optional paths.
 - Keep authored material independent from Dart code and use deterministic,
-  schema-versioned JSON packs. A separate authoring repository may export an
-  approved snapshot, but runtime downloads remain deferred.
+  schema-versioned JSON packs. The planned Content Studio will export an
+  approved snapshot. Runtime downloads remain deferred.
 
 ## Design tokens
 
@@ -186,8 +186,8 @@ Correctness always combines color with icon, label, and shape. Touch targets are
 
 ## Quality definition
 
-A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux build, APK builds, AAB build, artifact/manifest inspection, and
-a closing review of expected upstream warnings.
+A change is committable only when `./localPipeline.sh --noRun` succeeds: environment and repository policy, locked dependencies, generated-source consistency, formatting, strict analysis, shell/workflow/docs checks, content validation, tests, coverage, Android lint, secret/dependency scans, clean Linux, APK and AAB builds, SBOM validation and vulnerability scans,
+artifact inspection, and a closing review of expected upstream warnings.
 
 The gate is deliberately not the whole of verification. The audio plugin,
 system speech and an on-disk database need a real target, so they live in
@@ -212,9 +212,9 @@ coverage. Threshold reductions require explicit approval.
 
 Native-speaker audio, listening exercises, microphone access, learner
 recordings, sample comparison, pronunciation grading, backend, accounts,
-synchronization, social features, monetization, web, iOS, and production-signed
-releases are not part of phase two. System-provided TTS playback and manually
-dispatched, stable-signed full GitHub releases are included.
+synchronization, social features, monetization, web, iOS, and Play Store
+distribution remain deferred. Phase two includes system TTS playback and
+manually dispatched GitHub releases signed with the stable Android key.
 The future recording and course-authoring contract is documented in
 `04_content_and_audio_authoring.md`; raw recordings are not bundled or played
 until its manifest, preparation, validation, and fallback work is implemented.

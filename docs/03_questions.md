@@ -7,7 +7,7 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **How much content is required first?** One polished unit of approximately five lessons; expand toward A1 after the complete loop is proven.
 - **Who is the primary learner?** German-speaking families and beginners of all ages; friendly but not childish.
 - **Who approves language content?** Automated validation plus human review by a competent Croatian/German speaker before content is marked release-ready.
-- **How strict is grading?** Normalize Unicode NFC and whitespace only. Preserve spelling, German capitalization, Croatian diacritics, grammar, and explicit accepted variants.
+- **How strict is grading?** Normalize Unicode NFC, case, supported punctuation, and whitespace. Preserve spelling, Croatian diacritics, hyphens, word order, and authored alternatives.
 - **How many new concepts?** Approximately two per early lesson, each with at least three meaningful tagged exposures.
 
 ## Platforms and devices
@@ -24,17 +24,20 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Persistence?** Drift/SQLite in app-private storage, repositories at the boundary, and forward-only tested migrations.
 - **Course representation?** Bundled JSON validated structurally and semantically, then parsed into typed immutable models.
 - **Can curriculum authoring be separated from application development?** Yes.
-  JSON remains the canonical app format; the auxiliary Flutter Content Studio
-  lives at `tools/content_studio/` in this monorepo and exports deterministic
+  JSON remains the canonical app format; the proposed Flutter Content Studio
+  will live at `tools/content_studio/` in this monorepo and export deterministic
   validated snapshots. Do not add XML or unreviewed runtime downloads.
 - **Spaced repetition?** FSRS behind a replaceable interface using default parameters and 90% desired retention until enough learner history exists for justified tuning.
-- **Time handling?** Persist UTC; calculate learning days in Europe/Berlin.
+- **Time handling?** Persist instants in UTC and derive study days in the device’s local time zone.
 - **How is pronunciation played before recordings exist?** Use replaceable,
   device-local system TTS with Croatian locale `hr-HR`; fail accessibly when a
   Croatian voice or Linux speech service is unavailable, and never add network
   or microphone permissions.
 
 ## Content Studio
+
+These decisions describe the [proposed editor](editor.md). The editor and its
+CI workflow are planned.
 
 - **Who uses and approves it initially?** One trusted native speaker may author,
   record, review, approve, and export; keep an audit record without implementing
@@ -43,7 +46,7 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
   `tools/content_studio/`, sharing this repository's single SemVer source and
   quality rules without being compiled into the learner app.
 - **How is it distributed?** As a portable Windows ZIP and checksummed Linux
-  bundle. A path-filtered editor workflow checks both platforms on relevant
+  bundle. A planned path-filtered editor workflow will check both platforms on relevant
   pushes, while the root pipeline remains the mandatory integration gate.
 - **What audio is recorded first?** Croatian vocabulary with one canonical
   speaker and an ordinary headset microphone. Preserve raw WAV takes, report
@@ -73,9 +76,10 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **Does the text MVP need permissions?** No sensitive permissions and no release network permission.
 - **Should local learning data be encrypted?** App sandboxing and device encryption are sufficient for non-sensitive learning progress; do not add key-management complexity until sensitive data exists.
 - **Can an old phone be made risk-free?** No application can repair an unpatched OS. Minimize CroLingo's permissions, data, dependencies, exports, and network surface.
-- **How are releases signed?** Since `0.0.43`, with one stable external Android
-  key held in protected local storage and GitHub Actions secrets; keystores and
-  passwords are never committed. The workflow verifies the public certificate
+- **How are releases signed?** The stable Android signing configuration was
+  introduced in `0.0.43`. `v0.0.56` was the first published release signed with
+  that key. The private key and passwords stay in protected local storage and
+  GitHub Actions secrets. The workflow verifies the public certificate
   fingerprint before publishing.
 - **What about APKs from before stable signing?** Their ephemeral CI keys cannot
   be recovered, so users must uninstall one final time before installing the
@@ -87,7 +91,7 @@ This register prevents noncritical uncertainty from blocking implementation. Eac
 - **What may be committed?** Only an atomic, conventional, version-bumped change that passes the complete local pipeline and leaves all targets buildable.
 - **What if a guardrail appears overly strict?** Fix the code or document a narrow justified suppression. Do not globally weaken checks merely to pass.
 - **Should a developer switch ship to learners?** Yes, for now. "Entwicklungseinstellungen" is visible to everyone and holds one switch that opens locked lessons. It defaults to off, is labelled as a testing aid, and only affects which lessons may be started; it grants nothing, skips no grading, and writes no progress a learner could not reach by playing. Hide it behind a build flag once the audience is wider than the people testing it.
-- **Why is the coverage floor 98% and not higher?** A handful of lines cannot be reached from a headless test: the `audioplayers` player boundary needs the real platform plugin, and the speech adapter's platform detection depends on the host operating system. Chasing the remainder would mean mocking the framework rather than testing behaviour. 98% keeps roughly a dozen lines of headroom above the measured value, so an ordinary change does not turn the gate red for no reason.
+- **Why is the coverage floor 98% and not higher?** A handful of lines cannot be reached from a headless test: the `audioplayers` player boundary needs the real platform plugin, and the speech adapter's platform detection depends on the host operating system. Chasing the remainder would mean mocking the framework rather than testing behaviour. The 98% floor leaves room for real platform boundaries and encourages focused tests for new logic.
 - **What about warnings CroLingo cannot fix?** Warnings from the pinned Flutter toolchain, the Flutter Gradle template, or a bundled third-party plugin are named in the pipeline's closing warning review with the reason they are accepted. Do not silence them, do not patch dependency sources in this repository, and remove an entry once an upstream release retires it. Anything the review cannot account for is reported as unreviewed and needs a human decision.
 - **What should be downloaded into the repository?** Only source-owned assets. SDKs, tools, caches, external repositories, generated reports, builds, and secrets belong in ignored locations.
 - **What happens when tooling is missing?** `scripts/bootstrap.sh` installs pinned user-local tooling where practical and otherwise prints the exact system prerequisite. `localPipeline.sh` runs that script itself when a pinned tool is absent, so a fresh clone or a `git clean -xfd` repairs itself instead of requiring a remembered manual step. If bootstrap cannot complete the environment, the pipeline stops before the first real gate rather than reporting a cascade of missing-command failures, and it never silently skips a mandatory gate.

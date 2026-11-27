@@ -1,12 +1,8 @@
-use flutter. for desktop linux and android (state 2026)
-
-------
-
 # CroLingo — Reviewed Product Specification
 
-> This original product specification is refined by `01_plan.md` and
-> `03_questions.md`. Those documents are authoritative where this document's
-> earlier Android-only or audio-MVP assumptions conflict with the current plan.
+> This specification records the original product goals. The
+> [implementation plan](01_plan.md) and [adopted defaults](03_questions.md)
+> record later decisions. The [roadmap](02_roadmap.md) tracks delivery.
 
 ## 1. Product Vision
 
@@ -85,11 +81,11 @@ Very early material should therefore include concepts such as:
 
 The primary course is:
 
-**German → Croatian**
+## German → Croatian
 
 Exercises should also regularly reverse the direction:
 
-**Croatian → German**
+## Croatian → German
 
 The learner must therefore practise both:
 
@@ -104,7 +100,7 @@ English → Croatian is a possible future extension, but it is not part of the i
 
 The initial complete beginner curriculum should approximately target:
 
-**CEFR A1 Croatian**
+CEFR A1 Croatian.
 
 The application should eventually provide the vocabulary, grammar, comprehension, and basic communication skills expected around A1 level.
 
@@ -280,11 +276,8 @@ The exact visual design can change, but the unit-completion reward must:
 
 A lesson consists of several small screens or tasks.
 
-The current default should be approximately:
-
-**5 tasks per lesson**
-
-The exact number may later vary where educationally justified, but five is the initial design target.
+The initial design target was about five tasks per lesson. The bundled
+course uses seven exercises per lesson.
 
 Each task focuses on one concrete activity.
 
@@ -1334,11 +1327,7 @@ People should be able to:
 * Inspect its implementation
 * Contribute if contribution rules are later established
 
-The currently intended license is:
-
-**GNU GPLv3**
-
-The license decision is settled: GNU GPLv3, recorded in `LICENSE`.
+CroLingo is licensed under GNU GPLv3 or later. See the [license](../LICENSE).
 
 ---
 
@@ -1376,8 +1365,8 @@ Code that fails required quality gates should not be considered release-ready.
 > **Implemented.** `.github/workflows/release.yml` ("Release", manually
 > dispatched) performs every step below, signs with the stable external
 > Android identity, verifies the committed certificate fingerprint, and
-> publishes a full GitHub release with APK, AAB, Linux bundle, and
-> checksums.
+> publishes a full GitHub release with APKs, an AAB, a Linux bundle,
+> both SBOM formats, and checksums.
 
 The release workflow:
 
@@ -1402,9 +1391,7 @@ The initial distribution model is:
 * Users may clone and build the application themselves
 * APK releases may be distributed through GitHub
 
-The longer-term goal is publication in the:
-
-**Google Play Store**
+Publication in the Google Play Store is a longer-term goal.
 
 The project should therefore ultimately support all required Android release and signing processes.
 
@@ -1458,7 +1445,7 @@ The MVP should include:
 * Automated content validation
 * Public GitHub repository
 * GitHub Actions
-* GPLv3 as the current intended license
+* GPLv3 or later
 * Automated Android release builds
 
 ---

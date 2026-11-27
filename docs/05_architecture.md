@@ -56,7 +56,7 @@ flowchart TB
 
   subgraph Device["Android phone or Linux desktop"]
     subgraph FlutterApp["Flutter application (Dart)"]
-      Dart["Presentation, domain and data code<br/>Riverpod, go_router"]
+      Dart["Presentation, domain and data code<br/>Material UI, Riverpod, go_router"]
     end
 
     AndroidHost["Android host (Kotlin)<br/>MainActivity, FlutterActivity<br/>TextToSpeech bridge"]
@@ -346,9 +346,8 @@ erDiagram
   }
 ```
 
-Timestamps are persisted in UTC. Local calendar dates are derived only at the
-boundary, when a completed lesson is folded into `StudyDayEntries`, because a
-study day is a human-facing concept and a timestamp is not. `AppSettingEntries`
+Timestamps are persisted in UTC. When a lesson completes, the repository derives its study-day key from the
+device’s local calendar and stores it in `StudyDayEntries`. `AppSettingEntries`
 is a key/value table on purpose, so a new preference needs no migration.
 
 ## Content pipeline
@@ -368,9 +367,9 @@ flowchart LR
 
 `CourseValidator` runs both in the build pipeline and at runtime parse time. It
 rejects duplicate IDs, empty units or lessons, exercises without accepted
-answers, matching exercises with fewer than two pairs, sentence exercises with
-fewer than two tiles, unknown concept references, concepts with fewer than
-three exposures, and any concept missing either recall direction. Automated
+answers, matching exercises with fewer than two pairs or ambiguous labels, sentence
+exercises with fewer than two tiles, unknown concept references, concepts
+with fewer than three exposures, and any concept missing either recall direction. Automated
 validation cannot judge naturalness, so human Croatian/German review remains a
 separate, external checkpoint.
 
@@ -382,9 +381,8 @@ separate, external checkpoint.
 - **Every platform capability sits behind a replaceable interface.** Speech,
   tones, scheduling, persistence, and the asset bundle all accept an injected
   substitute, which is why the suite runs headless and deterministically.
-- **Optional enhancements never block learning.** Missing Croatian voices and
-  audio failures degrade silently; `AssetFeedbackAudioService` deliberately
-  swallows playback exceptions.
+- **Optional enhancements never block learning.** The speech button reports unavailable
+  voices accessibly. Feedback tone failures leave the lesson usable.
 - **Generated code is verified, not trusted.** `app_database.g.dart` is
   regenerated in the pipeline and the run fails if the committed file differs.
 - **Accessibility is structural.** Correctness is signalled by icon, label, and
@@ -398,8 +396,8 @@ separate, external checkpoint.
   families were extracted into `lib/features/lesson/widgets/`, so it now only
   orchestrates the session, but it still owns routing between the families and
   the feedback lifecycle.
-- Coverage sits a little above the 95% floor rather than comfortably clear of
-  it, so a single untested branch can turn the pipeline red.
+- Authored Dart line coverage is close to the enforced 98% floor. Add tests
+  alongside new behavior to preserve that margin.
 - Native-speaker audio, listening exercises, and pronunciation assessment are
   deliberately absent. The contract they must satisfy is specified in
   [the content and audio authoring guide](04_content_and_audio_authoring.md).
