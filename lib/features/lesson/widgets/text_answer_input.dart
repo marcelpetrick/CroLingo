@@ -1,6 +1,6 @@
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/features/lesson/widgets/exercise_answer.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Typed answer shared by translation and fill-in-the-blank exercises.
 class TextAnswerInput extends StatefulWidget {

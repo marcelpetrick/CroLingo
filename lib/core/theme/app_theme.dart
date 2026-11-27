@@ -1,6 +1,6 @@
 import 'package:crolingo/core/theme/app_palette.dart';
 import 'package:crolingo/domain/settings/app_theme_variant.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// CroLingo Material themes, one per selectable appearance.
 abstract final class AppTheme {

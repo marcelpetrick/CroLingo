@@ -2,10 +2,10 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/review/review_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Minimal content so a due review can be resolved to a Croatian word.
 const _course = Course(

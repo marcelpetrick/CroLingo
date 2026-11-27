@@ -3,8 +3,8 @@ import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:crolingo/features/lesson/widgets/answer_feedback.dart';
 import 'package:crolingo/features/lesson/widgets/lesson_celebration.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Runs an interactive, data-free preview of CroLingo's motion language.
 void main() => runApp(const ProviderScope(child: _PreviewApp()));

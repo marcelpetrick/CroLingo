@@ -1,7 +1,7 @@
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/features/lesson/widgets/exercise_answer.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Builds a Croatian sentence from shuffled tiles.
 class SentenceInput extends StatefulWidget {

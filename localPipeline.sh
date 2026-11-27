@@ -212,11 +212,11 @@ check_gradle_wrapper() {
     return 1
   fi
   printf '%s  %s\n' \
-    '3b8a25775a69158b5ad2b1d17a80a88dc7b40a352a73eb27d06c612a7ce68e98' \
+    '621008afc4f5d59357fcf06ffa644dd5aade5e091bdc363742710445f73cdaf8' \
     'android/gradle/wrapper/gradle-wrapper.jar' \
     | sha256sum --check
   grep -Fqx \
-    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.2-all.zip' \
+    'distributionUrl=https\://services.gradle.org/distributions/gradle-9.9.2-all.zip' \
     android/gradle/wrapper/gradle-wrapper.properties
 }
 
@@ -372,7 +372,7 @@ accepted_warning_reason() {
       printf 'Gradle embeds its own Kotlin and differs from the pinned plugin'
       ;;
     *'flutter_tools/gradle/src/main/kotlin'*)
-      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.47.4"
+      printf "Flutter's own Gradle plugin sources, pinned with Flutter 3.50.1"
       ;;
     *"'android.builtInKotlin=false' is deprecated"* | \
       *"'android.newDsl=false' is deprecated"*)

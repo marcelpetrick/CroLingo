@@ -1,6 +1,6 @@
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/course/course.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Shows which language direction the current exercise practises.
 ///

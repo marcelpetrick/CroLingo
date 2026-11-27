@@ -4,9 +4,9 @@ import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/concept_mastery.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Local vocabulary list with fine-grained learning strength.
 class VocabularyScreen extends ConsumerStatefulWidget {

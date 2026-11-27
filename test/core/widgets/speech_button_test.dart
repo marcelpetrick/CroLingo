@@ -1,8 +1,8 @@
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/domain/speech/speech_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   testWidgets('plays the exact Croatian string', (tester) async {

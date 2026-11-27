@@ -5,9 +5,9 @@ import 'package:crolingo/core/widgets/crow_mark.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/learning/course_progression.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Learner dashboard and continuation entry point.
 class HomeScreen extends ConsumerStatefulWidget {

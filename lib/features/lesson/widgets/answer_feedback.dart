@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/speech_button.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Immediate correction shown after one graded answer.
 ///

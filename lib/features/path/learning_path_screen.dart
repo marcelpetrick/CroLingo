@@ -4,9 +4,9 @@ import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Sequential Adriatic-journey learning path.
 class LearningPathScreen extends ConsumerStatefulWidget {

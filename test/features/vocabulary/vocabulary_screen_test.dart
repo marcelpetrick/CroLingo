@@ -4,9 +4,9 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/vocabulary/vocabulary_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   testWidgets('shows loading and every practiced mastery dimension', (

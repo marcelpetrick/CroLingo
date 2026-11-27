@@ -1,7 +1,7 @@
 import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Vocabulary, grammar, profile, and settings hub.
 class MoreScreen extends StatelessWidget {

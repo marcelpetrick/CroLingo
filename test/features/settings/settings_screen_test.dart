@@ -4,9 +4,9 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
 import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:crolingo/features/settings/settings_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// The answer-tone switch, which is the first of the two on the screen.
 final Finder soundSwitch = find.byType(Switch).first;

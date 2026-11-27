@@ -2,8 +2,8 @@ import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/app/router.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Root application widget.
 class CroLingoApp extends ConsumerWidget {

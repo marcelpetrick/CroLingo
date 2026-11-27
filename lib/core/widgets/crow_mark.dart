@@ -1,5 +1,5 @@
 import 'package:crolingo/core/theme/app_theme.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// Small original geometric crow mark used in the application shell.
 class CrowMark extends StatelessWidget {

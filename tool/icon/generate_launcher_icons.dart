@@ -4,9 +4,9 @@ import 'dart:ui' as ui;
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
 import 'package:crolingo/domain/settings/app_theme_variant.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Regenerates the Android launcher icons from the in-app mascot.
 ///

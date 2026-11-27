@@ -5,9 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TOOLING_DIR="${ROOT_DIR}/.tooling"
 BIN_DIR="${TOOLING_DIR}/bin"
 CACHE_DIR="${TOOLING_DIR}/cache"
-FLUTTER_VERSION="3.47.4"
+FLUTTER_VERSION="3.50.1"
 FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
-FLUTTER_SHA256="5b45f0ceda99b9bebdc873e7e69f6450aeb4c30f454b505e2e62fc9255a907d3"
+FLUTTER_SHA256="4ad17fc8462fbcef2ba19ff4a78c0a16b7147fde1add8578e267ea62cdb92678"
 
 mkdir -p "${BIN_DIR}" "${CACHE_DIR}"
 
@@ -84,16 +84,16 @@ install_raw_binary() {
 }
 
 install_flutter() {
-  if command -v flutter >/dev/null 2>&1 \
+  if [[ -x "${TOOLING_DIR}/flutter/bin/flutter" ]]; then
+    if "${TOOLING_DIR}/flutter/bin/flutter" --version --machine \
+      | grep -F "\"frameworkVersion\": \"${FLUTTER_VERSION}\"" >/dev/null; then
+      printf '[bootstrap] Reusing repository-local Flutter %s.\n' "${FLUTTER_VERSION}"
+      return
+    fi
+  elif command -v flutter >/dev/null 2>&1 \
     && flutter --version --machine 2>/dev/null \
-      | grep -q "\"frameworkVersion\":\"${FLUTTER_VERSION}\""; then
+      | grep -F "\"frameworkVersion\": \"${FLUTTER_VERSION}\"" >/dev/null; then
     printf '[bootstrap] Reusing Flutter %s from PATH.\n' "${FLUTTER_VERSION}"
-    return
-  fi
-  if [[ -x "${TOOLING_DIR}/flutter/bin/flutter" ]] \
-    && "${TOOLING_DIR}/flutter/bin/flutter" --version --machine \
-      | grep -q "\"frameworkVersion\":\"${FLUTTER_VERSION}\""; then
-    printf '[bootstrap] Reusing repository-local Flutter %s.\n' "${FLUTTER_VERSION}"
     return
   fi
 
@@ -139,24 +139,24 @@ install_quality_tools() {
     '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb'
   install_raw_binary \
     osv-scanner \
-    'https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_amd64' \
-    '160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b'
+    'https://github.com/google/osv-scanner/releases/download/v2.7.1/osv-scanner_linux_amd64' \
+    'fb7dab19a8bd9bbe5c3189f09d4b7ee1820c9553a23bac202648a56efd2f6ee8'
   install_tar_binary \
     zizmor \
-    'https://github.com/zizmorcore/zizmor/releases/download/v1.32.0/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
-    'bb110cc765eca9cd7efb2e284a956be5974c60027b0970f16397d86208a9957b'
+    'https://github.com/zizmorcore/zizmor/releases/download/v1.33.1/zizmor-x86_64-unknown-linux-gnu.tar.gz' \
+    '3e6a301c7a820a2501915f5a9de8c0486da82bdec7965f068477538a98743d43'
   install_tar_binary \
     shellcheck \
     'https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz' \
     '8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198'
   install_tar_binary \
     syft \
-    'https://github.com/anchore/syft/releases/download/v1.56.0/syft_1.56.0_linux_amd64.tar.gz' \
-    '1c2493cfcf52d3367d6cb25780d9190c111c2219c34c820574c43e8bae15c528'
+    'https://github.com/anchore/syft/releases/download/v1.57.2/syft_1.57.2_linux_amd64.tar.gz' \
+    'ad92bd3ec1b94a3df01d4d0aec199afa9c42b72e86da436ff5f837914d32706b'
   install_tar_binary \
     trivy \
-    'https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz' \
-    'c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0'
+    'https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_Linux-64bit.tar.gz' \
+    'bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf'
   install_raw_binary \
     cyclonedx \
     'https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.33.1/cyclonedx-linux-x64' \
@@ -171,7 +171,7 @@ install_quality_tools() {
     --no-audit \
     --no-fund \
     --save-exact \
-    markdownlint-cli2@0.24.0
+    markdownlint-cli2@0.24.2
 }
 
 install_spdx_validator() {

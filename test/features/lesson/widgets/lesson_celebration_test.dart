@@ -1,8 +1,8 @@
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/domain/settings/app_theme_variant.dart';
 import 'package:crolingo/features/lesson/widgets/lesson_celebration.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   testWidgets('stages the mascot, XP, and action into the win moment', (

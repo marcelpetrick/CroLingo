@@ -9,9 +9,9 @@ import 'package:crolingo/features/home/home_screen.dart';
 import 'package:crolingo/features/path/learning_path_screen.dart';
 import 'package:crolingo/features/profile/profile_screen.dart';
 import 'package:crolingo/features/vocabulary/vocabulary_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   Future<void> pumpApp(WidgetTester tester) async {

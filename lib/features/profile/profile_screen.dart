@@ -5,9 +5,9 @@ import 'package:crolingo/data/course/asset_course_repository.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/concept_mastery.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Complete local learning statistics without accounts or telemetry.
 class ProfileScreen extends ConsumerStatefulWidget {

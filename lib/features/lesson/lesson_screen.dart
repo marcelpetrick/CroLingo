@@ -16,8 +16,8 @@ import 'package:crolingo/features/lesson/widgets/lesson_header.dart';
 import 'package:crolingo/features/lesson/widgets/matching_input.dart';
 import 'package:crolingo/features/lesson/widgets/sentence_input.dart';
 import 'package:crolingo/features/lesson/widgets/text_answer_input.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Interactive player for one bundled lesson.
 class LessonScreen extends StatefulWidget {

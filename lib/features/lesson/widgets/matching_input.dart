@@ -1,7 +1,7 @@
 import 'package:crolingo/core/widgets/speech_button.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/features/lesson/widgets/exercise_answer.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Pairs each Croatian word with its German meaning.
 class MatchingInput extends StatefulWidget {

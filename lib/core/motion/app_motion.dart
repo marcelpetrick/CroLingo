@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// Shared motion rhythm for responsive, consistent transitions.
 abstract final class AppMotion {

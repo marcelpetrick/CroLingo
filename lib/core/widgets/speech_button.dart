@@ -1,7 +1,7 @@
 import 'package:crolingo/app/providers.dart';
 import 'package:crolingo/domain/speech/speech_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Accessible control for optional Croatian pronunciation playback.
 class SpeechButton extends ConsumerStatefulWidget {

@@ -4,9 +4,9 @@ import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/features/lesson/widgets/exercise_answer.dart';
 import 'package:crolingo/features/lesson/widgets/lesson_header.dart';
 import 'package:crolingo/features/lesson/widgets/sentence_input.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _sentence = Exercise(
   id: 'sentence',

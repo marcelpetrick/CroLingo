@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:crolingo/core/motion/app_motion.dart';
 import 'package:crolingo/core/theme/app_theme.dart';
 import 'package:crolingo/core/widgets/crow_mark.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Short, accessible reward shown after a lesson or focused review.
 class LessonCelebration extends StatefulWidget {

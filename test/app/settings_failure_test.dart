@@ -4,9 +4,9 @@ import 'package:crolingo/app/router.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/domain/settings/app_settings.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Unreadable preferences must never take the app down: every screen falls
 /// back to the safe default instead.

@@ -2,8 +2,8 @@ import 'package:crolingo/domain/audio/feedback_audio_service.dart';
 import 'package:crolingo/domain/course/course.dart';
 import 'package:crolingo/domain/progress/progress_repository.dart';
 import 'package:crolingo/features/lesson/lesson_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   testWidgets('completes all four text exercise families with feedback', (
